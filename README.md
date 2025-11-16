@@ -1,1 +1,77 @@
-# InfOverlayDLL
+# InfoOverlay DLL  
+> A dynamic-link library for injecting HUD overlays into Java Edition Minecraft  
+> 一个用于向 Java 版 Minecraft 注入信息显示层（HUD）的动态链接库
+
+---
+
+## 📌 Overview | 项目简介
+
+**InfoOverlay** 是一个可以注入到 **大部分 Java 版 Minecraft** 的动态链接库（DLL）。  
+注入成功后，你可以在游戏画面中显示各种实时信息，包括：
+
+- 自定义文本  
+- 当前时间  
+- 粉丝数  
+- 游戏 FPS  
+- B 站直播弹幕（⚠ 存在未知偶发性崩端问题）
+  
+适用于 **主播、视频作者、服务器玩家、工具开发者** 等希望在游戏中加入 HUD 信息显示的人群。
+
+**InfoOverlay** is a DLL designed to be injected into **most versions of Java Edition Minecraft**.  
+After injection, it can render various real-time information directly inside the game:
+
+- Custom text  
+- Current time  
+- Follower count  
+- Game FPS  
+- Bilibili live comments (⚠ Occasional crashes may occur due to an unknown cause)
+
+Useful for streamers, content creators, server players, and developers who want in-game HUD overlays.
+
+---
+
+## ✨ Features | 功能特点
+
+### ✔ 基础功能
+- 游戏内文字绘制  
+- 游戏帧率（FPS）显示  
+- 自定义信息编辑  
+- 时间显示  
+
+### ✔ 直播相关功能
+- B 站粉丝数显示  
+- B 站直播间弹幕实时显示（实验性）
+
+### ✔ 技术特性
+- 支持多版本 Java Minecraft  
+- 自定义渲染  
+- 独立 DLL，可用于二次开发
+
+---
+
+## 📦 Installation | 安装方式
+
+### 1. 下载成品
+你可以克隆代码并自行构建  
+
+你也可以在 **爱发电** 以 6 元获得：  
+- 编译好的成品  
+- 自动更新  
+- 技术支持  
+- 使用教程  
+
+（付费内容是“服务与编译成品”，不是源码）
+
+---
+
+## ⚠ Disclaimer | 免责声明
+
+**本程序不会读取、修改或写入任何 Minecraft 游戏内存数据。  
+不会提供或造成任何不公平的游戏优势，也不涉及任何加速、透视、自动操作等功能。  
+InfoOverlay 仅用于绘制独立的叠加界面（Overlay），与游戏逻辑无任何交互。**
+
+另外需要特别说明：
+
+**⚠ 请勿在网易版 Minecraft（网易MC）中使用本程序。**  
+由于网易版存在独立的客户端保护机制，**DLL 注入行为可能会被错误识别为作弊行为，并导致封号风险。**  
+如果用户在网易版 Minecraft 中注入本程序并导致账号封禁，作者概不负责。
