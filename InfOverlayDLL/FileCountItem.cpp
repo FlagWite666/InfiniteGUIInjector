@@ -1,6 +1,7 @@
 #include "FileCountItem.h"
 #include <filesystem>
 #include "StringConverter.h"
+#include "AudioManager.h"
 #include "imgui\imgui_internal.h"
 #include "ImGuiStd.h"
 namespace fs = std::filesystem;
@@ -73,11 +74,13 @@ void FileCountItem::DrawContent()
     {
         color.color = ImVec4(0.1f, 1.0f, 0.1f, 1.0f); //ÂÌÉ«
         lastFileCount = fileCount;
+        if (isPlaySound) AudioManager::Instance().playSound("filecount\\filecount_up.wav", soundVolume);
     }
     else if (fileCount < lastFileCount)
     {
         color.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f); //ºìÉ«
         lastFileCount = fileCount;
+        if (isPlaySound) AudioManager::Instance().playSound("filecount\\filecount_down.wav", soundVolume);
     }
 
     ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
@@ -100,6 +103,12 @@ void FileCountItem::Load(const nlohmann::json& j)
 
     if (j.contains("recursive")) recursive = j["recursive"];
     if (j.contains("extensionFilter")) extensionFilter = j["extensionFilter"];
+
+    if (j.contains("fileCount")) fileCount = j["fileCount"];
+    lastFileCount = fileCount;
+
+    if (j.contains("isPlaySound")) isPlaySound = j["isPlaySound"];
+    if (j.contains("soundVolume")) soundVolume = j["soundVolume"];
     LoadInfoItemConfig(j);
 }
 
@@ -109,6 +118,10 @@ void FileCountItem::Save(nlohmann::json& j) const
     j["folderPath"] = folderPath;
     j["recursive"] = recursive;
     j["extensionFilter"] = extensionFilter;
+    j["fileCount"] = fileCount;
+
+    j["isPlaySound"] = isPlaySound;
+    j["soundVolume"] = soundVolume;
     SaveInfoItemConfig(j);
 
 }

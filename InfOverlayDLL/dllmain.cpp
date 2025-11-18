@@ -7,7 +7,8 @@
 #include "MainUI.h"
 #include "GlobalConfig.h"
 #include "StringConverter.h"
-
+#include "FileManager.h"
+#include "AudioManager.h"
 #include "fonts\Uranus_Pixel_11Px.h"
 
 
@@ -131,8 +132,6 @@ void StartUpdateThread() {
     updateThread.detach();  // 将线程设为后台线程
 }
 
-
-
 // 在找到有效 HDC/窗口后初始化 ImGui（只初始化一次）
 void InitImGuiForContext(HWND hwnd)
 {
@@ -192,11 +191,7 @@ void InitImGuiForContext(HWND hwnd)
     OutputDebugStringA(msg.c_str());
     //MessageBoxA(hwnd, msg.c_str(), "Info", MB_ICONINFORMATION);
     ImGui_ImplOpenGL3_Init(glsl_version);
-    g_isInit = true;
 
-    ConfigManager::Load(ConfigManager::GetConfigPath(), globalConfig, infoManager);
-
-    StartUpdateThread();  // 启动更新线程
     ImFont* font;
     if (globalConfig.fontPath == "default")
         font = io.Fonts->AddFontFromMemoryCompressedTTF(Ur_data, Ur_size, 20.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
@@ -206,37 +201,14 @@ void InitImGuiForContext(HWND hwnd)
         font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\msyh.ttc", 20.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
     }
     io.FontDefault = font;
-}
+    g_isInit = true;
 
-//// 恢复鼠标限制（释放）
-//void ReleaseCursorClip()
-//{
-//    if (g_cursorClipped)
-//    {
-//        ClipCursor(NULL);
-//        g_cursorClipped = false;
-//    }
-//}
-//
-//// 应用或释放鼠标限制（当 UI 激活时可选）
-//void ApplyCursorClip(bool enable)
-//{
-//    if (!g_hwnd) return;
-//    if (enable && !g_cursorClipped)
-//    {
-//        RECT rc;
-//        GetClientRect(g_hwnd, &rc);
-//        // 将客户端坐标转换为屏幕坐标
-//        MapWindowPoints(g_hwnd, NULL, (POINT*)&rc, 2);
-//        ClipCursor(&rc);
-//        g_cursorClipped = true;
-//    }
-//    else if (!enable && g_cursorClipped)
-//    {
-//        ClipCursor(NULL);
-//        g_cursorClipped = false;
-//    }
-//}
+    //加载配置文件
+    ConfigManager::Load(FileManager::GetConfigPath(), globalConfig, infoManager);
+    //初始化音频管理器
+    AudioManager::Instance().Init();
+    StartUpdateThread();  // 启动更新线程
+}
 
 // Hooked SwapBuffers - 每次换帧都会被调用
 BOOL WINAPI MySwapBuffers(HDC hdc)
@@ -363,8 +335,7 @@ void Uninit()
         g_oldWndProc = NULL;
     }
 
-    // 释放鼠标限制
-     //ReleaseCursorClip();
+    AudioManager::Instance().Shutdown();// 卸载音频管理器
 
     // 卸载 MinHook
     if (g_mhInitialized)

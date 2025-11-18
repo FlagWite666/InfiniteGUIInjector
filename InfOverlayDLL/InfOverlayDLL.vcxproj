@@ -138,11 +138,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BilibiliFansItem.h" />
     <ClInclude Include="ConfigManager.h" />
     <ClInclude Include="CounterItem.h" />
     <ClInclude Include="DanmakuItem.h" />
     <ClInclude Include="FileCountItem.h" />
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="fonts\Uranus_Pixel_11Px.h" />
     <ClInclude Include="FpsItem.h" />
     <ClInclude Include="framework.h" />
@@ -163,6 +165,7 @@
     <ClInclude Include="infoManager.h" />
     <ClInclude Include="MainUI.h" />
     <ClInclude Include="minHook\MinHook.h" />
+    <ClInclude Include="miniaudio\miniaudio.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TextItem.h" />
     <ClInclude Include="TimeItem.h" />
@@ -171,6 +174,7 @@
     <ClInclude Include="WindowSnapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BilibiliFansItem.cpp" />
     <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="CounterItem.cpp" />

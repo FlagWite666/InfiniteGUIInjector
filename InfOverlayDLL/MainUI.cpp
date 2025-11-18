@@ -3,6 +3,7 @@
 #include "ImGuiStd.h"
 #include "ConfigManager.h"
 #include "GlobalConfig.h"
+#include "FileManager.h"
 #include "StringConverter.h"
 
 struct FontInfo {
@@ -103,7 +104,7 @@ void MainUI::Render(GlobalConfig* globalConfig, bool* p_open)
     ImGui::SameLine();
 
     if (ImGui::Button(u8"保存配置"))
-        ConfigManager::Save(ConfigManager::GetConfigPath(), *globalConfig, *manager);
+        ConfigManager::Save(FileManager::GetConfigPath(), *globalConfig, *manager);
 
 
     ImGui::SameLine();
@@ -315,6 +316,9 @@ void MainUI::Draw_FileCountItemSettings(FileCountItem* item)
     ImGuiStd::InputTextStd(u8"文件夹路径", item->folderPath);
     ImGui::Checkbox(u8"递归扫描(包括子文件夹)", &item->recursive);
     ImGuiStd::InputTextStd(u8"扩展名过滤 (.txt)", item->extensionFilter);
+    ImGui::Checkbox(u8"提示音", &item->isPlaySound);
+    if (item->isPlaySound)
+        ImGui::SliderFloat(u8"提示音音量", &item->soundVolume, 0.0f, 1.0f, "%.2f");
 }
 
 void MainUI::Draw_BilibiliItemSettings(BilibiliFansItem* item)
@@ -335,6 +339,9 @@ void MainUI::Draw_BilibiliItemSettings(BilibiliFansItem* item)
         else
             item->uid = std::stoll(uidStr);
     }
+    ImGui::Checkbox(u8"提示音", &item->isPlaySound);
+    if (item->isPlaySound)
+        ImGui::SliderFloat(u8"提示音音量", &item->soundVolume, 0.0f, 1.0f, "%.2f");
 }
 
 void MainUI::Draw_CounterItemSettings(CounterItem* item)
@@ -344,6 +351,10 @@ void MainUI::Draw_CounterItemSettings(CounterItem* item)
     ImGuiStd::Keybind(u8"增加快捷键：", item->hotkeyAdd);
 //设置减少快捷键
     ImGuiStd::Keybind(u8"减少快捷键：", item->hotkeySub);
+
+    ImGui::Checkbox(u8"提示音", &item->isPlaySound);
+    if (item->isPlaySound)
+	    ImGui::SliderFloat(u8"提示音音量", &item->soundVolume, 0.0f, 1.0f, "%.2f");
 }
 
 void MainUI::Draw_DanmakuItemSettings(DanmakuItem* item)

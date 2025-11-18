@@ -29,5 +29,8 @@ public:
     bool recursive = false;           // 是否递归扫描
     std::string extensionFilter = ""; // 例如 ".txt" 为空则全部文件
 
+    bool isPlaySound = true;
+    float soundVolume = 0.5f;
+
     file_count_element color = { ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text)) };
 };

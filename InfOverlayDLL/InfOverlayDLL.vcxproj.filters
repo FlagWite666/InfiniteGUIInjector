@@ -40,6 +40,15 @@
     <Filter Include="源文件\fonts">
       <UniqueIdentifier>{6a3e3ac6-c8f4-4e7e-9c70-f20792f4213d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\FileManager">
+      <UniqueIdentifier>{46c84f05-eb98-46d0-abfb-9cadecd87fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\AudioEngine">
+      <UniqueIdentifier>{9ab1bf8f-92fa-46e3-8522-81eeb3863464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniaudio">
+      <UniqueIdentifier>{f00d2bf3-5f1e-420f-bc0d-57d62e1951aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="minHook\MinHook.h">
@@ -135,6 +144,15 @@
     <ClInclude Include="VK_Keymap.h">
       <Filter>源文件\ui</Filter>
     </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>源文件\FileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>源文件\AudioEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="miniaudio\miniaudio.h">
+      <Filter>miniaudio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -208,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="CounterItem.cpp">
       <Filter>源文件\core\items</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>源文件\AudioEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

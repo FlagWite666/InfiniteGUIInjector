@@ -2,23 +2,6 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-std::string ConfigManager::GetRunPath()
-{
-    char* appdata = nullptr;
-    size_t len;
-    _dupenv_s(&appdata, &len, "APPDATA");
-    std::string p = std::string(appdata ? appdata : "") + "\\InfOverlay";
-    CreateDirectoryA(p.c_str(), NULL);
-    free(appdata);
-    return p;
-}
-
-std::string ConfigManager::GetConfigPath()
-{
-    return GetRunPath() + "\\config.json";
-}
-
-
 bool ConfigManager::Save(const std::string& filePath,
     const GlobalConfig& global,
     const InfoManager& info)

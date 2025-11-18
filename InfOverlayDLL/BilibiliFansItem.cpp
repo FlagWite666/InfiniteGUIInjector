@@ -3,6 +3,7 @@
 #include "ImGuiStd.h"
 #include "ImGui\imgui_internal.h"
 #include <nlohmann/json.hpp>
+#include "AudioManager.h"
 
 void BilibiliFansItem::Update()
 {
@@ -45,11 +46,13 @@ void BilibiliFansItem::DrawContent()
     {
         color.color = ImVec4(0.1f, 1.0f, 0.1f, 1.0f); //ÂÌÉ«
         lastFansCount = fansCount;
+        if(isPlaySound) AudioManager::Instance().playSound("bilibilifans\\bilibilifans_up.wav", soundVolume);
     }
     else if (fansCount < lastFansCount)
     {
         color.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f); //ºìÉ«
         lastFansCount = fansCount;
+        if(isPlaySound) AudioManager::Instance().playSound("bilibilifans\\bilibilifans_down.wav", soundVolume);
     }
 
     ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
@@ -67,6 +70,10 @@ void BilibiliFansItem::DrawContent()
 void BilibiliFansItem::Load(const nlohmann::json& j)
 {
     if (j.contains("uid")) uid = j["uid"];
+    if (j.contains("fansCount")) fansCount = j["fansCount"];
+    lastFansCount = fansCount;
+    if (j.contains("isPlaySound")) isPlaySound = j["isPlaySound"];
+    if (j.contains("soundVolume")) soundVolume = j["soundVolume"];
 
     LoadInfoItemConfig(j);
 }
@@ -75,5 +82,8 @@ void BilibiliFansItem::Save(nlohmann::json& j) const
 {
     j["type"] = "bilibili_fans";
     j["uid"] = uid;
+    j["fansCount"] = fansCount;
+    j["isPlaySound"] = isPlaySound;
+    j["soundVolume"] = soundVolume;
     SaveInfoItemConfig(j);
 }

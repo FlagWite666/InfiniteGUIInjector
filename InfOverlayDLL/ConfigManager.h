@@ -5,11 +5,6 @@
 
 class ConfigManager {
 public:
-
-    static std::string GetRunPath();
-
-    static std::string GetConfigPath();
-
     static bool Save(const std::string& filePath,
         const GlobalConfig& global,
         const InfoManager& info);

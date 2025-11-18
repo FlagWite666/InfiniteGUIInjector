@@ -25,6 +25,9 @@ public:
     int lastCount = 0;
     float fontSize = 20.0f;
 
+	bool isPlaySound = true;
+    float soundVolume = 0.5f;
+
     int hotkeyAdd = VK_F6;   // д╛хо©Л╫щ╪Э
     int hotkeySub = VK_F5;
 
