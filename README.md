@@ -42,7 +42,7 @@ Useful for streamers, content creators, server players, and developers who want 
 
 ### ✔ 直播相关功能
 - B 站粉丝数显示  
-- B 站直播间弹幕实时显示（需要配合第三方弹幕姬使用：https://www.danmuji.org）
+- B 站直播间弹幕实时显示（需要配合第三方弹幕姬使用：https://www.danmuji.org )
 
 ### ✔ 技术特性
 - 支持多版本 Java Minecraft  
