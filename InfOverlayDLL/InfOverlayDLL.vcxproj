@@ -165,6 +165,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemManager.h" />
+    <ClInclude Include="KeybindModule.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="minHook\MinHook.h" />
     <ClInclude Include="miniaudio\miniaudio.h" />

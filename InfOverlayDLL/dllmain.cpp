@@ -38,6 +38,8 @@ LRESULT CALLBACK HookedWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
         if (wParam == VK_ESCAPE && Menu::Instance().open)
             Menu::Instance().Toggle();
+
+        ItemManager::Instance().ProcessKeyEvents(wParam);
     }
 
     if (Menu::Instance().open)
@@ -374,6 +376,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
     case DLL_PROCESS_DETACH:
         Uninit();
+        FreeLibraryAndExitThread(hModule, 0);
         break;
     }
     return TRUE;

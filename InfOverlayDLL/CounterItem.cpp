@@ -6,17 +6,16 @@
 #include <string>
 #include <windows.h>
 
-
-
-void CounterItem::Update()
+void CounterItem::OnKeyEvent(int key)
 {
-    // 加法键按下
-    if (GetAsyncKeyState(hotkeyAdd) & 1)   // 1 表示刚按下
+    if (key == keybinds.at(u8"增加快捷键："))
+    {
         count++;
-
-    // 减法键按下
-    if (GetAsyncKeyState(hotkeySub) & 1)
+    }
+    else if (key == keybinds.at(u8"减少快捷键："))
+    {
         count--;
+    }
 }
 
 void CounterItem::DrawContent()
@@ -51,10 +50,7 @@ void CounterItem::DrawSettings()
 {
     DrawModuleSettings();
     ImGui::InputInt(u8"计数值", &count);
-    //设置增加快捷键
-    ImGuiStd::Keybind(u8"增加快捷键：", hotkeyAdd);
-    //设置减少快捷键
-    ImGuiStd::Keybind(u8"减少快捷键：", hotkeySub);
+    DrawKeybindSettings();
     if (ImGui::CollapsingHeader(u8"通用设置"))
     {
         DrawWindowSettings();
@@ -71,8 +67,6 @@ void CounterItem::Load(const nlohmann::json& j)
     LoadSound(j);
     if (j.contains("count")) count = j["count"];
     lastCount = count;
-    if (j.contains("hotkeyAdd")) hotkeyAdd = j["hotkeyAdd"];
-    if (j.contains("hotkeySub")) hotkeySub = j["hotkeySub"];
 
 }
 
@@ -83,6 +77,4 @@ void CounterItem::Save(nlohmann::json& j) const
     SaveWindow(j);
     SaveSound(j);
     j["count"] = count;
-    j["hotkeyAdd"] = hotkeyAdd;
-    j["hotkeySub"] = hotkeySub;
 }

@@ -180,6 +180,9 @@
     <ClInclude Include="fonts\Uranus_Pixel_11Px.h">
       <Filter>源文件\imGuiHelper\fonts</Filter>
     </ClInclude>
+    <ClInclude Include="KeybindModule.h">
+      <Filter>源文件\core\items\virtual\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

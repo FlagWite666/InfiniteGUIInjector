@@ -2,15 +2,15 @@
 #include "Item.h"
 #include "AffixModule.h"
 #include "WindowModule.h"
-#include "UpdateModule.h"
 #include "SoundModule.h"
+#include "KeybindModule.h"
 #include <string>
 
 struct counter_element {
     ImVec4 color;
 };
 
-class CounterItem : public Item, public AffixModule, public WindowModule, public UpdateModule, public SoundModule
+class CounterItem : public Item, public AffixModule, public WindowModule, public SoundModule, public KeybindModule
 {
 public:
     CounterItem() {
@@ -20,12 +20,13 @@ public:
         description = u8"显示计数器";
         isPlaySound = true;
         soundVolume = 0.5f;
-        refreshIntervalMs = 50;
-        lastUpdateTime = std::chrono::steady_clock::now();
+
+        keybinds.insert(std::make_pair(u8"增加快捷键：", VK_F6));
+        keybinds.insert(std::make_pair(u8"减少快捷键：", VK_F5));
     }
     ~CounterItem() {}
 
-    void Update() override;
+    void OnKeyEvent(int key) override;
     void DrawContent() override;
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;
@@ -33,11 +34,6 @@ public:
 
     int count = 0;
     int lastCount = 0;
-    float fontSize = 20.0f;
-
-
-    int hotkeyAdd = VK_F6;   // 默认快捷键
-    int hotkeySub = VK_F5;
 
     counter_element color = { ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text)) };
 };

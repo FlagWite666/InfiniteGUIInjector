@@ -56,6 +56,23 @@ void ItemManager::UpdateAll()
     }
 }
 
+void ItemManager::ProcessKeyEvents(WPARAM wParam)
+{
+    for (auto& item : items)
+    {
+        if (!item->isEnabled) continue; // 跳过禁用的模块
+        if (auto kbd = dynamic_cast<KeybindModule*>(item.get()))
+        {
+            for (auto& keybind : kbd->keybinds)
+            {
+                if (wParam == keybind.second)
+                {
+                    kbd->OnKeyEvent(keybind.second);
+                }
+            }
+        }
+    }
+}
 
 // ---------------------------------------------
 // 渲染所有信息项（每帧调用）
