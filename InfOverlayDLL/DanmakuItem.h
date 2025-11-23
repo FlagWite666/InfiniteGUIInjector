@@ -45,6 +45,14 @@ public:
 
     virtual ~DanmakuItem();
 
+    void Update() override;
+    void DrawContent() override;
+    void DrawSettings() override;
+    void Load(const nlohmann::json& j) override;
+    void Save(nlohmann::json& j) const override;
+
+private:
+
     // 更新弹幕内容
     void AddDanmaku(const std::string& username, const std::string& message);
     void AddCaptain(const std::string& username, const std::string& captainName, const std::string& captainCount);
@@ -53,13 +61,6 @@ public:
     void AddUserLike(const std::string& username);
 
 
-    void Update() override;
-    void DrawContent() override;
-    void DrawSettings() override;
-    void Load(const nlohmann::json& j) override;
-    void Save(nlohmann::json& j) const override;
-
-protected:
     // 弹幕内容
     std::deque<Danmaku> danmakuList;
 
@@ -72,7 +73,6 @@ protected:
     FILETIME lastWriteTime = {};
     bool isScrollable = false;
 
-public:
     // 最大弹幕数量
     int maxDanmakuCount = 16;
 

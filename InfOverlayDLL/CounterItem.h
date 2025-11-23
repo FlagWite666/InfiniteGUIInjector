@@ -30,12 +30,13 @@ public:
     }
     ~CounterItem() {}
 
-    void OnKeyEvent(UINT state, WPARAM key, LPARAM lParam) override;
+    void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
     void DrawContent() override;
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
 
+private:
     int count = 0;
     int lastCount = 0;
 

@@ -156,7 +156,7 @@ public:
         j["fontSize"] = fontSize;
         j["clickThrough"] = clickThrough;
     }
-
+protected:
     bool isCustomSize = false;    //是否自定义大小
     float x = 100.0f;
     float y = 40.0f;

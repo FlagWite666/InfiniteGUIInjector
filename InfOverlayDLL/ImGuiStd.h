@@ -1,9 +1,11 @@
 #pragma once
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include <string>
 #include "VK_Keymap.h"
 #include <Windows.h>
 #include <map>
+
 namespace ImGuiStd {
 
     static bool InputTextStd(const char* label, std::string& str, ImGuiInputTextFlags flags = 0)

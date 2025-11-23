@@ -32,7 +32,7 @@ public:
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
 
-public:
+private:
     long long uid = 399194206;          // B站用户UID
     int fansCount = 0;    // 粉丝数（从API解析）
     int lastFansCount = 0;    // 粉丝数（从API解析）

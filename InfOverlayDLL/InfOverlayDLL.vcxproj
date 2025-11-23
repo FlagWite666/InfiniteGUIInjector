@@ -208,6 +208,7 @@
     <ClInclude Include="BilibiliFansItem.h" />
     <ClInclude Include="ConfigManager.h" />
     <ClInclude Include="CounterItem.h" />
+    <ClInclude Include="CpsItem.h" />
     <ClInclude Include="DanmakuItem.h" />
     <ClInclude Include="FileCountItem.h" />
     <ClInclude Include="FileUtils.h" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="KeybindModule.h" />
+    <ClInclude Include="KeystrokesItem.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="minHook\MinHook.h" />
     <ClInclude Include="miniaudio\miniaudio.h" />
@@ -250,6 +252,7 @@
     <ClCompile Include="BilibiliFansItem.cpp" />
     <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="CounterItem.cpp" />
+    <ClCompile Include="CpsItem.cpp" />
     <ClCompile Include="DanmakuItem.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FileCountItem.cpp" />
@@ -265,6 +268,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="ItemManager.cpp" />
+    <ClCompile Include="KeystrokesItem.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="mian.cpp" />
     <ClCompile Include="pch.cpp">

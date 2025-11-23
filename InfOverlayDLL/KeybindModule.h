@@ -9,7 +9,7 @@
 class KeybindModule
 {
 public:
-	virtual void OnKeyEvent(UINT state, WPARAM key, LPARAM lParam) = 0;
+	virtual void OnKeyEvent(bool state, bool isRepeat, WPARAM key) = 0;
     void DrawKeybindSettings()
     {
         for (auto& [name, key] : keybinds)
@@ -35,6 +35,6 @@ public:
             j[name] = key;
         }
     }
-
+protected:
 	std::map<std::string, int> keybinds; //name, key
 };

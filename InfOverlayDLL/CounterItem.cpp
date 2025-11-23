@@ -6,10 +6,10 @@
 #include <string>
 #include <windows.h>
 
-void CounterItem::OnKeyEvent(UINT state, WPARAM key, LPARAM lParam)
+void CounterItem::OnKeyEvent(bool state, bool isRepeat, WPARAM key)
 {
-    bool isRepeat = (lParam & (1 << 30)) != 0;
-    if(state == WM_KEYDOWN)
+    if(key == NULL) return;
+    if(state) //按键按下
     {
         if (key == keybinds.at(u8"增加快捷键："))
         {

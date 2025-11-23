@@ -256,8 +256,6 @@ void DanmakuItem::DrawContent()
 
 
     //…Ë÷√±≥æ∞Õ∏√˜∂»
-    float child_alpha = 1.0f - (1.0f - alpha) * 0.5f;
-
     ImGui::SetNextWindowBgAlpha(alpha);
 
     ImGuiChildFlags child_flags = 0;

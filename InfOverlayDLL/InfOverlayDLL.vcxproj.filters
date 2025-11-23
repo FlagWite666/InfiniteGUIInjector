@@ -189,6 +189,12 @@
     <ClInclude Include="Run.h">
       <Filter>源文件\ui</Filter>
     </ClInclude>
+    <ClInclude Include="KeystrokesItem.h">
+      <Filter>源文件\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="CpsItem.h">
+      <Filter>源文件\core\items\huds</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -274,6 +280,12 @@
     </ClCompile>
     <ClCompile Include="Run.cpp">
       <Filter>源文件\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="KeystrokesItem.cpp">
+      <Filter>源文件\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="CpsItem.cpp">
+      <Filter>源文件\core\items\huds</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

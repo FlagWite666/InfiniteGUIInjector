@@ -16,11 +16,21 @@ OldSwapBuffers fpSwapBuffers = NULL;
 LRESULT CALLBACK HookedWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
-    ItemManager::Instance().ProcessKeyEvents(message, wParam, lParam);
+    bool isRepeat = (lParam & (1 << 30)) != 0;
+    bool state;
+    if (message == WM_KEYDOWN || message == WM_LBUTTONDOWN || message == WM_RBUTTONDOWN ||
+        message == WM_MBUTTONDOWN || message == WM_XBUTTONDOWN)
+        state = true;
+    else if (message == WM_KEYUP || message == WM_LBUTTONUP || message == WM_RBUTTONUP ||
+        message == WM_MBUTTONUP || message == WM_XBUTTONUP)
+        state = false;
+    else
+        state = true;
+
+    ItemManager::Instance().ProcessKeyEvents(state, isRepeat, wParam);
     // 1. °´¼ü¼ì²â
-    if (message == WM_KEYDOWN)
+    if (state)
     {
-        bool isRepeat = (lParam & (1 << 30)) != 0;
         if (wParam == GlobalConfig::Instance().menuKey &&!isRepeat)
             Menu::Instance().Toggle();
 

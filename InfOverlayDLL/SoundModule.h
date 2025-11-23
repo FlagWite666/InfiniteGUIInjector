@@ -23,6 +23,7 @@ public:
         j["isPlaySound"] = isPlaySound;
         j["soundVolume"] = soundVolume;
     }
+protected:
     bool isPlaySound;
     float soundVolume;    // …˘“Ù“Ù¡ø£®0.0~1.0£©
 };

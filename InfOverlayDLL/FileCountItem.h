@@ -37,7 +37,6 @@ private:
     size_t fileCount = 0;
     size_t lastFileCount = 0;
 
-public:
     // ÅäÖÃÏî
     std::string folderPath = "C:\\Users";   // Ä¬ÈÏÂ·¾¶
     std::string errorMessage = "";

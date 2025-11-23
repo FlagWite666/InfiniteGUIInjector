@@ -6,6 +6,8 @@
 #include "CounterItem.h"
 #include "DanmakuItem.h"
 #include "TextItem.h"
+#include "KeystrokesItem.h"
+#include "CpsItem.h"
 #include "GlobalConfig.h"
 
 #include <chrono>
@@ -17,6 +19,8 @@ ItemManager::ItemManager()
     AddItem(std::make_shared<TimeItem>());
     AddItem(std::make_shared<FpsItem>());
     AddItem(std::make_shared<DanmakuItem>());
+    AddItem(std::make_shared<KeystrokesItem>());
+    AddItem(std::make_shared<CpsItem>());
 }
 
 void ItemManager::AddItem(std::shared_ptr<Item> item)

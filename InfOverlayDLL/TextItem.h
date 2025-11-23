@@ -18,6 +18,6 @@ public:
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
-
+private:
     std::string text;
 };

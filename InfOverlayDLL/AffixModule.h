@@ -23,6 +23,7 @@ public:
         j["prefix"] = prefix;
         j["suffix"] = suffix;
     }
+protected:
 	std::string prefix = "[";
 	std::string suffix = "]";
 };
