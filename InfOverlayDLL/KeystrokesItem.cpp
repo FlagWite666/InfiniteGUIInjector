@@ -108,7 +108,7 @@ void KeystrokesItem::DrawSettings()
 void KeystrokesItem::Load(const nlohmann::json& j)
 {
     LoadItem(j);
-    //LoadWindow(j);
+    LoadWindow(j);
     if (j.contains("showSpace")) showSpace = j["showSpace"];
     if (j.contains("showMouse")) showMouse = j["showMouse"];
     if (j.contains("showCps")) showCps = j["showCps"];
@@ -127,7 +127,7 @@ void KeystrokesItem::Load(const nlohmann::json& j)
 void KeystrokesItem::Save(nlohmann::json& j) const
 {
     SaveItem(j);
-    //SaveWindow(j);
+    SaveWindow(j);
     j["showSpace"] = showSpace;
     j["showMouse"] = showMouse;
     j["showCps"] = showCps;

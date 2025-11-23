@@ -2,7 +2,6 @@
 #include <string>
 #include "imgui/imgui.h"
 #include <nlohmann/json.hpp>
-#include <Windows.h>
 #include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
 #include "GlobalConfig.h"
@@ -76,6 +75,7 @@ public:
         // 保存到 Item
         x = snap.snappedPos.x;
         y = snap.snappedPos.y;
+        snapState = snap.snapState;
 
         //保存窗口大小
         width = ImGui::GetWindowSize().x;
@@ -125,6 +125,25 @@ public:
         {
             HandleDrag(g_hwnd);
         }
+        else
+        {
+            // 当前窗口位置大小
+            ImVec2 pos = ImGui::GetWindowPos();
+            ImVec2 sz = ImGui::GetWindowSize();
+
+            // 获取 screenW,screenH（DLL 中已经有 g_hwnd）
+            RECT rc;
+            GetClientRect(g_hwnd, &rc);
+            float sw = (float)rc.right;
+            float sh = (float)rc.bottom;
+            WindowSnapper::KeepSnapped(pos, sz, sw, sh, snapState);
+            // 设置吸附后的位置
+            ImGui::SetWindowPos(pos, ImGuiCond_Always);
+
+            // 保存到 Item
+            x = pos.x;
+            y = pos.y;
+        }
 
         ImGui::End();
         if (!showBorder) ImGui::PopStyleColor(); // 边框透明
@@ -142,6 +161,9 @@ public:
         if (j.contains("showBorder")) showBorder = j["showBorder"];
         if (j.contains("fontSize")) fontSize = j["fontSize"];
         if (j.contains("clickThrough")) clickThrough = j["clickThrough"];
+
+        if (j.contains("snapState")) snapState = j["snapState"];
+
     }
     void SaveWindow(nlohmann::json& j) const
     {
@@ -155,11 +177,15 @@ public:
         j["showBorder"] = showBorder;
         j["fontSize"] = fontSize;
         j["clickThrough"] = clickThrough;
+
+        j["snapState"] = snapState;
     }
 protected:
     bool isCustomSize = false;    //是否自定义大小
     float x = 100.0f;
     float y = 40.0f;
+
+    SnapState snapState = SNAP_NONE;
     float width = 250.0f;
     float height = 80.0f;
 
