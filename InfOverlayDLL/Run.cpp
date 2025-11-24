@@ -10,6 +10,7 @@
 #include "fonts\Uranus_Pixel_11Px.h"
 #include "pch.h"
 #include "ImguiSty.h"
+#include <thread>
 typedef BOOL(WINAPI* OldSwapBuffers)(HDC);
 OldSwapBuffers fpSwapBuffers = NULL;
 // 仅当 uiActive=true 时，让 ImGui 处理 Win32 消息

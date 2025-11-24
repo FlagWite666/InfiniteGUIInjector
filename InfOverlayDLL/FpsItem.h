@@ -17,6 +17,12 @@ public:
         prefix = "[";
         suffix = "FPS]";
     }
+
+    static FpsItem& Instance() {
+        static FpsItem instance;
+        return instance;
+    }
+
     void Update() override;
     void DrawContent() override;
     void DrawSettings() override;

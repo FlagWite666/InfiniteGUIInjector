@@ -21,6 +21,11 @@ public:
         refreshIntervalMs = 1000;
         lastUpdateTime = std::chrono::steady_clock::now();
     }
+    //Instance()
+    static TimeItem& Instance() {
+        static TimeItem instance;
+        return instance;
+    }
 
     void Update() override;
     void DrawContent() override;

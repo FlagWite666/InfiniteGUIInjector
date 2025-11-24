@@ -64,6 +64,9 @@
     <Filter Include="源文件\ui\menu">
       <UniqueIdentifier>{55dec776-c4ff-4705-8cc8-2cf65b555978}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\core\items\hidden">
+      <UniqueIdentifier>{52054187-1cb7-46af-9f81-3d2d2426bc65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="minHook\MinHook.h">
@@ -192,8 +195,14 @@
     <ClInclude Include="KeystrokesItem.h">
       <Filter>源文件\core\items\huds</Filter>
     </ClInclude>
-    <ClInclude Include="CpsItem.h">
+    <ClInclude Include="CPSItem.h">
       <Filter>源文件\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="CPSDetector.h">
+      <Filter>源文件\core\items\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateDetector.h">
+      <Filter>源文件\core\items\hidden</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -284,8 +293,14 @@
     <ClCompile Include="KeystrokesItem.cpp">
       <Filter>源文件\core\items\huds</Filter>
     </ClCompile>
-    <ClCompile Include="CpsItem.cpp">
+    <ClCompile Include="CPSItem.cpp">
       <Filter>源文件\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="CPSDetector.cpp">
+      <Filter>源文件\core\items\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateDetector.cpp">
+      <Filter>源文件\core\items\hidden</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

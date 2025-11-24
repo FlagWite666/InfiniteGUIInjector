@@ -1,115 +1,131 @@
 #include "ItemManager.h"
 #include "TimeItem.h"
 #include "FpsItem.h"
+#include "DanmakuItem.h"
+#include "KeystrokesItem.h"
+#include "CPSItem.h"
 #include "BilibiliFansItem.h"
 #include "FileCountItem.h"
 #include "CounterItem.h"
-#include "DanmakuItem.h"
 #include "TextItem.h"
-#include "KeystrokesItem.h"
-#include "CpsItem.h"
-#include "GlobalConfig.h"
 
+#include "CPSDetector.h"
+#include "GameStateDetector.h"
+
+#include "Menu.h"
+#include <algorithm>
 #include <chrono>
 
-
+// ------------------------------------------------
 ItemManager::ItemManager()
 {
-    // 注册默认信息项
-    AddItem(std::make_shared<TimeItem>());
-    AddItem(std::make_shared<FpsItem>());
-    AddItem(std::make_shared<DanmakuItem>());
-    AddItem(std::make_shared<KeystrokesItem>());
-    AddItem(std::make_shared<CpsItem>());
+    // 注册默认 Singleton
+    AddSingleton(&GameStateDetector::Instance());
+    AddSingleton(&CPSDetector::Instance());
+
+    AddSingleton(&TimeItem::Instance());
+    AddSingleton(&FpsItem::Instance());
+    AddSingleton(&DanmakuItem::Instance());
+    AddSingleton(&KeystrokesItem::Instance());
+    AddSingleton(&CPSItem::Instance());
 }
 
-void ItemManager::AddItem(std::shared_ptr<Item> item)
+// ------------------------------------------------
+void ItemManager::AddSingleton(Item* item)
 {
-    items.push_back(std::move(item));
+    singletonItems.push_back(item);
+    allItems.push_back(item);
 }
 
-
-// ---------------------------------------------
-// 删除信息项（简单版）
-// ---------------------------------------------
-void ItemManager::RemoveItem(int index)
+void ItemManager::AddMulti(std::unique_ptr<Item> item)
 {
-    if (index >= 0 && index < items.size()) {
-        items.erase(items.begin() + index);
+    allItems.push_back(item.get());
+    multiItems.push_back(std::move(item));
+}
 
+void ItemManager::RemoveMulti(Item* target)
+{
+    if (!target) return;
+    if (!target->IsMultiInstance()) {
+        return; // 禁止删除 Singleton
     }
+    // 1. 在 multiItems 中查找 unique_ptr 所拥有的对象
+    for (auto it = multiItems.begin(); it != multiItems.end(); ++it)
+    {
+        if (it->get() == target)
+        {
+            // 2. 从 allItems 中移除
+            allItems.erase(
+                std::remove(allItems.begin(), allItems.end(), target),
+                allItems.end()
+            );
 
+            // 3. 从 multiItems 中删除（自动 delete）
+            multiItems.erase(it);
+            return; // 删除完立刻返回
+        }
+    }
 }
 
+// ------------------------------------------------
 void ItemManager::UpdateAll()
 {
-    auto now = std::chrono::steady_clock::now();
-
-    for (auto& item : items)
+    for (auto item : allItems)
     {
-        if (!item->isEnabled) continue; // 跳过禁用的模块
-        if (auto upd = dynamic_cast<UpdateModule*>(item.get()))
+        if (!item->isEnabled) continue;
+        if (auto upd = dynamic_cast<UpdateModule*>(item))
         {
             if (upd->ShouldUpdate())
             {
                 upd->Update();
                 upd->MarkUpdated();
             }
-                
         }
     }
 }
 
-void ItemManager::ProcessKeyEvents(UINT key, WPARAM wParam, LPARAM lParam) //key：按键，wParam：按下或释放标志，lParam：是否是重复按键
-{
-    for (auto& item : items)
-    {
-        if (!item->isEnabled) continue; // 跳过禁用的模块
-        if (auto kbd = dynamic_cast<KeybindModule*>(item.get()))
-        {
-            kbd->OnKeyEvent(key, wParam, lParam);
-        }
-    }
-}
-
-// ---------------------------------------------
-// 渲染所有信息项（每帧调用）
-// ---------------------------------------------
+// ------------------------------------------------
 void ItemManager::RenderAll(HWND hwnd)
 {
-    for (auto& item : items) {
-        if (!item->isEnabled) continue; // 跳过禁用的模块
-        if (auto win = dynamic_cast<WindowModule*>(item.get()))
+    if (GameStateDetector::Instance().IsNeedHide() && !Menu::Instance().open)
+        return; // 隐藏所有窗口
+    for (auto item : allItems)
+    {
+        if (!item->isEnabled) continue;
+        if (auto win = dynamic_cast<WindowModule*>(item))
         {
             win->RenderWindow(hwnd);
         }
     }
 }
 
-// ---------------------------------------------
-// 从 JSON 加载全部信息项
-// ---------------------------------------------
+// ------------------------------------------------
+void ItemManager::ProcessKeyEvents(bool state, bool isRepeat, WPARAM key)
+{
+    for (auto item : allItems)
+    {
+        if (!item->isEnabled) continue;
+        if (auto kbd = dynamic_cast<KeybindModule*>(item))
+        {
+            kbd->OnKeyEvent(state, isRepeat, key);
+        }
+    }
+}
+
+// ------------------------------------------------
+// JSON Load / Save
+// ------------------------------------------------
 void ItemManager::Load(const nlohmann::json& j)
 {
-    // 清理现有 MultiInstance 但保留 Singleton 已初始化的
-    items.erase(
-        std::remove_if(items.begin(), items.end(),
-            [](const std::shared_ptr<Item>& it) {
-                return it->IsMultiInstance();
-            }),
-        items.end()
-    );
-
-    // 加载 SingletonItems（此时 Singleton 实例已存在，只需要加载配置）
+    // ---- 加载单例 ----
     if (j.contains("SingletonItems"))
     {
         for (auto& node : j["SingletonItems"])
         {
-            std::string type = node["type"].get<std::string>();
-
-            for (auto& item : items)
+            std::string type = node["type"];
+            for (auto item : singletonItems)
             {
-                if (!item->IsMultiInstance() && item->name == type) // 只加载到已存在 Singleton
+                if (item->name == type)
                 {
                     item->Load(node);
                     break;
@@ -118,42 +134,51 @@ void ItemManager::Load(const nlohmann::json& j)
         }
     }
 
-    //  加载 MultiInstanceItems（每个都创建新实例）
+    // ---- 清空多例并重建 ----
+    multiItems.clear();
+    allItems.erase(
+        std::remove_if(allItems.begin(), allItems.end(),
+            [&](Item* it) { return it->IsMultiInstance(); }),
+        allItems.end()
+    );
+
     if (j.contains("MultiInstanceItems"))
     {
         for (auto& node : j["MultiInstanceItems"])
         {
             std::unique_ptr<Item> item;
-            std::string type = node["type"].get<std::string>();
+            std::string type = node["type"];
 
-            if (type == u8"粉丝数显示")    item = std::make_unique<BilibiliFansItem>();
-            if (type == u8"文件数量显示")       item = std::make_unique<FileCountItem>();
-            if (type == u8"计数器")          item = std::make_unique<CounterItem>();
-            if (type == u8"文本显示")             item = std::make_unique<TextItem>();
+            if (type == u8"粉丝数显示") item = std::make_unique<BilibiliFansItem>();
+            if (type == u8"文件数量显示") item = std::make_unique<FileCountItem>();
+            if (type == u8"计数器")     item = std::make_unique<CounterItem>();
+            if (type == u8"文本显示")   item = std::make_unique<TextItem>();
+
             if (!item) continue;
 
             item->Load(node);
-            AddItem(std::move(item));
+            AddMulti(std::move(item));
         }
     }
 }
 
-// ---------------------------------------------
-// 保存所有信息项
-// ---------------------------------------------
+// ------------------------------------------------
 void ItemManager::Save(nlohmann::json& j) const
 {
     j["SingletonItems"] = nlohmann::json::array();
     j["MultiInstanceItems"] = nlohmann::json::array();
 
-    for (auto& item : items)
+    for (auto item : singletonItems)
     {
         nlohmann::json node;
         item->Save(node);
+        j["SingletonItems"].push_back(node);
+    }
 
-        if (item->IsMultiInstance())
-            j["MultiInstanceItems"].push_back(node);
-        else
-            j["SingletonItems"].push_back(node);
+    for (auto& up : multiItems)
+    {
+        nlohmann::json node;
+        up->Save(node);
+        j["MultiInstanceItems"].push_back(node);
     }
 }

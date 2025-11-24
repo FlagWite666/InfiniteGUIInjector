@@ -3,33 +3,30 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include "Item.h"
-#include "GlobalConfig.h"
 
 class ItemManager {
 public:
     ItemManager();
-
     static ItemManager& Instance() {
         static ItemManager instance;
         return instance;
     }
 
-    void AddItem(std::shared_ptr<Item> item);
-    void RemoveItem(int index);
+    void AddSingleton(Item* item);
+    void AddMulti(std::unique_ptr<Item> item);
+    void RemoveMulti(Item* target);
 
     void UpdateAll();
-
     void RenderAll(HWND hwnd);
-
-    void ProcessKeyEvents(UINT key, WPARAM wParam, LPARAM lParam);
+    void ProcessKeyEvents(bool state, bool isRepeat, WPARAM key);
 
     void Load(const nlohmann::json& j);
     void Save(nlohmann::json& j) const;
 
-
-
-    std::vector<std::shared_ptr<Item>>& GetItems() { return items; }
+    const std::vector<Item*>& GetAllItems() const { return allItems; }
 
 private:
-    std::vector<std::shared_ptr<Item>> items;
+    std::vector<Item*> allItems;                      // 全部 item（指针，不析构）
+    std::vector<Item*> singletonItems;                // 单例指针，不析构
+    std::vector<std::unique_ptr<Item>> multiItems;    // 多例，由 manager 管理
 };

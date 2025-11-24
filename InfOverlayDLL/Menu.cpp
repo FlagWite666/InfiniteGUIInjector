@@ -6,6 +6,11 @@
 #include "GlobalConfig.h"
 #include "FileUtils.h"
 #include "StringConverter.h"
+#include "TextItem.h"
+#include "FileCountItem.h"
+#include "BilibiliFansItem.h"
+#include "CounterItem.h"
+#include <thread>
 
 
 struct FontInfo {
@@ -166,7 +171,7 @@ void Menu::Render()
     // 添加各种信息项按钮
 
     if (ImGui::Button(u8"添加 文本")) {
-        ItemManager::Instance().AddItem(std::make_unique<TextItem>());
+        ItemManager::Instance().AddMulti(std::make_unique<TextItem>());
     }
 
     //if (ImGui::Button(u8"添加 时间")) {
@@ -178,16 +183,16 @@ void Menu::Render()
     //}
 
     if (ImGui::Button(u8"添加 文件数量")) {
-        ItemManager::Instance().AddItem(std::make_unique<FileCountItem>());
+        ItemManager::Instance().AddMulti(std::make_unique<FileCountItem>());
     }
 
     if (ImGui::Button(u8"添加 粉丝数")) {
-        ItemManager::Instance().AddItem(std::make_unique<BilibiliFansItem>());
+        ItemManager::Instance().AddMulti(std::make_unique<BilibiliFansItem>());
     }
 
     if (ImGui::Button(u8"添加 计数器"))
     {
-        ItemManager::Instance().AddItem(std::make_unique<CounterItem>());
+        ItemManager::Instance().AddMulti(std::make_unique<CounterItem>());
     }
 
     //if (ImGui::Button(u8"添加 弹幕显示")) {
@@ -286,11 +291,13 @@ void Menu::Render()
 
 void Menu::DrawItemList()
 {
-    auto& items = ItemManager::Instance().GetItems();
+    auto& items = ItemManager::Instance().GetAllItems();
 
     for (int i = 0; i < items.size(); i++)
     {
-        Item* item = items[i].get();
+        Item* item = items[i];
+        if (item->type == Hidden)
+            continue;
 
         ImGui::Checkbox(("##" + std::to_string(i)).c_str(), &item->isEnabled);
         ImGui::SameLine();
@@ -303,7 +310,7 @@ void Menu::DrawItemList()
         {
             if (ImGui::Button(u8"删除"))
             {
-                ItemManager::Instance().RemoveItem(i);
+                ItemManager::Instance().RemoveMulti(item);
                 ImGui::PopID();
                 break;
             }

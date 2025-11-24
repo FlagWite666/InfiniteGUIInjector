@@ -45,6 +45,11 @@ public:
 
     virtual ~DanmakuItem();
 
+    static DanmakuItem& Instance() {
+        static DanmakuItem instance;
+        return instance;
+    }
+
     void Update() override;
     void DrawContent() override;
     void DrawSettings() override;

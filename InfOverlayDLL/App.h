@@ -18,7 +18,7 @@ public:
 	std::string appAuthor = "QC_Max";
 	std::string appDescription = "InfOverlay is a library that allows you to create overlays for in-game information.";
 	std::string announcement = "这里没有公告捏...";
-	version cloudVersion;
+	version cloudVersion = { 0, 0, 0 };
 	std::wstring versionUrl = L"https://gitee.com/qc_max/inf-overlay/raw/master/version.json";
 	std::wstring announcementUrl = L"https://gitee.com/qc_max/inf-overlay/raw/master/announcement.txt";
 	HWND clientHwnd = nullptr;

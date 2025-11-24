@@ -93,6 +93,11 @@ public:
     }
     ~KeystrokesItem() {}
 
+    static KeystrokesItem& Instance() {
+        static KeystrokesItem instance;
+        return instance;
+    }
+
     void Update() override;
     void DrawContent() override;
     void DrawSettings() override;

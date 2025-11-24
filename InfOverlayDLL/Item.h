@@ -11,7 +11,8 @@
 
 enum ItemType {
     Hud,
-    Util
+    Util,
+    Hidden
 };
 
 enum MultiType {
@@ -53,9 +54,9 @@ public:
     }
 
     bool isEnabled = true; // 是否启用该信息项
-    ItemType type; // 信息项类型
-    MultiType multiType; // 信息项是否可以多开
-    std::string name; // 信息项名称
-    std::string description; // 信息项描述
+    ItemType type = ItemType::Hud; // 信息项类型
+    MultiType multiType = MultiType::Singlton; // 信息项是否可以多开
+    std::string name = "Item"; // 信息项名称
+    std::string description = "No description"; // 信息项描述
     //std::string icon; // 信息项图标路径
 };

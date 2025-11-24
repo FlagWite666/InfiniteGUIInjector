@@ -62,7 +62,7 @@ namespace ImGuiStd {
     }
     struct keybind_element
     {
-        ImGuiID id;
+        ImGuiID id = 0;
         bool binding = false;
     };
     static ImGuiID current_id = 0;

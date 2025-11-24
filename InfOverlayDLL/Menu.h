@@ -1,12 +1,5 @@
 #pragma once
-#include "ItemManager.h"
-#include "TextItem.h"
-#include "TimeItem.h"
-#include "FileCountItem.h"
-#include "BilibiliFansItem.h"
-#include "CounterItem.h"
-#include "DanmakuItem.h"
-#include "FpsItem.h"
+#include "Item.h"
 
 enum MenuState {
     MENU_STATE_MAIN,
