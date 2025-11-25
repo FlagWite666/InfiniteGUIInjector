@@ -1,9 +1,10 @@
 #include "GameStateDetector.h"
 #include "App.h"
-#include <windows.h>
+#include "KeyState.h"
 void GameStateDetector::Update()
 {
 	isInGame = !IsMouseCursorVisible();
+
 }
 
 void GameStateDetector::Load(const nlohmann::json& j)
@@ -20,6 +21,7 @@ void GameStateDetector::Save(nlohmann::json& j) const
 
 void GameStateDetector::DrawSettings()
 {
+	ImGui::Checkbox(u8"仅在游戏内显示窗口", &hideItemInGui);
 }
 
 //bool GameStateDetector::IsPaused() const
@@ -51,31 +53,6 @@ bool GameStateDetector::IsInGame() const
 {
 	return isInGame;
 }
-
-//bool GameStateDetector::DetWindowCenter() const
-//{
-//	RECT rc = { 0, 0 };
-//	GetWindowRect(App::Instance().clientHwnd, &rc);
-//	int x = (int)floor((rc.right - rc.left) / 2) + rc.left;
-//	int y = (int)floor((rc.bottom - rc.top) / 2) + rc.top;
-//	static int smx = GetSystemMetrics(SM_CXSCREEN);
-//	static int smy = GetSystemMetrics(SM_CYSCREEN);
-//	if (rc.right != smx && rc.bottom != smy)
-//		y += 12;
-//
-//	POINT curPos = { x, y };
-//
-//	RECT rc2 = { 0, 0 };
-//
-//	rc2.left = x - centerLevel + 1;
-//	rc2.top = y - centerLevel;
-//	rc2.right = x + centerLevel;
-//	rc2.bottom = y +centerLevel + 1;
-//	GetCursorPos(&curPos);
-//	return PtInRect(&rc2, curPos);
-//
-//}
-
 
 bool GameStateDetector::IsMouseCursorVisible() const
 {

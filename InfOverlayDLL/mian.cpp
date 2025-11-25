@@ -76,7 +76,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
         ImGui::NewFrame();
 
         //  调用 DLL 原有渲染入口
-        ItemManager::Instance().RenderAll(g_hWnd);
+        ItemManager::Instance().RenderAll();
 
         Menu::Instance().Render();
 

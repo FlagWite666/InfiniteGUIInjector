@@ -12,7 +12,7 @@ public:
         ImGuiStd::InputTextStd(u8"Ç°×º", prefix);
         ImGuiStd::InputTextStd(u8"ºó×º", suffix);
     }
-
+protected:
     void LoadAffix(const nlohmann::json& j)
     {
         if (j.contains("prefix")) prefix = j["prefix"];
@@ -23,7 +23,7 @@ public:
         j["prefix"] = prefix;
         j["suffix"] = suffix;
     }
-protected:
+
 	std::string prefix = "[";
 	std::string suffix = "]";
 };

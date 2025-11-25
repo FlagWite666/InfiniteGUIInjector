@@ -1,25 +1,6 @@
 #include "CPSDetector.h"
 #include "App.h"
-bool GetKeyDown(int key)
-{
-    return GetAsyncKeyState(key) & 0x8000;
-}
-
-bool IsPressedOnce(int vk)
-{
-    if (vk <= 0)
-        return false;
-    static bool PrevKeyState[512] = { false };
-
-    bool CurrKeyState = GetKeyDown(vk);
-    bool IsClick = false;
-    if (PrevKeyState[vk] != CurrKeyState)
-    {
-        IsClick = CurrKeyState;
-        PrevKeyState[vk] = CurrKeyState;
-    }
-    return IsClick;
-}
+#include "KeyState.h"
 
 // 检查是否到了更新的时间
 bool CPSDetector::ShouldCpsUpdate() {
@@ -43,11 +24,11 @@ void CPSDetector::Update()
     }
     if (App::Instance().clientHwnd != GetForegroundWindow())
         return;
-    if (IsPressedOnce(VK_LBUTTON))
+    if (GetKeyClick(VK_LBUTTON))
     {
         cps.AddLeftClick(20);
     }
-    if (IsPressedOnce(VK_RBUTTON))
+    if (GetKeyClick(VK_RBUTTON))
     {
         cps.AddRightClick(20);
     }

@@ -12,43 +12,12 @@
 #include "CounterItem.h"
 #include <thread>
 
-
-struct FontInfo {
-    std::string name;
-    std::wstring path;
-};
-
-std::vector<FontInfo> GetFontsFromDirectory(const std::wstring& directory) {
-    std::vector<FontInfo> fontInfos;
-
-    WIN32_FIND_DATA findFileData;
-    HANDLE hFind = FindFirstFile((directory + L"\\*").c_str(), &findFileData);
-
-    if (hFind == INVALID_HANDLE_VALUE)
-        return fontInfos;
-
-    do {
-        if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-            std::wstring filename = findFileData.cFileName;
-            if (filename.find(L".ttf") != std::string::npos || filename.find(L".otf") != std::string::npos) {
-                FontInfo fontInfo;
-                fontInfo.name = StringConverter::WstringToUtf8(filename);
-                fontInfo.path = directory + L"\\" + filename;
-                fontInfos.push_back(fontInfo);
-            }
-        }
-    } while (FindNextFile(hFind, &findFileData) != 0);
-
-    FindClose(hFind);
-    return fontInfos;
-}
-
 void ShowFontSelection(GlobalConfig* globalConfig) {
-    static std::vector<FontInfo> fontFiles;
+    static std::vector<FileUtils::FontInfo> fontFiles;
 
     // Get font files if not loaded yet
     if (fontFiles.empty()) {
-        fontFiles = GetFontsFromDirectory(L"C:\\Windows\\Fonts");
+        fontFiles = FileUtils::GetFontsFromDirectory(L"C:\\Windows\\Fonts");
         ////获取用户名
         //std::wstring username = L"";
         //DWORD usernameSize = 0;
@@ -57,7 +26,7 @@ void ShowFontSelection(GlobalConfig* globalConfig) {
         wchar_t username[256]; // 确保足够空间来存储用户名
         DWORD usernameSize = sizeof(username) / sizeof(username[0]);
         GetUserNameW(username, &usernameSize);
-        std::vector<FontInfo> userFonts = GetFontsFromDirectory(L"C:\\Users\\" + std::wstring(username) + L"\\AppData\\Local\\Microsoft\\Windows\\Fonts");
+        std::vector<FileUtils::FontInfo> userFonts = FileUtils::GetFontsFromDirectory(L"C:\\Users\\" + std::wstring(username) + L"\\AppData\\Local\\Microsoft\\Windows\\Fonts");
         fontFiles.insert(fontFiles.end(), userFonts.begin(), userFonts.end());
     }
 
@@ -174,14 +143,6 @@ void Menu::Render()
         ItemManager::Instance().AddMulti(std::make_unique<TextItem>());
     }
 
-    //if (ImGui::Button(u8"添加 时间")) {
-    //    ItemManager::Instance().AddItem(std::make_unique<TimeItem>());
-    //}
-
-    //if (ImGui::Button(u8"添加 FPS显示")) {
-    //    ItemManager::Instance().AddItem(std::make_unique<FpsItem>());
-    //}
-
     if (ImGui::Button(u8"添加 文件数量")) {
         ItemManager::Instance().AddMulti(std::make_unique<FileCountItem>());
     }
@@ -194,11 +155,6 @@ void Menu::Render()
     {
         ItemManager::Instance().AddMulti(std::make_unique<CounterItem>());
     }
-
-    //if (ImGui::Button(u8"添加 弹幕显示")) {
-    //    ItemManager::Instance().AddItem(std::make_unique<DanmakuItem>());
-    //}
-
 
     ImGui::Separator();
     DrawItemList();
@@ -328,12 +284,6 @@ void Menu::DrawItemList()
         }
 
         ImGui::PopID();
-        //ImGui::SameLine();
-        //避免冲突
-
-        //std::string clickThroughStr = u8"固定##" + std::to_string(i);
-
-        //ImGui::Checkbox(clickThroughStr.c_str(), &item->clickThrough);
     }
 }
 
@@ -353,4 +303,17 @@ void Menu::Toggle(bool open)
 void Menu::Toggle()
 {
     open = !open;
+    if (!open)
+    {
+        RECT rect;
+        // 获取窗口的矩形位置和大小
+        if (GetWindowRect(App::Instance().clientHwnd, &rect)) {
+            // 计算窗口中心的位置
+            int centerX = (rect.left + rect.right) / 2;
+            int centerY = (rect.top + rect.bottom) / 2;
+
+            // 设置鼠标位置
+            SetCursorPos(centerX, centerY);
+        }
+    }
 }

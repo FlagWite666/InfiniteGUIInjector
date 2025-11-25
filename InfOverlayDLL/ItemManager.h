@@ -17,7 +17,7 @@ public:
     void RemoveMulti(Item* target);
 
     void UpdateAll();
-    void RenderAll(HWND hwnd);
+    void RenderAll();
     void ProcessKeyEvents(bool state, bool isRepeat, WPARAM key);
 
     void Load(const nlohmann::json& j);

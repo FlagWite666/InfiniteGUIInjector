@@ -206,6 +206,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BilibiliFansItem.h" />
+    <ClInclude Include="Clickgui.h" />
     <ClInclude Include="ConfigManager.h" />
     <ClInclude Include="CounterItem.h" />
     <ClInclude Include="CPSDetector.h" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="KeybindModule.h" />
+    <ClInclude Include="KeyState.h" />
     <ClInclude Include="KeystrokesItem.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="minHook\MinHook.h" />
@@ -240,6 +242,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Run.h" />
     <ClInclude Include="SoundModule.h" />
+    <ClInclude Include="Sprint.h" />
     <ClInclude Include="TextItem.h" />
     <ClInclude Include="TimeItem.h" />
     <ClInclude Include="StringConverter.h" />
@@ -252,6 +255,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BilibiliFansItem.cpp" />
+    <ClCompile Include="Clickgui.cpp" />
     <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="CounterItem.cpp" />
     <ClCompile Include="CPSDetector.cpp" />
@@ -272,6 +276,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="ItemManager.cpp" />
+    <ClCompile Include="KeyState.cpp" />
     <ClCompile Include="KeystrokesItem.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="mian.cpp" />
@@ -284,6 +289,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='exe|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Run.cpp" />
+    <ClCompile Include="Sprint.cpp" />
     <ClCompile Include="TextItem.cpp" />
     <ClCompile Include="TimeItem.cpp" />
     <ClCompile Include="StringConverter.cpp" />

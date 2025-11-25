@@ -206,7 +206,7 @@ BOOL WINAPI MySwapBuffers(HDC hdc)
     ImGui::NewFrame();
 
     {
-        ItemManager::Instance().RenderAll(App::Instance().clientHwnd);
+        ItemManager::Instance().RenderAll();
         Menu::Instance().Render();
     }
 

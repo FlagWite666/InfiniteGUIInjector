@@ -21,5 +21,5 @@ public:
     }
 protected:
 	int refreshIntervalMs;    // 默认 1 秒
-	std::chrono::steady_clock::time_point lastUpdateTime;  // 记录最后更新时间
+	std::chrono::steady_clock::time_point lastUpdateTime = std::chrono::steady_clock::now();  // 记录最后更新时间
 };

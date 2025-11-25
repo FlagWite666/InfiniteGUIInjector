@@ -8,6 +8,7 @@
 #include "FileCountItem.h"
 #include "CounterItem.h"
 #include "TextItem.h"
+#include "Sprint.h"
 
 #include "CPSDetector.h"
 #include "GameStateDetector.h"
@@ -22,6 +23,8 @@ ItemManager::ItemManager()
     // 注册默认 Singleton
     AddSingleton(&GameStateDetector::Instance());
     AddSingleton(&CPSDetector::Instance());
+
+    AddSingleton(&Sprint::Instance());
 
     AddSingleton(&TimeItem::Instance());
     AddSingleton(&FpsItem::Instance());
@@ -85,7 +88,7 @@ void ItemManager::UpdateAll()
 }
 
 // ------------------------------------------------
-void ItemManager::RenderAll(HWND hwnd)
+void ItemManager::RenderAll()
 {
     if (GameStateDetector::Instance().IsNeedHide() && !Menu::Instance().open)
         return; // 隐藏所有窗口
@@ -94,7 +97,7 @@ void ItemManager::RenderAll(HWND hwnd)
         if (!item->isEnabled) continue;
         if (auto win = dynamic_cast<WindowModule*>(item))
         {
-            win->RenderWindow(hwnd);
+            win->RenderWindow();
         }
     }
 }

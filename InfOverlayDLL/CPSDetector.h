@@ -56,7 +56,7 @@ class CPSDetector : public Item, public UpdateModule
 public:
     CPSDetector() {
         type = Hidden; // 信息项类型
-        multiType = Singlton;    // 信息项是否可以多开
+        multiType = Singleton;    // 信息项是否可以多开
         name = u8"CPS检测";
         description = u8"检测左右键CPS";
         isEnabled = true;

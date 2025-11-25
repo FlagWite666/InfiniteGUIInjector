@@ -67,6 +67,9 @@
     <Filter Include="源文件\core\items\hidden">
       <UniqueIdentifier>{52054187-1cb7-46af-9f81-3d2d2426bc65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\core\items\menu">
+      <UniqueIdentifier>{42876650-d4a5-4c59-93ab-afefa0a6abbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="minHook\MinHook.h">
@@ -162,9 +165,6 @@
     <ClInclude Include="WindowModule.h">
       <Filter>源文件\core\items\virtual\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="WindowSnapper.h">
-      <Filter>源文件\core\items\virtual\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="FileUtils.h">
       <Filter>源文件\utils</Filter>
     </ClInclude>
@@ -203,6 +203,18 @@
     </ClInclude>
     <ClInclude Include="GameStateDetector.h">
       <Filter>源文件\core\items\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="Clickgui.h">
+      <Filter>源文件\core\items\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowSnapper.h">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprint.h">
+      <Filter>源文件\core\items\utiis</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyState.h">
+      <Filter>源文件\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -275,9 +287,6 @@
     <ClCompile Include="TimeItem.cpp">
       <Filter>源文件\core\items\huds</Filter>
     </ClCompile>
-    <ClCompile Include="WindowSnapper.cpp">
-      <Filter>源文件\core\items\virtual\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="StringConverter.cpp">
       <Filter>源文件\utils</Filter>
     </ClCompile>
@@ -301,6 +310,18 @@
     </ClCompile>
     <ClCompile Include="GameStateDetector.cpp">
       <Filter>源文件\core\items\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="Clickgui.cpp">
+      <Filter>源文件\core\items\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowSnapper.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprint.cpp">
+      <Filter>源文件\core\items\utiis</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyState.cpp">
+      <Filter>源文件\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@ public:
         }
 
     }
+protected:
     void LoadKeybind(const nlohmann::json& j)
     {
         for (auto& [name, key] : keybinds)
@@ -35,6 +36,6 @@ public:
             j[name] = key;
         }
     }
-protected:
+
 	std::map<std::string, int> keybinds; //name, key
 };

@@ -18,7 +18,7 @@ public:
 
     GameStateDetector() {
         type = Hidden; // 信息项类型
-        multiType = Singlton;    // 信息项是否可以多开
+        multiType = Singleton;    // 信息项是否可以多开
         name = u8"游戏状态检测";
         description = u8"检测游戏当前状态";
         isEnabled = true;

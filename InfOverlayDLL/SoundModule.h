@@ -12,7 +12,7 @@ public:
         ImGui::Checkbox(u8"提示音", &isPlaySound);
         ImGui::SliderFloat(u8"音量", &soundVolume, 0.0f, 1.0f, "%.2f");
     }
-
+protected:
     void LoadSound(const nlohmann::json& j)
     {
         if (j.contains("isPlaySound")) isPlaySound = j["isPlaySound"];
@@ -23,7 +23,6 @@ public:
         j["isPlaySound"] = isPlaySound;
         j["soundVolume"] = soundVolume;
     }
-protected:
     bool isPlaySound;
     float soundVolume;    // 声音音量（0.0~1.0）
 };

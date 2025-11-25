@@ -6,6 +6,7 @@
 #pragma comment(lib, "dwmapi.lib")
 #include "GlobalConfig.h"
 #include "WindowSnapper.h"
+#include "App.h"
 static const float SNAP_DISTANCE = 15.0f;
 static bool isSnapping = false;
 
@@ -37,53 +38,9 @@ public:
     // ---------------------------
 //   渲染整个窗口（统一逻辑）
 // ---------------------------
-    std::string GetActualWindowName() const {
-        return "##" + std::to_string((uintptr_t)this);
-    }
-
-    void HandleDrag(HWND g_hwnd)
+    virtual void RenderWindow()
     {
-        if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
-            isSnapping = true;
-        else
-            isSnapping = false;
-
-        // 当前窗口位置大小
-        ImVec2 pos = ImGui::GetWindowPos();
-        ImVec2 sz = ImGui::GetWindowSize();
-
-        // 获取 screenW,screenH（DLL 中已经有 g_hwnd）
-        RECT rc;
-        GetClientRect(g_hwnd, &rc);
-        float sw = (float)rc.right;
-        float sh = (float)rc.bottom;
-
-        SnapResult snap;
-        if (isSnapping)
-        {
-            // 计算吸附
-            snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, SNAP_DISTANCE);
-            // 画吸附线
-            WindowSnapper::DrawGuides(snap, sw, sh);
-        }
-        else
-            snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, 0.0f);
-
-        // 设置吸附后的位置
-        ImGui::SetWindowPos(snap.snappedPos, ImGuiCond_Always);
-
-        // 保存到 Item
-        x = snap.snappedPos.x;
-        y = snap.snappedPos.y;
-        snapState = snap.snapState;
-
-        //保存窗口大小
-        width = ImGui::GetWindowSize().x;
-        height = ImGui::GetWindowSize().y;
-    }
-
-    virtual void RenderWindow(HWND g_hwnd)
-    {
+        if (!isWindowShow) return;
         if (!isCustomSize)
             //ImGui::SetNextWindowSizeConstraints(ImVec2(10, 10), ImVec2(2560, 1440));
             ImGui::SetNextWindowSize(ImVec2(0, 0), ImGuiCond_Always);
@@ -94,7 +51,7 @@ public:
             if (isCustomSize)
                 ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Always);
         }
-
+        HWND g_hwnd = App::Instance().clientHwnd;
 
         ImGui::SetNextWindowBgAlpha(alpha); // 半透明
         if (!showBorder) ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); // 边框透明
@@ -148,7 +105,53 @@ public:
         ImGui::End();
         if (!showBorder) ImGui::PopStyleColor(); // 边框透明
     }
+private:
+        std::string GetActualWindowName() const {
+            return "##" + std::to_string((uintptr_t)this);
+        }
 
+        void HandleDrag(HWND g_hwnd)
+        {
+            if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
+                isSnapping = true;
+            else
+                isSnapping = false;
+
+            // 当前窗口位置大小
+            ImVec2 pos = ImGui::GetWindowPos();
+            ImVec2 sz = ImGui::GetWindowSize();
+
+            // 获取 screenW,screenH（DLL 中已经有 g_hwnd）
+            RECT rc;
+            GetClientRect(g_hwnd, &rc);
+            float sw = (float)rc.right;
+            float sh = (float)rc.bottom;
+
+            SnapResult snap;
+            if (isSnapping)
+            {
+                // 计算吸附
+                snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, SNAP_DISTANCE);
+                // 画吸附线
+                WindowSnapper::DrawGuides(snap, sw, sh);
+            }
+            else
+                snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, 0.0f);
+
+            // 设置吸附后的位置
+            ImGui::SetWindowPos(snap.snappedPos, ImGuiCond_Always);
+
+            // 保存到 Item
+            x = snap.snappedPos.x;
+            y = snap.snappedPos.y;
+            snapState = snap.snapState;
+
+            //保存窗口大小
+            width = ImGui::GetWindowSize().x;
+            height = ImGui::GetWindowSize().y;
+        }
+
+protected:
     void LoadWindow(const nlohmann::json& j)
     {
         if (j.contains("isCustomSize")) isCustomSize = j["isCustomSize"];
@@ -180,7 +183,9 @@ public:
 
         j["snapState"] = snapState;
     }
-protected:
+
+    bool isWindowShow = true;
+
     bool isCustomSize = false;    //是否自定义大小
     float x = 100.0f;
     float y = 40.0f;

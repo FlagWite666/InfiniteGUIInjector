@@ -8,7 +8,7 @@ class FpsItem : public Item, public AffixModule, public UpdateModule, public Win
 public:
     FpsItem() {
         type = Hud; // 信息项类型
-        multiType = Singlton;    // 信息项是否可以多开
+        multiType = Singleton;    // 信息项是否可以多开
         isEnabled = false;
         name = u8"帧率显示";
         description = u8"显示当前帧率";

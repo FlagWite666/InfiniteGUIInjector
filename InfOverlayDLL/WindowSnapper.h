@@ -21,7 +21,7 @@ enum SnapState : uint32_t {
 
 struct SnapResult {
     ImVec2 snappedPos;
-    SnapState snapState;
+    SnapState snapState = SNAP_NONE;
 };
 
 class WindowSnapper
