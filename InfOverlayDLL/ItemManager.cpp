@@ -21,9 +21,6 @@
 ItemManager::ItemManager()
 {
     // ×¢²áÄ¬ÈÏ Singleton
-    AddSingleton(&GameStateDetector::Instance());
-    AddSingleton(&CPSDetector::Instance());
-
     AddSingleton(&Sprint::Instance());
 
     AddSingleton(&TimeItem::Instance());
@@ -31,6 +28,9 @@ ItemManager::ItemManager()
     AddSingleton(&DanmakuItem::Instance());
     AddSingleton(&KeystrokesItem::Instance());
     AddSingleton(&CPSItem::Instance());
+
+    AddSingleton(&GameStateDetector::Instance());
+    AddSingleton(&CPSDetector::Instance());
 }
 
 // ------------------------------------------------

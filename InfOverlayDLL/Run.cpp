@@ -11,6 +11,7 @@
 #include "pch.h"
 #include "ImguiSty.h"
 #include <thread>
+#include "GameStateDetector.h"
 typedef BOOL(WINAPI* OldSwapBuffers)(HDC);
 OldSwapBuffers fpSwapBuffers = NULL;
 // 仅当 uiActive=true 时，让 ImGui 处理 Win32 消息
@@ -62,6 +63,10 @@ LRESULT CALLBACK HookedWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
         case WM_INPUTLANGCHANGEREQUEST:
         case WM_INPUTLANGCHANGE:
+
+        case WM_DESTROY:
+        case WM_QUIT:
+        case WM_CLOSE:
             goto end;
         default:
             return TRUE;
@@ -227,6 +232,11 @@ static bool g_mhInitialized = false;
 // 初始化 Hook（在单独线程里执行）
 DWORD WINAPI InitThread(LPVOID)
 {
+    do
+    {
+        GameStateDetector::Instance().Update();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    } while (!GameStateDetector::Instance().IsInGame());
 
     if (g_mhInitialized) return 0;
 
