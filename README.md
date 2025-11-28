@@ -20,17 +20,6 @@
   
 适用于 **主播、视频作者、服务器玩家、工具开发者** 等希望在游戏中加入 HUD 信息显示的人群。
 
-**InfoOverlay** is a DLL designed to be injected into **most versions of Java Edition Minecraft**.  
-After injection, it can render various real-time information directly inside the game:
-
-- Custom text  
-- Current time  
-- Follower count  
-- Game FPS  
-- Bilibili live comments (⚠ Occasional crashes may occur due to an unknown cause)
-
-Useful for streamers, content creators, server players, and developers who want in-game HUD overlays.
-
 ---
 
 ## ✨ Features | 功能特点
@@ -58,7 +47,7 @@ Useful for streamers, content creators, server players, and developers who want 
 ### 1. 下载成品
 你可以克隆代码并自行构建  
 
-你也可以在 **爱发电** 以 9 元获得：  
+你也可以在 **爱发电** 以 8.8 元获得：  
 - 编译好的成品  
 - 自动更新  
 - 技术支持  
@@ -78,4 +67,6 @@ InfoOverlay 仅用于绘制独立的叠加界面（Overlay），与游戏逻辑�
 
 **⚠ 请勿在网易版 Minecraft（网易MC）中使用本程序。**  
 由于网易版存在独立的客户端保护机制，**DLL 注入行为可能会被错误识别为作弊行为，并导致封号风险。**  
-如果用户在网易版 Minecraft 中注入本程序并导致账号封禁，作者概不负责。
+如果用户在网易版 Minecraft 中注入本程序并导致账号封禁，作者概不负责。  
+
+本项目使用了《天王星像素 11Px》字体，其授权为 GPL v2 + 文泉驿字体嵌入例外。字体版权归文泉驿信任委员会、FangQ 与 Firefly 所有。
