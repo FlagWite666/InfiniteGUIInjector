@@ -1,6 +1,7 @@
 #include "CPSDetector.h"
 #include "App.h"
 #include "KeyState.h"
+#include "opengl_hook.h"
 
 // 检查是否到了更新的时间
 bool CPSDetector::ShouldCpsUpdate() {
@@ -22,8 +23,8 @@ void CPSDetector::Update()
         cps.processClick();
         MarkUpCPSdated();
     }
-    if (App::Instance().clientHwnd != GetForegroundWindow())
-        return;
+    //if (App::Instance().clientHwnd != opengl_hook::handle_window)
+    //    return;
     if (GetKeyClick(VK_LBUTTON))
     {
         cps.AddLeftClick(20);

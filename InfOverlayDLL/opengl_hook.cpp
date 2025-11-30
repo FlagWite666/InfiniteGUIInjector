@@ -39,8 +39,6 @@ static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPA
 	{
 	}
 	break;
-
-
 	case WM_SIZE:
 	{
 		int width = LOWORD(lParam);
@@ -48,7 +46,6 @@ static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPA
 		opengl_hook::screen_size = { width, height };
 		break;
 	}
-
 	default:
 	{
 		break;

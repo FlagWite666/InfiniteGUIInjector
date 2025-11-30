@@ -21,9 +21,6 @@
     <Filter Include="ext\imgui">
       <UniqueIdentifier>{49d21573-3161-447b-8c01-513853e8e238}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ext\gl">
-      <UniqueIdentifier>{b6c6774b-04c2-4143-83e1-4e115edc7ed1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ext\detours">
       <UniqueIdentifier>{09d24ab0-c176-450b-8d42-dd2f71cb2898}</UniqueIdentifier>
     </Filter>

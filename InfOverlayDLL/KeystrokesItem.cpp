@@ -7,8 +7,8 @@
 #include "App.h"
 void KeystrokesItem::Update()
 {
-    if(App::Instance().clientHwnd != GetForegroundWindow())
-        return;
+    //if(App::Instance().clientHwnd != opengl_hook::handle_window)
+    //    return;
     for (auto& key_box : key_boxes)
     {
         if(GetAsyncKeyState(key_box.key) & 0x8000)
