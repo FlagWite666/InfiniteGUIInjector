@@ -1,4 +1,4 @@
-# InfoOverlay DLL  
+# 无限GUI DLL  
 > A dynamic-link library for injecting HUD overlays into Java Edition Minecraft  
 > 一个用于向 Java 版 Minecraft 注入信息显示层（HUD）的动态链接库
 
@@ -6,7 +6,7 @@
 
 ## 📌 Overview | 项目简介
 
-**InfoOverlay** 是一个可以注入到 **大部分 Java 版 Minecraft** 的动态链接库（DLL）。  
+**无限GUI** 是一个可以注入到 **大部分 Java 版 Minecraft** 的动态链接库（DLL）。  
 注入成功后，你可以在游戏画面中显示各种实时信息，包括：
 
 - 自定义文本  
@@ -36,7 +36,7 @@
 - B 站直播间弹幕实时显示（需要配合第三方弹幕姬使用：https://www.danmuji.org )
 
 ### ✔ 技术特性
-- 支持多版本 Java Minecraft  
+- 支持多版本 Java Minecraft-1.13~最新版本
 - 自定义渲染  
 - 独立 DLL，可用于二次开发
 
@@ -48,7 +48,8 @@
 你可以克隆代码并自行构建  
 
 你也可以在 **爱发电** 以 8.8 元获得：  
-- 编译好的成品  
+- 编译好的成品
+- 附赠注入器
 - 自动更新  
 - 技术支持  
 - 使用教程  
