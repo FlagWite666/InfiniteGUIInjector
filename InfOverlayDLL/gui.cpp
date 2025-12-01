@@ -10,33 +10,12 @@
 //#include <gl/GL.h>
 
 #include "fonts.h"
-#include "GlobalConfig.h"
 #include "ImGuiSty.h"
-#include "ConfigManager.h"
-#include "AudioManager.h"
-#include "FileUtils.h"
+#include "ItemManager.h"
 #include "App.h"
 
 #include "Menu.h"
-
-#include <thread>
-#include <atomic>
 static ImGuiContext* imGuiContext = nullptr;
-static std::atomic_bool g_running = ATOMIC_VAR_INIT(true);
-// 线程函数：更新所有 item 状态
-void UpdateThread() {
-	App::Instance().GetAnnouncement();
-	while (g_running.load()) {
-		ItemManager::Instance().UpdateAll();  // 调用UpdateAll()来更新所有item
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));  // 休眠100ms，可以根据实际需求调整
-	}
-}
-
-// 启动更新线程
-void StartUpdateThread() {
-	std::thread updateThread(UpdateThread);
-	updateThread.detach();  // 将线程设为后台线程
-}
 
 void Gui::init()
 {
@@ -100,11 +79,8 @@ void Gui::init()
 		/* Problem: glewInit failed, something is seriously wrong. */
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
-	//加载配置文件
-	ConfigManager::Load(FileUtils::GetConfigPath());
-	//初始化音频管理器
-	AudioManager::Instance().Init();
-	StartUpdateThread();  // 启动更新线程
+
+	isInit = true;
 
 }
 void Gui::clean()
@@ -136,7 +112,6 @@ void Gui::render()
 	//ImGui::SetNextWindowPos(ImVec2(0, 0));
 	//ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGuiContext* context = ImGui::GetCurrentContext();
-	static bool done = false;
 	if (context->WithinFrameScope)
 	{
 		//ImGui::Begin("Overlay", nullptr,

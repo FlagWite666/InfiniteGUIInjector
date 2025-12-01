@@ -7,9 +7,6 @@
 #include "menu.h"
 #include "ItemManager.h"
 #include "gui.h"
-#include "App.h"
-#include "Images.h"
-#include "pics\MCInjector-small.h"
 //#include <base/voyage.h>
 //#include <mutex>
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -102,7 +99,7 @@ end:
 
 
 TitanHook<decltype(&detour_wgl_swap_buffers)>wgl_swap_buffers_hook;
-DWORD WINAPI opengl_hook::init(LPVOID)
+void opengl_hook::init()
 {
 	HMODULE h_ogl_32 = GetModuleHandleW(L"opengl32.dll");
 	if (!h_ogl_32)
@@ -117,7 +114,7 @@ DWORD WINAPI opengl_hook::init(LPVOID)
 	wgl_swap_buffers_hook.InitHook(pfunc_wgl_swap_buffers, detour_wgl_swap_buffers);
 	wgl_swap_buffers_hook.SetHook();
 
-	return 0;
+	return;
 }
 bool opengl_hook::clean()
 {
@@ -154,11 +151,7 @@ bool detour_wgl_swap_buffers(HDC hdc)
 	if (WindowFromDC(hdc) != opengl_hook::handle_window) return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 
 	wglMakeCurrent(hdc, opengl_hook::custom_gl_ctx);
-	static std::once_flag flag2;
-	std::call_once(flag2, [&]
-		{
-			App::Instance().logoTexture.id = LoadTextureFromMemory(logo, logoSize, &App::Instance().logoTexture.width, &App::Instance().logoTexture.height);
-		});
+
 	// 切换 ImGui 鼠标捕获设置
 	ImGuiIO& io = ImGui::GetIO();
 	if (Menu::Instance().open)

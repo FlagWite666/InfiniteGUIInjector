@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/glew.h>
+#include "gl\glew.h"
 #include <Windows.h>
 #include <string>
 #include "imgui\imgui.h"
@@ -24,7 +24,7 @@ public:
 	std::string appName = u8"无限GUI";
 	version appVersion = { 0, 9, 0 };
 	std::string appAuthor = "QC_Max";
-	std::string appDescription = "Infinite GUI is a library that allows you to create overlays for in-game information.";
+	std::string appDescription = "InfiniteGUI is a library that allows you to create overlays for in-game information.";
 	std::string announcement = u8"这里没有公告捏...";
 	version cloudVersion = { 0, 0, 0 };
 	std::wstring versionUrl = L"https://gitee.com/qc_max/InfiniteGUI/raw/master/version.json";

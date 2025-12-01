@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -14,9 +10,6 @@
     </Filter>
     <Filter Include="ext\miniaudio">
       <UniqueIdentifier>{f00d2bf3-5f1e-420f-bc0d-57d62e1951aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ext\minHook">
-      <UniqueIdentifier>{c2067915-ea92-45dd-a925-e0f7731ba316}</UniqueIdentifier>
     </Filter>
     <Filter Include="ext\imgui">
       <UniqueIdentifier>{49d21573-3161-447b-8c01-513853e8e238}</UniqueIdentifier>
@@ -91,14 +84,14 @@
     <Filter Include="src\App">
       <UniqueIdentifier>{f414afce-aa5f-4d73-b2d5-4d3e097231c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ext\gl">
+      <UniqueIdentifier>{ca2c60f6-1cc9-43fd-91ba-06e67a5a24cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\gl\rel">
+      <UniqueIdentifier>{33b19222-3a3c-4bc6-b10a-e108d94d5727}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="minHook\MinHook.h">
-      <Filter>ext\minHook</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imgui.h">
       <Filter>ext\imgui</Filter>
     </ClInclude>
@@ -267,12 +260,21 @@
     <ClInclude Include="Images.h">
       <Filter>src\ui\renderer\hooks\gui\resources</Filter>
     </ClInclude>
+    <ClInclude Include="Init.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\glew.h">
+      <Filter>ext\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\glxew.h">
+      <Filter>ext\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\wglew.h">
+      <Filter>ext\gl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
@@ -365,9 +367,6 @@
     <ClCompile Include="KeyState.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="opengl_hook.cpp">
-      <Filter>src\ui\renderer\hooks</Filter>
-    </ClCompile>
     <ClCompile Include="gui.cpp">
       <Filter>src\ui\renderer\hooks\gui</Filter>
     </ClCompile>
@@ -377,13 +376,19 @@
     <ClCompile Include="Images.cpp">
       <Filter>src\ui\renderer\hooks\gui\resources</Filter>
     </ClCompile>
+    <ClCompile Include="opengl_hook.cpp">
+      <Filter>src\ui\renderer\hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="minHook\libMinHook.x64.lib">
-      <Filter>ext\minHook</Filter>
-    </Library>
     <Library Include="detours\detours.lib">
       <Filter>ext\detours</Filter>
+    </Library>
+    <Library Include="gl\glew32.lib">
+      <Filter>ext\gl</Filter>
+    </Library>
+    <Library Include="gl\rel\GlU32.Lib">
+      <Filter>ext\gl\rel</Filter>
     </Library>
   </ItemGroup>
 </Project>

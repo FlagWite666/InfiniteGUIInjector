@@ -225,6 +225,9 @@
     <ClInclude Include="FpsItem.h" />
     <ClInclude Include="GameStateDetector.h" />
     <ClInclude Include="GlobalConfig.h" />
+    <ClInclude Include="gl\glew.h" />
+    <ClInclude Include="gl\glxew.h" />
+    <ClInclude Include="gl\wglew.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="harmony_sc_regular.h" />
     <ClInclude Include="HttpClient.h" />
@@ -241,16 +244,15 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="Init.hpp" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="KeybindModule.h" />
     <ClInclude Include="KeyState.h" />
     <ClInclude Include="KeystrokesItem.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="minHook\MinHook.h" />
     <ClInclude Include="miniaudio\miniaudio.h" />
     <ClInclude Include="opengl_hook.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="pics\MCInjector-small.h" />
     <ClInclude Include="SoundModule.h" />
     <ClInclude Include="Sprint.h" />
@@ -293,14 +295,6 @@
     <ClCompile Include="KeystrokesItem.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="opengl_hook.cpp" />
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='exe|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='exe|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="Sprint.cpp" />
     <ClCompile Include="TextItem.cpp" />
     <ClCompile Include="TimeItem.cpp" />
@@ -309,7 +303,8 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="detours\detours.lib" />
-    <Library Include="minHook\libMinHook.x64.lib" />
+    <Library Include="gl\glew32.lib" />
+    <Library Include="gl\rel\GlU32.Lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

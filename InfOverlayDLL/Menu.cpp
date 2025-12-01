@@ -3,6 +3,8 @@
 #include "imgui/imgui_internal.h"
 #include "ImGuiStd.h"
 #include "App.h"
+#include "Images.h"
+#include "pics\MCInjector-small.h"
 #include "ConfigManager.h"
 #include "GlobalConfig.h"
 #include "FileUtils.h"
@@ -267,6 +269,11 @@ void Menu::ShowSidePanels()
 // LOGO 顶部动画面板
 //======================
     {
+        static std::once_flag flag;
+        std::call_once(flag, [&]
+            {
+                App::Instance().logoTexture.id = LoadTextureFromMemory(logo, logoSize, &App::Instance().logoTexture.width, &App::Instance().logoTexture.height);
+            });
         // 按钮中心
         ImVec2 startPos = Center;
 
@@ -362,7 +369,7 @@ void Menu::ShowSettings(bool* done)
         ImGui::SameLine();
 
         if (ImGui::Button(u8"保存配置"))
-            ConfigManager::Instance().Save(FileUtils::GetConfigPath());
+            ConfigManager::Instance().Save(FileUtils::configPath);
 
 
         ImGui::SameLine();
@@ -390,6 +397,20 @@ void Menu::ShowSettings(bool* done)
         ImGui::BeginChild("Content", ImVec2(0, 0), true);
         //显示公告
         ImGui::BeginChild("Announce", ImVec2(0, 100), true);
+
+
+        static std::once_flag flag2;
+        std::call_once(flag2, [&]
+            {
+                static std::thread announcementThread;
+                    // 启动后台线程
+                announcementThread = std::thread([]()
+                    {
+                        App::Instance().GetAnnouncement();
+                    });
+                announcementThread.detach();
+            });
+
         ImGuiStd::TextShadow(App::Instance().announcement.c_str());
         ImGui::EndChild();
 

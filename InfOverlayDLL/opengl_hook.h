@@ -11,7 +11,7 @@ struct screen
 
 namespace opengl_hook
 {
-	DWORD WINAPI init(LPVOID);
+	void init();
 	bool clean();
 	inline HDC handle_device_ctx;
 	inline HGLRC o_gl_ctx;//mc原来的gl上下文

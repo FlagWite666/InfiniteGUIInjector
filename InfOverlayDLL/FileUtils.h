@@ -3,10 +3,20 @@
 #include <string>
 #include <vector>
 #include <shlobj.h>
+#include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi.lib")
 #include "StringConverter.h"
 namespace FileUtils {
 
-    static std::string GetRunPath()
+    inline std::string appDataPath = "";
+
+    inline std::string configPath = "";
+
+    inline std::string modulePath = "";
+
+    inline std::string soundPath = "";
+
+    inline std::string GetAppDataPath()
     {
         PWSTR path = nullptr;
         SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &path);
@@ -21,22 +31,22 @@ namespace FileUtils {
         return p;
     }
 
-    static std::string GetConfigPath()
+    inline std::string GetConfigPath()
     {
         //如果没有Configs文件夹，则创建
-        std::string p = GetRunPath() + "\\Configs";
+        std::string p = appDataPath + "\\Configs";
         CreateDirectoryA(p.c_str(), NULL);
-        return GetRunPath() + "\\Configs\\config.json";
+        return p + "\\config.json";
     }
 
-    static std::string GetSoundPath()
+    inline std::string GetSoundPath()
     {
-        return GetRunPath() + "\\Sounds";
+        return modulePath + "\\Assets\\Sounds";
     }
 
-    static std::string GetSoundPath(std::string soundName)
+    inline std::string GetSoundPath(std::string soundName)
     {
-        return GetRunPath() + "\\Sounds\\" + soundName;
+        return soundPath + "\\" + soundName;
     }
 
     struct FontInfo {
@@ -44,7 +54,7 @@ namespace FileUtils {
         std::wstring path;
     };
 
-    static std::vector<FontInfo> GetFontsFromDirectory(const std::wstring& directory) {
+    inline std::vector<FontInfo> GetFontsFromDirectory(const std::wstring& directory) {
         std::vector<FontInfo> fontInfos;
 
         WIN32_FIND_DATA findFileData;
@@ -69,6 +79,32 @@ namespace FileUtils {
         return fontInfos;
     }
 
+    inline std::string GetModulePath(HMODULE hMod)
+    {
+        char path[MAX_PATH];
+        GetModuleFileNameA(hMod, path, MAX_PATH);
 
+        // 将 DLL 名字去掉，只保留路径
+        std::string fullPath(path);
+        size_t pos = fullPath.find_last_of("\\/");
+        if (pos != std::string::npos)
+            fullPath = fullPath.substr(0, pos);
+
+        return fullPath;
+    }
+
+    inline void InitBasePath(std::string basePath)
+    {
+        PathRemoveFileSpecA(basePath.data());
+    }
+
+    inline void InitPaths(HMODULE hMod)
+    {
+        appDataPath = GetAppDataPath();
+        configPath = GetConfigPath();
+        modulePath = GetModulePath(hMod);
+        soundPath = GetSoundPath();
+        InitBasePath(modulePath);
+    }
 
 };
