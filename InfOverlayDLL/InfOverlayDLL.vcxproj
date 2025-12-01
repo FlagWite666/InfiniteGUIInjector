@@ -32,6 +32,7 @@
     <ProjectGuid>{f6f7c7c8-1eb1-4b27-917b-364346449f5a}</ProjectGuid>
     <RootNamespace>InfOverlayDLL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>InfiniteGUI-DLL</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -229,7 +230,7 @@
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="Images.h" />
     <ClInclude Include="ImGuiStd.h" />
-    <ClInclude Include="ImguiSty.h" />
+    <ClInclude Include="ImGuiSty.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_opengl2.h" />

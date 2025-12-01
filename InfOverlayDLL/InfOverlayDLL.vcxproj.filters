@@ -207,7 +207,7 @@
     <ClInclude Include="Menu.h">
       <Filter>src\ui\menu</Filter>
     </ClInclude>
-    <ClInclude Include="ImguiSty.h">
+    <ClInclude Include="ImGuiSty.h">
       <Filter>src\ui\renderer\hooks\gui\imGuiHelper</Filter>
     </ClInclude>
     <ClInclude Include="KeystrokesItem.h">

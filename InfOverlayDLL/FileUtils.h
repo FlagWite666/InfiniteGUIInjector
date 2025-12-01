@@ -15,7 +15,7 @@ namespace FileUtils {
         wcstombs(buffer, path, MAX_PATH);
         CoTaskMemFree(path);
 
-        std::string p = std::string(buffer) + "\\InfOverlay";
+        std::string p = std::string(buffer) + "\\InfiniteGUI";
         CreateDirectoryA(p.c_str(), NULL);
 
         return p;

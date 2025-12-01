@@ -521,7 +521,7 @@ void Menu::ShowSettings(bool* done)
             ImGui::SameLine();
             if (ImGui::Button(u8"GitHub"))
             {
-                ShellExecute(NULL, NULL, L"https://github.com/QCMaxcer/InfOverlay-DLL", NULL, NULL, SW_SHOWNORMAL);
+                ShellExecute(NULL, NULL, L"https://github.com/QCMaxcer/InfiniteGUI-Minecraft-DLL", NULL, NULL, SW_SHOWNORMAL);
             }
         }
 
