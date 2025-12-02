@@ -138,7 +138,6 @@ void ItemManager::Load(const nlohmann::json& j)
             }
         }
     }
-
     // ---- 清空多例并重建 ----
     multiItems.clear();
     allItems.erase(

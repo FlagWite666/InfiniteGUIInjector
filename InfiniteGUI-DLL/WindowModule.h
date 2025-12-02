@@ -17,6 +17,11 @@ static bool isSnapping = false;
 class WindowModule : public WindowStyleModule
 {
 public:
+
+    WindowModule()
+    {
+        SetStyle();
+    }
     virtual void DrawContent() = 0;       // 绘制内容（文本、图形等）
 
     void SetStyle()

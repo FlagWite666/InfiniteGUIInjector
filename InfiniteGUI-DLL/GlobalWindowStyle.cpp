@@ -6,11 +6,13 @@ void GlobalWindowStyle::Toggle()
 
 void GlobalWindowStyle::Load(const nlohmann::json& j)
 {
+	LoadItem(j);
 	LoadStyle(j);
 }
 
 void GlobalWindowStyle::Save(nlohmann::json& j) const
 {
+	SaveItem(j);
 	SaveStyle(j);
 }
 

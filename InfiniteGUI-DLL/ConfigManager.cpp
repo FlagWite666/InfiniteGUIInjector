@@ -21,9 +21,7 @@ bool ConfigManager::Load(const std::string& filePath)
 
     nlohmann::json j;
     f >> j;
-
     if (j.contains("global")) GlobalConfig::Instance().Load(j["global"]);
     if (j.contains("item")) ItemManager::Instance().Load(j["item"]);
-
     return true;
 }

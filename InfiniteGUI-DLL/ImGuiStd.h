@@ -228,18 +228,23 @@ namespace ImGuiStd {
 
     static void SaveImVec4(nlohmann::json& j, const char* key, const ImVec4& v)
     {
-        j[key] = { v.x, v.y, v.z, v.w };
+        if (!j.is_object()) j = nlohmann::json::object();
+
+        j[key] = nlohmann::json::array(
+            { v.x, v.y, v.z, v.w }
+        );
     }
 
     static void LoadImVec4(const nlohmann::json& j, const char* key, ImVec4& v)
     {
-        if (j.contains(key) && j[key].is_array() && j[key].size() == 4)
-        {
-            v.x = j[key][0];
-            v.y = j[key][1];
-            v.z = j[key][2];
-            v.w = j[key][3];
-        }
+        if (!j.is_object()) return;
+
+        const auto& arr = j[key];
+        if (!arr.is_array() || arr.size() != 4) return;
+            v.x = j[key][0].get<float>();
+            v.y = j[key][1].get<float>();
+            v.z = j[key][2].get<float>();
+            v.w = j[key][3].get<float>();
     }
 
 }
