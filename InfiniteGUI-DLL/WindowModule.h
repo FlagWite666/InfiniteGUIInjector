@@ -164,11 +164,17 @@ public:
         if (ImGui::Checkbox(u8"²Êºç", &itemStyle.rainbowFont))
         {
             custom.fontColor = true;
+        }
+        if (custom.fontColor)
+        {
             itemStylePtr.fontColor = &itemStyle.fontColor;
             itemStylePtr.rainbowFont = &itemStyle.rainbowFont;
         }
-        if(!custom.fontColor)
+        else
+        {
             itemStylePtr.rainbowFont = &GlobalWindowStyle::Instance().GetGlobeStyle().rainbowFont;
+            itemStylePtr.fontColor = &GlobalWindowStyle::Instance().GetGlobeStyle().fontColor;
+        }
         itemStylePtr.bgColor = EditWindowColor(u8"±³¾°ÑÕÉ«", &itemStyle.bgColor, &GlobalWindowStyle::Instance().GetGlobeStyle().bgColor, custom.bgColor);
         itemStylePtr.borderColor = EditWindowColor(u8"±ß¿òÑÕÉ«", &itemStyle.borderColor, &GlobalWindowStyle::Instance().GetGlobeStyle().borderColor, custom.borderColor);
     }

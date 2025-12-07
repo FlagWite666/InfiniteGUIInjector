@@ -16,6 +16,7 @@ void ChangeLog::Init()
     NewVersion("B0.9.2", "25.12.12");
     AddContent(OPTIMIZE, u8"优化ChangeLog界面");
     AddContent(OPTIMIZE, u8"优化/美化动态模糊");
+    AddContent(FIXBUG, u8"修复字体彩色绑定问题");
 }
 
 ChangeLog::ChangeLog()

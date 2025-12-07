@@ -1,9 +1,10 @@
 ﻿#include "gui.h"
-
+//#include "imgui_bloom_src\opengl_imgui_bloom.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
+
 #include "opengl_hook.h"
 
 //#include <gl/glew.h>
@@ -16,7 +17,6 @@
 
 #include "Menu.h"
 #include "Motionblur.h"
-#include "GameStateDetector.h"
 static ImGuiContext* imGuiContext = nullptr;
 
 void Gui::init()
@@ -45,11 +45,7 @@ void Gui::init()
 	io.MouseDrawCursor = false;
 	io.ConfigFlags |= ImGuiConfigFlags_NoMouse; // 禁止 ImGui 捕获鼠标输入（我们在切换时会调整）
 	io.IniFilename = nullptr; // 禁止生成 imgui.ini
-	//ImGui::StyleColorsDark();
 	SetStyleGray();
-	//SetStylePurple();
-	//SetStyleViolet();
-	//SetStyleVioletBlue();
 
 	ImGui_ImplWin32_Init(opengl_hook::handle_window);
 	ImGui_ImplOpenGL3_Init();
@@ -96,6 +92,8 @@ void Gui::clean()
 //#include <base/features/events/events.h>
 static std::atomic_flag clipCursor = ATOMIC_FLAG_INIT;
 static RECT originalClip;
+////定义声明imgui的bloom系统
+//static std::shared_ptr<BloomImGui::FxBloomSystem> MyGuiBloom;
 void Gui::render()
 {
 	ImGui_ImplOpenGL3_NewFrame();
@@ -110,32 +108,14 @@ void Gui::render()
 	//	});
 
 	//MyGuiBloom->RenderContextCaptureBegin();
-
-	//ImGui::SetNextWindowPos(ImVec2(0, 0));
-	//ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGuiContext* context = ImGui::GetCurrentContext();
 	if (context->WithinFrameScope)
 	{
-		//ImGui::Begin("Overlay", nullptr,
-		//	ImGuiWindowFlags_NoTitleBar |
-		//	ImGuiWindowFlags_NoResize |
-		//	ImGuiWindowFlags_NoMove |
-		//	ImGuiWindowFlags_NoScrollbar |
-		//	ImGuiWindowFlags_NoSavedSettings |
-		//	ImGuiWindowFlags_NoInputs |
-		//	ImGuiWindowFlags_NoFocusOnAppearing |
-		//	ImGuiWindowFlags_NoBringToFrontOnFocus |
-		//	ImGuiWindowFlags_NoBackground);
-		////voyage::get().event_bus.fire_event(render_2d_event{});
-		//ImGui::End();
 		ItemManager::Instance().RenderAll();
-		//Menu::Instance().Render();
 	}
-
-
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	ImGui::EndFrame();
 	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	if (Motionblur::Instance().isEnabled &&
 		Motionblur::Instance().applayOnMenu &&
 		Menu::Instance().isEnabled) 

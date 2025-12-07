@@ -86,6 +86,9 @@
     <Filter Include="src\ui\imGuiHelper">
       <UniqueIdentifier>{a0dee063-a8f0-4d9a-bb87-fcd8aa3195b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ext\imgui_bloom_src">
+      <UniqueIdentifier>{d698696b-6725-4b07-9b94-fce3e2d079c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Init.hpp">
@@ -289,6 +292,9 @@
     <ClInclude Include="ChangeLog.h">
       <Filter>src\app</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_bloom_src\opengl_imgui_bloom.h">
+      <Filter>ext\imgui_bloom_src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -407,6 +413,12 @@
     </ClCompile>
     <ClCompile Include="ChangeLog.cpp">
       <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_bloom_src\opengl_imgui_bloom.cpp">
+      <Filter>ext\imgui_bloom_src</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_bloom_src\opengl_imgui_bloom_script.cpp">
+      <Filter>ext\imgui_bloom_src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
