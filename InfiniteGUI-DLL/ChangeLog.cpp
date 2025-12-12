@@ -21,7 +21,7 @@ void ChangeLog::Init()
     AddContent(ADD, u8"添加多配置管理系统");
 
     NewVersion("B0.9.3", "25.12.09");
-    AddContent(OPTIMIZE, u8"优化动态模糊,添加FPS调制");
+    AddContent(OPTIMIZE, u8"动态模糊添加FPS调制");
     AddContent(ADD, u8"全新UI");
 } //我写这个真是个天才，这样就不用手敲Imgui代码了，天才天才天才天
 
