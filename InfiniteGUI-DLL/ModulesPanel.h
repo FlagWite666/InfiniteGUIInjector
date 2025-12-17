@@ -15,6 +15,7 @@ public:
 	{
 		m_categoryBar = new CategoryBar();
 		m_moduleSettings = new ModuleSettings();
+		filter = m_categoryBar->GetFilter();
 		//m_moduleButton = new ModuleButton("1", "TestModule", "TestModuleDesc", ImVec2(548, 60));
 	}
 	~ModulesPanel()
@@ -80,6 +81,7 @@ private:
 			case 4: selectedType = ItemType::Server; break;
 			default: selectedType = ItemType::All; break;
 			}
+			filter = m_categoryBar->GetFilter();
 		}
 
 		startPos.y += m_categoryBar->GetButtonHeight() + 13;
@@ -89,13 +91,18 @@ private:
 		ImGui::SetCursorPos(ImVec2(padding, padding));
 		for (auto moduleCard : m_moduleCard)
 		{
-			if(selectedType == All || selectedType == moduleCard->GetItem()->type)
+			auto* item = moduleCard->GetItem();
+
+			if (selectedType != All && selectedType != item->type)
+				continue;
+
+			if (filter->IsActive() && !filter->PassFilter(item->name.c_str()) && !filter->PassFilter(item->description.c_str()))
+				continue;
+
+			if (moduleCard->Draw())
 			{
-				if (moduleCard->Draw())
-				{
-					joinModuleSettings = true;
-					selectedItem = moduleCard->GetItem();
-				}
+				joinModuleSettings = true;
+				selectedItem = item;
 			}
 		}
 		ImGui::Dummy(ImVec2(0, 10));
@@ -131,6 +138,7 @@ private:
 	bool isInModuleSettings = false;
 	Item *selectedItem = nullptr;
 	ItemType selectedType = All;
+	ImGuiTextFilter *filter;
 	CategoryBar* m_categoryBar;
 	ModuleSettings* m_moduleSettings; //二级设置 
 	std::vector<ModuleCard*> m_moduleCard;

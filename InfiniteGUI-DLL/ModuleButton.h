@@ -31,6 +31,8 @@ public:
 		{
 			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
 			lastScreenPos = screenPos;
+			fontSize = ImGui::GetFontSize();
+			lastFontSize = fontSize;
 			SetStateData();
 			//设置m_current的状态
 			m_current = m_normal;
@@ -46,6 +48,15 @@ public:
 			SetStateData();
 			ApllyCenterPositionChange();
 			lastScreenPos = screenPos;
+		}
+
+
+		fontSize = ImGui::GetFontSize();
+		if (IsFontSizeChanged(fontSize, lastFontSize))
+		{
+			SetStateData();
+			skipAnim = false;
+			lastFontSize = fontSize;
 		}
 
 		bool pressed = DrawInvisibleButton(m_current.button);
@@ -214,7 +225,7 @@ private:
 
 		//设置m_normal的文字
 		//文字在图标右边显示，上下居中
-		m_normal.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_normal.label.fontSize = fontSize * 1.0f;
 		ImVec2 labelPos = ImVec2(screenPos.x + m_normal.button.size.y, screenPos.y + (m_normal.button.size.y - m_normal.label.fontSize) * 0.5f);
 		m_normal.label.CalculateCenter(labelPos, labelText);
 		ImVec4 labelColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text));
@@ -222,7 +233,7 @@ private:
 
 		//描述与文字高度重叠，但是颜色为灰色透明
 
-		m_normal.description.fontSize = ImGui::GetFontSize() * 0.8f;
+		m_normal.description.fontSize = fontSize * 0.8f;
 		ImVec2 descriptionPos = ImVec2(screenPos.x + m_normal.button.size.y, screenPos.y + (m_normal.button.size.y - m_normal.description.fontSize) * 0.5f);
 		m_normal.description.CalculateCenter(descriptionPos, descriptionText);
 		ImVec4 descriptionColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_TextDisabled));
@@ -249,11 +260,11 @@ private:
 
 		//设置m_selected的文字
 		//文字向上移动，并正常显示
-		m_selected.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_selected.label.fontSize = fontSize * 1.0f;
 		m_selected.label.center = normal.label.center;
 		m_selected.label.color = normal.label.color;
 
-		m_selected.description.fontSize = ImGui::GetFontSize() * 0.8f;
+		m_selected.description.fontSize = fontSize * 0.8f;
 		m_selected.description.center = normal.description.center;
 		//ImVec4 descriptionColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_TextDisabled));
 		m_selected.description.color = normal.description.color;
@@ -280,10 +291,10 @@ private:
 
 		//设置m_selected的文字
 		//文字向上移动，并正常显示
-		m_hovered.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_hovered.label.fontSize = fontSize * 1.0f;
 		m_hovered.label.color = normal.label.color;
 
-		m_hovered.description.fontSize = ImGui::GetFontSize() * 0.8f;
+		m_hovered.description.fontSize = fontSize * 0.8f;
 		ImVec4 descriptionColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_TextDisabled));
 		m_hovered.description.color = descriptionColor;
 
@@ -312,10 +323,10 @@ private:
 
 		//设置m_active的文字
 		//文字向上移动，并正常显示
-		m_active.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_active.label.fontSize = fontSize * 1.0f;
 		m_active.label.color = normal.label.color;
 
-		m_active.description.fontSize = ImGui::GetFontSize() * 0.8f;
+		m_active.description.fontSize = fontSize * 0.8f;
 		ImVec4 descriptionColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_TextDisabled));
 		m_active.description.color = descriptionColor;
 

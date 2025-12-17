@@ -183,25 +183,27 @@ bool detour_wgl_swap_buffers(HDC hdc)
 		});
 	if (WindowFromDC(hdc) != opengl_hook::handle_window) return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 
-	wglMakeCurrent(hdc, opengl_hook::custom_gl_ctx);
+	if(!opengl_hook::gui.done)
+	{
+		wglMakeCurrent(hdc, opengl_hook::custom_gl_ctx);
 
-	static std::once_flag flag2;
-	std::call_once(flag2, [&]
-		{
-			static std::thread announcementThread;
-			// 启动后台线程
-			announcementThread = std::thread([]()
-				{
-					App::Instance().GetAnnouncement();
-				});
-			announcementThread.detach();
-			opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
-		});
+		static std::once_flag flag2;
+		std::call_once(flag2, [&]
+			{
+				static std::thread announcementThread;
+				// 启动后台线程
+				announcementThread = std::thread([]()
+					{
+						App::Instance().GetAnnouncement();
+					});
+				announcementThread.detach();
+				opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
+			});
 
-	//渲染代码
-	opengl_hook::gui.render();
-	//渲染结束
-	wglMakeCurrent(hdc, opengl_hook::o_gl_ctx);
+		//渲染代码
+		opengl_hook::gui.render();
+		wglMakeCurrent(hdc, opengl_hook::o_gl_ctx);
+	}
 
 	return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 }

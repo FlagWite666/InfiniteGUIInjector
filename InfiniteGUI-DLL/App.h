@@ -12,8 +12,8 @@ class App
 {
 public:
 	std::string appName = u8"无限GUI";
-	version appVersion = { 0, 9, 2 };
-	std::string appAuthor = "QC_Max";
+	version appVersion = { 0, 9, 3 };
+	std::string appAuthor = u8"路过的Max";
 	std::string appDescription = "InfiniteGUI is a library that allows you to create overlays for in-game information.";
 	std::string announcement = u8"这里没有公告捏...";
 	version cloudVersion = { 0, 0, 0 };

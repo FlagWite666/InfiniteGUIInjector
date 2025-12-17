@@ -45,6 +45,7 @@ void Menu::Render()
         break;
     case MENU_STATE_SETTINGS:
         ImGui::PushStyleColor(ImGuiCol_WindowBg, itemStyle.bgColor);
+        //ImGui::PushStyleColor(ImGuiCol_ChildBg, itemStyle.bgColor);
         ImGui::PushStyleColor(ImGuiCol_Border, itemStyle.borderColor);
         PushRounding(itemStyle.windowRounding);
         panelAnim.blurriness = (float)blur->blurriness_value;
@@ -335,7 +336,7 @@ void Menu::ShowSettings(bool* done)
         settingMenu->Init();
         initialized = true;
     }
-    if (settingMenu->Draw())
+    if (settingMenu->Draw(opengl_hook::gui.done))
     {
         isEnabled = false;
         Toggle();

@@ -37,6 +37,8 @@ public:
 		{
 			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
 			lastScreenPos = screenPos;
+			fontSize = ImGui::GetFontSize();
+			lastFontSize = fontSize;
 			SetStateData();
 			//设置m_current的状态
 			m_current = m_normal;
@@ -52,6 +54,14 @@ public:
 			SetStateData();
 			ApllyCenterPositionChange();
 			lastScreenPos = screenPos;
+		}
+
+		fontSize = ImGui::GetFontSize();
+		if (IsFontSizeChanged(fontSize, lastFontSize))
+		{
+			SetStateData();
+			skipAnim = false;
+			lastFontSize = fontSize;
 		}
 
 		bool pressed = DrawInvisibleButton(m_current.button);
@@ -210,7 +220,7 @@ private:
 
 		//设置m_normal的文字
 		//文字居中显示，透明度为0
-		m_normal.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_normal.label.fontSize = fontSize * 1.0f;
 		m_normal.label.center = ImVec2(screenPos.x + m_normal.button.size.x / 2, screenPos.y + m_normal.button.size.y / 2);
 		//m_normal.label.CalculatePos();
 		ImVec4 labelColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_TextDisabled));
@@ -235,7 +245,7 @@ private:
 
 		//设置m_selected的文字
 		//文字向右移动，并正常显示
-		m_selected.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_selected.label.fontSize = fontSize * 1.0f;
 		if (isExitButton)
 			m_selected.label.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f);
 		else
@@ -269,7 +279,7 @@ private:
 
 		//设置m_hovered的文字
 		//文字向右移动，并正常显示
-		m_hovered.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_hovered.label.fontSize = fontSize * 1.0f;
 		m_hovered.label.color = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text));
 
 		ComputeTextLayout(
@@ -301,7 +311,7 @@ private:
 
 		//设置m_active的文字
 		//文字向右移动，并正常显示
-		m_active.label.fontSize = ImGui::GetFontSize() * 0.9f;
+		m_active.label.fontSize = fontSize * 0.9f;
 		if (isExitButton)
 			m_active.label.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f);
 		else

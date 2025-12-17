@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 
+#include "ImGuiStd.h"
 #include "MyButton.h"
 class CategoryBar {
 public:
@@ -35,6 +36,29 @@ public:
             }
             curPos.x += buttonSize.x + padding * 0.625f;
         }
+        curPos.y += 1.0f;
+        ImGui::SetCursorPos(curPos);
+
+        float windowWith = ImGui::GetWindowWidth();
+
+        if (filter.Draw(u8"##filter", windowWith - curPos.x - padding, u8" 搜索"))
+        {
+            return true;
+        }
+
+        if (!filter.IsActive())
+        {
+            curPos.y += 5.0f;
+            ImGui::SetCursorPos(ImVec2(windowWith - padding - 25.0f, curPos.y));
+            ImGui::BeginDisabled();
+            ImGui::PushFont(opengl_hook::gui.iconFont, 18.0f);
+
+            ImGuiStd::TextColoredShadow(ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled), u8"\uE041");
+
+            ImGui::PopFont();
+
+            ImGui::EndDisabled();
+        }
 
         return clickedOne;   // -1 表示没有点击
     }
@@ -42,8 +66,11 @@ public:
     int GetSelectedIndex() const { return selectedButtonIndex; }
     float GetButtonHeight() const { return buttonSize.y; }
 
+    ImGuiTextFilter *GetFilter() { return &filter; }
+
 private:
     std::vector<MyButton> buttons;
     ImVec2 buttonSize = ImVec2(80, 30);
     int selectedButtonIndex = 0;
+    ImGuiTextFilter filter;
 };

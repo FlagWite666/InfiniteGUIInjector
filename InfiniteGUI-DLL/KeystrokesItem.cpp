@@ -31,7 +31,7 @@ void KeystrokesItem::DrawContent()
     cursorPos.y = window_padding.y;
     ImGui::PushStyleColor(ImGuiCol_Border, *itemStylePtr.borderColor);
     ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, *itemStylePtr.windowRounding);
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, *itemStylePtr.bgColor);
+    //ImGui::PushStyleColor(ImGuiCol_ChildBg, *itemStylePtr.bgColor);
     for (auto& key_box : key_boxes)
     {
         if(key_box.type == space && !showSpace) continue;
@@ -73,7 +73,7 @@ void KeystrokesItem::DrawContent()
             cursorPos.x += key_box.width + padding;
     }
     ImGui::PopStyleVar(); //¥∞ø⁄‘≤Ω«
-    ImGui::PopStyleColor(2); // «∑Òœ‘ æ±ﬂøÚ
+    ImGui::PopStyleColor(); // «∑Òœ‘ æ±ﬂøÚ
 }
 
 void KeystrokesItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)

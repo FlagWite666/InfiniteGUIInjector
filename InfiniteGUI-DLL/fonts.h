@@ -10,7 +10,6 @@ namespace Fonts
 {
 	void init();
 	inline FontData alibaba = { nullptr, 0 };
-	inline FontData ur = { nullptr, 0 };
 	inline FontData icons = { nullptr, 0 };
 };
 

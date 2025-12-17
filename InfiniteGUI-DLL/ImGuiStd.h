@@ -11,6 +11,19 @@
 
 namespace ImGuiStd {
 
+    static bool InputTextWithHintStd(const char* label, const char* hint, std::string& str, ImGuiInputTextFlags flags = 0)
+    {
+        char buffer[1024];
+        strncpy(buffer, str.c_str(), sizeof(buffer));
+        buffer[sizeof(buffer) - 1] = 0;
+
+        if (ImGui::InputTextWithHint(label, hint, buffer, sizeof(buffer), flags)) {
+            str = buffer;
+            return true;
+        }
+        return false;
+    }
+
     static bool InputTextStd(const char* label, std::string& str, ImGuiInputTextFlags flags = 0)
     {
         char buffer[1024];

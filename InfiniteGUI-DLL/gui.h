@@ -15,8 +15,8 @@ public:
 	bool isInit = false;
 	bool done = false;
 	void init();
-	static void clean();
-	static void render();
+	void clean();
+	void render() const;
 	ImFont* font;
 	ImFont* iconFont;
 	Texture logoTexture;

@@ -14,11 +14,10 @@ public:
         buttons.emplace_back("=", u8"退出", true);
     }
 
-    int Draw()
+    bool Draw()
     {
         ImVec2 startPos = ImGui::GetCursorScreenPos();
-        bool moving = ImGui::IsMouseDragging(0, 1.f);
-        int clickedIndex = -1;
+        bool clicked = false;
         for (int i = 0; i < buttons.size(); i++)
         {
             PanelButton& btn = buttons[i];
@@ -26,18 +25,20 @@ public:
             // 设置按钮的“是否选中”
             btn.SetSelected(i == selectedButtonIndex);
             // 绘制按钮
-            bool clicked = btn.Draw(moving);
-            if (clicked)
+            if (btn.Draw())
             {
                 selectedButtonIndex = i;
-                clickedIndex = i;
+                clicked = true;
             }
         }
-
-        return clickedIndex;   // -1 表示没有点击
+        return clicked;   // -1 表示没有点击
     }
 
     int GetSelectedIndex() const { return selectedButtonIndex; }
+    void SetSelectedIndex(int index)
+    {
+        selectedButtonIndex = index;
+    }
 
 private:
     std::vector<PanelButton> buttons;

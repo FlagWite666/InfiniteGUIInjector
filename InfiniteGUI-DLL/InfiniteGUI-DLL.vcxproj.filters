@@ -268,9 +268,6 @@
     <ClInclude Include="fonts\IconFont.h">
       <Filter>src\ui\hooks\gui\resources\fonts</Filter>
     </ClInclude>
-    <ClInclude Include="fonts\Uranus_Pixel_11Px.h">
-      <Filter>src\ui\hooks\gui\resources\fonts</Filter>
-    </ClInclude>
     <ClInclude Include="pics\MCInjector-small.h">
       <Filter>src\ui\hooks\gui\resources\images</Filter>
     </ClInclude>

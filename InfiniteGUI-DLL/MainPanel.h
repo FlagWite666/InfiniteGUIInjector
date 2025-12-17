@@ -99,6 +99,8 @@ public:
 		case 3:
 			m_panelType = AboutPanel;
 			break;
+		default:
+			m_panelType = ModulePanel;
 		}
 	}
 	PanelType GetPanelType() const { return m_panelType; }

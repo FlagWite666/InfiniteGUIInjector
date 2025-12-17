@@ -236,11 +236,13 @@ public:
         if (isTransparentBg)
         {
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); // ±³¾°Í¸Ã÷
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, *itemStylePtr.bgColor);
             ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); // ±ß¿òÍ¸Ã÷
         }
         else
         {
             ImGui::PushStyleColor(ImGuiCol_WindowBg, *itemStylePtr.bgColor); 
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, *itemStylePtr.bgColor);
             ImGui::PushStyleColor(ImGuiCol_Border, *itemStylePtr.borderColor); 
         }
         PushRounding(*itemStylePtr.windowRounding);
@@ -291,7 +293,7 @@ public:
 
         ImGui::End();
         ImGui::PopStyleVar(7);
-        ImGui::PopStyleColor(3);
+        ImGui::PopStyleColor(4);
     }
 
     bool IsClickThrough() const {

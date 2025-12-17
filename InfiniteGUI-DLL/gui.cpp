@@ -12,7 +12,6 @@
 #include "fonts.h"
 #include "ImGuiSty.h"
 #include "ItemManager.h"
-#include "App.h"
 #include "GlobalConfig.h"
 
 #include "Menu.h"
@@ -75,11 +74,12 @@ void Gui::clean()
 	if ((ImGui::GetCurrentContext() ? (void*)ImGui::GetIO().BackendRendererUserData : nullptr))ImGui_ImplOpenGL3_Shutdown();
 	if ((ImGui::GetCurrentContext() ? (void*)ImGui::GetIO().BackendPlatformUserData : nullptr))ImGui_ImplWin32_Shutdown();
 	if (imGuiContext)ImGui::DestroyContext(imGuiContext);
+	isInit = false;
 }
 
 static std::atomic_flag clipCursor = ATOMIC_FLAG_INIT;
 static RECT originalClip;
-void Gui::render()
+void Gui::render() const
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplWin32_NewFrame();

@@ -20,13 +20,14 @@ void ChangeLog::Init()
     AddContent(ADD, u8"添加菜单背景模糊");
     AddContent(ADD, u8"添加多配置管理系统");
 
-    NewVersion("B0.9.3", "25.12.09");
+    NewVersion("B0.9.3", "25.12.18");
     AddContent(OPTIMIZE, u8"动态模糊添加FPS调制");
-    AddContent(ADD, u8"全新UI");
+    AddContent(ADD, u8"全新UI大更新");
     AddContent(ADD, u8"添加点击特效");
     AddContent(CHANGE, u8"更改默认字体为平滑字体");
     AddContent(CHANGE, u8"按键显示空格改为直线");
     AddContent(CHANGE, u8"改进架构,仅文本显示可多例");
+    AddContent(ADD, u8"完美实现退出(detach)");
 } //我写这个真是个天才，这样就不用手敲Imgui代码了，天才天才天才天
 
 ChangeLog::ChangeLog()

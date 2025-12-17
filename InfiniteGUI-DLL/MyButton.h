@@ -32,6 +32,8 @@ public:
 		{
 			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
 			lastScreenPos = screenPos;
+			fontSize = ImGui::GetFontSize();
+			lastFontSize = fontSize;
 			SetStateData();
 			//设置m_current的状态
 			m_current = m_normal;
@@ -44,6 +46,14 @@ public:
 			SetStateData();
 			ApllyCenterPositionChange();
 			lastScreenPos = screenPos;
+		}
+
+		fontSize = ImGui::GetFontSize();
+		if (IsFontSizeChanged(fontSize, lastFontSize))
+		{
+			SetStateData();
+			skipAnim = false;
+			lastFontSize = fontSize;
 		}
 
 		bool pressed = DrawInvisibleButton(m_current.button);
@@ -138,8 +148,16 @@ public:
 	{
 		return m_state;
 	}
-	void SetSize(const ImVec2 size);
-	void SetPosition(const ImVec2 pos);
+	void SetSize(const ImVec2 size)
+	{
+		m_normal.button.size = size;
+		SetStateData();
+	}
+	void SetPosition(const ImVec2 pos)
+	{
+		m_normal.button.CalculateCenter(pos);
+		SetStateData();
+	}
 protected:
 
 	//文字
@@ -193,7 +211,7 @@ protected:
 
 		//设置m_normal的文字
 		//文字居中显示，透明度为0
-		m_normal.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_normal.label.fontSize = fontSize * 1.0f;
 		m_normal.label.center = ImVec2(screenPos.x + m_normal.button.size.x / 2, screenPos.y + m_normal.button.size.y / 2);
 		//m_normal.label.CalculatePos();
 		ImVec4 labelColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_TextDisabled));
@@ -215,7 +233,7 @@ protected:
 		ImVec2 textCenter = ImVec2(buttonPos.x + m_selected.button.size.x / 2, buttonPos.y + m_selected.button.size.y / 2);		//设置m_hovered的图标
 
 		m_selected.label.center = textCenter;
-		m_selected.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_selected.label.fontSize = fontSize * 1.0f;
 		m_selected.label.color = ImVec4(0.2f, 0.9f, 0.2f, 1.0f);
 
 	}
@@ -237,7 +255,7 @@ protected:
 		//设置m_hovered的文字
 		//文字向右移动，并正常显示
 		m_hovered.label.center = textCenter;
-		m_hovered.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_hovered.label.fontSize = fontSize * 1.0f;
 		m_hovered.label.color = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text));
 
 	}
@@ -259,7 +277,7 @@ protected:
 		//设置m_active的文字
 		//文字向右移动，并正常显示
 		m_active.label.center = textCenter;
-		m_active.label.fontSize = ImGui::GetFontSize() * 0.9f;
+		m_active.label.fontSize = fontSize * 0.9f;
 		m_active.label.color = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text));
 
 	}

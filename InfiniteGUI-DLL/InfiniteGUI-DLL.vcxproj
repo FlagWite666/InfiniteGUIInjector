@@ -172,7 +172,6 @@
     <ClInclude Include="FontSelector.h" />
     <ClInclude Include="fonts\AlibabaPuHuiTi-3-85-Bold.h" />
     <ClInclude Include="fonts\IconFont.h" />
-    <ClInclude Include="fonts\Uranus_Pixel_11Px.h" />
     <ClInclude Include="FpsItem.h" />
     <ClInclude Include="GameStateDetector.h" />
     <ClInclude Include="GlobalConfig.h" />

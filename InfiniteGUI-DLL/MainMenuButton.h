@@ -17,6 +17,8 @@ public:
 		{
 			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
 			lastScreenPos = screenPos;
+			fontSize = ImGui::GetFontSize();
+			lastFontSize = fontSize;
 			SetStateData();
 			//设置m_current的状态
 			m_current = m_normal;
@@ -32,6 +34,14 @@ public:
 			SetStateData();
 			ApllyCenterPositionChange();
 			lastScreenPos = screenPos;
+		}
+
+		fontSize = ImGui::GetFontSize();
+		if (IsFontSizeChanged(fontSize, lastFontSize))
+		{
+			SetStateData();
+			skipAnim = false;
+			lastFontSize = fontSize;
 		}
 
 		bool pressed = DrawInvisibleButton(m_current.button);

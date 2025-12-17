@@ -22,7 +22,7 @@ public:
 	{
 		mainPanel->Init();
 	}
-	bool Draw() const
+	bool Draw(bool &done)
 	{
 
 		ImGui::BeginChild(u8"主控制面板Inner", settingMenuSize, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
@@ -45,21 +45,72 @@ public:
 		//ImVec4 LeftPanelBgColor = ImGui::GetColorU32(ImGuiCol_ChildBg)
 		draw->AddRectFilled(LeftPanelBg1, LeftPanelBg2, ImGui::GetColorU32(ImGuiCol_WindowBg));
 
-
-
 		leftPanel->Draw();
 		int index = leftPanel->GetSelectedIndex();
+		if (index == 4)
+		{
+			// 请求退出（只弹窗）
+			showExitConfirm = true;
+			ImGui::OpenPopup(u8"退出确认");
+		}
+		else
+			lastSelectedIndex = index;
+		showExitConfirmDialog(done);
 		ImVec2 pos1 = ImVec2(padding * 2 + 150.0f + screenPos.x, screenPos.y);
 		ImVec2 pos2 = ImVec2(padding * 2 + 150.0f + screenPos.x, settingMenuSize.y + screenPos.y);
 		draw->AddLine(pos1, pos2, ImGui::GetColorU32(ImGuiCol_Separator), 1.0f);
 		ImGui::SetCursorPos(ImVec2(padding * 2 + 150.0f, 0.0f));
-		mainPanel->SetPanelType(index);
+		mainPanel->SetPanelType(lastSelectedIndex);
 		mainPanel->Draw();
 		ImGui::EndChild();
 		return exit;
 	}
 
 private:
+
+	void showExitConfirmDialog(bool &done)
+	{
+		if (showExitConfirm)
+		{
+			ImGui::SetNextWindowSize(ImVec2(280, 0), ImGuiCond_Always);
+
+			if (ImGui::BeginPopupModal(u8"退出确认", nullptr,
+				ImGuiWindowFlags_NoResize |
+				ImGuiWindowFlags_NoMove |
+				ImGuiWindowFlags_NoCollapse))
+			{
+				ImGuiStd::TextShadow(u8"确定要退出吗？");
+
+				// 居中按钮
+				float buttonWidth = 100.0f;
+				float spacing = ImGui::GetStyle().ItemSpacing.x;
+				float totalWidth = buttonWidth * 2 + spacing;
+				float offsetX = (ImGui::GetContentRegionAvail().x - totalWidth) * 0.5f;
+				if (offsetX > 0)
+					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offsetX);
+
+				if (ImGui::Button(u8"确定", ImVec2(buttonWidth, 0)))
+				{
+					done = true;               // 真正退出
+					showExitConfirm = false;
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button(u8"取消", ImVec2(buttonWidth, 0)))
+				{
+					leftPanel->SetSelectedIndex(lastSelectedIndex); // 取消退出，恢复上一次选择的选项
+					showExitConfirm = false;
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
+		}
+	}
+	bool showExitConfirm = false;
+	int lastSelectedIndex = 0;
 	LeftPanel * leftPanel;
 	MainPanel * mainPanel;
 	MyButton * exitButton;

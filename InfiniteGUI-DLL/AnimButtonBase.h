@@ -79,6 +79,8 @@ protected:
 
 	ImVec2 screenPos;
 	ImVec2 lastScreenPos;
+	float fontSize;
+	float lastFontSize;
 
     ButtonState m_state = Normal;
     ButtonState lastState = Normal;
@@ -182,6 +184,11 @@ protected:
 	static bool IsPositionChanged(const ImVec2& pos, const ImVec2& lastPos)
 	{
 		return pos.x!= lastPos.x || pos.y!= lastPos.y;
+	}
+
+	static bool IsFontSizeChanged(const float& fontSize, const float& lastFontSize)
+	{
+		return lastFontSize != fontSize;
 	}
 
 	static ImVec2 CalPostionChangedValue(const ImVec2& pos, const ImVec2& lastPos)

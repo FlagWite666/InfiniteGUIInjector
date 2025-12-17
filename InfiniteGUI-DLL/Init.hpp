@@ -25,17 +25,20 @@ void StartThreads() {
 
 // 停止更新线程
 void StopThreads() {
-	g_running = false;
 	if (g_updateThread.joinable()) {
 		g_updateThread.join();
 	}
 }
 
-//void Uninit() {
-//	g_running = false;
-//	AudioManager::Instance().Shutdown();
-//	ConfigManager::Save(FileUtils::configPath);
-//}
+void Uninit() {
+	opengl_hook::clean();
+	g_running = false;
+	StopThreads();
+	HttpUpdateWorker::Instance().Stop();
+	AudioManager::Instance().Shutdown();
+	FreeLibraryAndExitThread(g_hModule, 0);
+
+}
 
 
 DWORD WINAPI InitApp(LPVOID)
@@ -56,11 +59,11 @@ DWORD WINAPI InitApp(LPVOID)
 	HttpUpdateWorker::Instance().Start();
 	StartThreads();
 
-	//while (!opengl_hook::gui.done)
-	//{
-	//	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	//}
-	
+	while (!opengl_hook::gui.done)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	Uninit();
 
     return 0;
 
