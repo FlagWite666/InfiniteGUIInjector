@@ -11,18 +11,36 @@ public:
 		return instance;
 	}
 
-	void Init(bool isEnabled, float volume)
+	void Init(bool* isEnabled, float* volume)
 	{
 		this->isEnabled = isEnabled;
 		this->volume = volume;
 	}
-	void PlayClickSound()
+	void PlayPopSound() const
 	{
-		if (isEnabled) AudioManager::Instance().playSound("pop.wav", volume);
+		if (*isEnabled) AudioManager::Instance().playSound("menu\\pop.wav", *volume);
 	}
-	void SetEnabled(bool isEnabled) { this->isEnabled = isEnabled; }
-	void SetVolume(float volume) { this->volume = volume; }
+	void PlayClickSound() const
+	{
+		if (*isEnabled) AudioManager::Instance().playSound("menu\\click.wav", *volume);
+	}
+	void PlayOnSound() const
+	{
+		if (*isEnabled) AudioManager::Instance().playSound("menu\\on.wav", *volume);
+	}
+	void PlayOffSound()const
+	{
+		if (*isEnabled) AudioManager::Instance().playSound("menu\\off.wav", *volume);
+	}
+	void PlaySaveSound()const
+	{
+		if (*isEnabled) AudioManager::Instance().playSound("menu\\save.wav", *volume);
+	}
+	void PlayExitSound()const
+	{
+		if (*isEnabled) AudioManager::Instance().playSound("menu\\exit.wav", *volume);
+	}
 private:
-	bool isEnabled = true;
-	float volume = 1.0f;
+	bool* isEnabled;
+	float* volume;
 };

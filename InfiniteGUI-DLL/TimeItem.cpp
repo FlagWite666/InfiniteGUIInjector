@@ -24,8 +24,10 @@ void TimeItem::Update()
 
     // 转换成字符串
     std::stringstream ss;
-    ss << std::put_time(&localTime, "%Y-%m-%d %H:%M:%S");
-
+    if (showDate)
+        ss << std::put_time(&localTime, "%Y-%m-%d | %H:%M:%S");
+    else
+        ss << std::put_time(&localTime, "%H:%M:%S");
     currentTimeStr = ss.str();
     dirtyState.contentDirty = true;
 }
@@ -50,6 +52,11 @@ void TimeItem::DrawContent()
 void TimeItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
+    float bigItemWidth = centerX * 2.0f - bigPadding * 4.0f;
+
+    ImGui::SetCursorPosX(bigPadding);
+    ImGui::SetNextItemWidth(itemWidth);
+    ImGui::Checkbox(u8"显示日期", &showDate);
     DrawAffixSettings(bigPadding, centerX, itemWidth);
     DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
@@ -59,6 +66,7 @@ void TimeItem::Load(const nlohmann::json& j)
     LoadItem(j);
     LoadAffix(j);
     LoadWindow(j);
+    if(j.contains("showDate")) showDate = j.at("showDate").get<bool>();
 }
 
 void TimeItem::Save(nlohmann::json& j) const
@@ -66,4 +74,5 @@ void TimeItem::Save(nlohmann::json& j) const
     SaveItem(j);
     SaveAffix(j);
     SaveWindow(j);
+    j["showDate"] = showDate;
 }

@@ -6,6 +6,8 @@
 #include "AudioManager.h"
 #include "HttpUpdateWorker.h"
 #include "Anim.h"
+#include "Notification.h"
+#include "NotificationItem.h"
 
 void BilibiliFansItem::Toggle()
 {
@@ -53,11 +55,17 @@ void BilibiliFansItem::Update()
     {
         color.color = ImVec4(0.1f, 1.0f, 0.1f, 1.0f); //绿色
         if (isPlaySound) AudioManager::Instance().playSound("bilibilifans\\bilibilifans_up.wav", soundVolume);
+        int count = fansCount - lastFansCount;
+        std::string msg = u8"涨粉 " + std::to_string(count) + u8" 位。";
+        NotificationItem::Instance().AddNotification(NotificationType_Info, msg);
     }
     else if (fansCount < lastFansCount)
     {
         color.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f); //红色
         if (isPlaySound) AudioManager::Instance().playSound("bilibilifans\\bilibilifans_down.wav", soundVolume);
+        int count = lastFansCount - fansCount;
+        std::string msg = u8"掉粉 " + std::to_string(count) + u8" 位。";
+        NotificationItem::Instance().AddNotification(NotificationType_Info, msg);
     }
     else return;
 

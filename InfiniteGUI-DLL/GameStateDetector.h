@@ -53,6 +53,7 @@ public:
     bool IsInGame() const;          // 在游戏世界中
     bool IsNeedHide() const;        // 是否需要隐藏信息项;
     GameState GetCurrentState() const;
+    bool IsInGameWindow() const;
     void ProcessMouseMovement(int dx, int dy);
     bool IsCameraMoving() const;
     float GetCameraSpeed() const;
@@ -61,9 +62,10 @@ private:
     static bool IsMouseCursorVisible();
 
     bool hideItemInGui = true;
-    //GameState currentState = GameState::Paused;
+
     GameState currentState = InGameMenu;
     GameState lastState = InGameMenu;
+    bool isInGameWindow = true;
     int centerLevel = 1;
 
     float movementThreshold = 1.0f; // 小于这个视为静止，用于防抖动

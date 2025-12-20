@@ -6,13 +6,14 @@
 #include <windows.h>
 
 #include "Anim.h"
+#include "GameStateDetector.h"
 
 void KeystrokesItem::Toggle()
 {
 }
 void KeystrokesItem::Update()
 {
-    if(opengl_hook::handle_window != GetForegroundWindow())
+    if(!GameStateDetector::Instance().IsInGameWindow())
         return;
     for (auto& key_box : key_boxes)
     {

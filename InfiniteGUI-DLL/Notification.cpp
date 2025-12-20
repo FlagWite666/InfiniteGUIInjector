@@ -5,6 +5,7 @@
 
 void Notification::RenderGui()
 {
+    SetMaxElementPos();
     //获取io
     ImGuiIO& io = ImGui::GetIO();
     float speed = 5.0f * 3.0f * std::clamp(io.DeltaTime, 0.0f, 0.05f);
@@ -46,7 +47,9 @@ void Notification::RenderGui()
     ImGui::PushFont(NULL, itemStyle.fontSize * 0.8f);
     ImGui::SameLine();
     float startX = ImGui::GetCursorPosX();
+    ImGui::BeginDisabled();
     ImGuiStd::TextShadow(title.c_str());
+    ImGui::EndDisabled();
     ImGui::PopFont();
 
     ImGui::Separator();
@@ -72,13 +75,16 @@ bool Notification::Done() const
     return done;
 }
 
+void Notification::SetMaxElementPos()
+{
+    ImVec2 maxScreenSize = ImVec2(opengl_hook::screen_size.x, opengl_hook::screen_size.y);
+    startElement.pos = ImVec2(maxScreenSize.x + windowPadding, maxScreenSize.y - (placeIndex + 1.5f) * (size.y + windowPadding));
+    targetElement.pos = ImVec2(maxScreenSize.x - size.x - windowPadding, startElement.pos.y);
+}
+
 void Notification::SetPlaceIndex(int index)
 {
     this->placeIndex = index;
-    ImVec2 maxScreen = ImVec2(opengl_hook::screen_size.x, opengl_hook::screen_size.y);
-    startElement.pos = ImVec2(maxScreen.x + windowPadding, maxScreen.y - (placeIndex + 1.5f) * (size.y + windowPadding));
-    targetElement.pos = ImVec2(maxScreen.x - size.x - windowPadding, startElement.pos.y);
-
 }
 
 bool Notification::ShouldLeave()

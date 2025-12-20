@@ -16,7 +16,7 @@ void SetStyleGray()
     style.TabBorderSize = 1.0f;
     colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
     colors[ImGuiCol_TextDisabled] = ImVec4(0.48f, 0.48f, 0.48f, 1.00f);
-    colors[ImGuiCol_WindowBg] = ImVec4(0.14f, 0.14f, 0.14f, 0.80f);
+    colors[ImGuiCol_WindowBg] = ImVec4(0.14f, 0.14f, 0.14f, 0.20f);
     colors[ImGuiCol_ChildBg] = ImVec4(0.14f, 0.14f, 0.14f, 0.50f);
     colors[ImGuiCol_PopupBg] = ImVec4(0.14f, 0.14f, 0.14f, 0.80f);
     colors[ImGuiCol_Border] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);

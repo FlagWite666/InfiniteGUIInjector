@@ -50,6 +50,9 @@ void FpsItem::DrawContent()
 void FpsItem::RenderBeforeGui()
 {
 	frameCount++; //ÓÎÏ·Ö¡ÂÊ
+	auto now = Clock::now();
+	lastFrameTimeMs = std::chrono::duration_cast<std::chrono::duration<float>>(now - lastFrameTime).count();
+	lastFrameTime = now;
 }
 
 void FpsItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)

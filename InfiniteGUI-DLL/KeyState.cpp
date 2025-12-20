@@ -1,5 +1,7 @@
 #include "KeyState.h"
 
+#include "opengl_hook.h"
+
 
 bool KeyState::GetKeyClick(int key)
 {
@@ -66,7 +68,7 @@ void KeyState::SetKeyDown(int key, int mode)
 	default:
 	case SC_POST_MESSAGE:
 	{
-		HWND hwnd = GetForegroundWindow();
+		const HWND hwnd = opengl_hook::handle_window;
 		if (key == Click::Left || key == Click::Right)
 		{
 			POINT point;
@@ -114,7 +116,7 @@ void KeyState::SetKeyUp(int key, int mode)
 	default:
 	case SC_POST_MESSAGE:
 	{
-		HWND hwnd = GetForegroundWindow();
+		const HWND hwnd = opengl_hook::handle_window;
 		if (key == Click::Left || key == Click::Right)
 		{
 			POINT point;
@@ -175,7 +177,7 @@ void KeyState::SetKeyClick(int key, int sleep, int mode)
 	default:
 	case SC_POST_MESSAGE:
 	{
-		HWND hwnd = GetForegroundWindow();
+		const HWND hwnd = opengl_hook::handle_window;
 		if (key == Click::Left || key == Click::Right)
 		{
 			POINT point;

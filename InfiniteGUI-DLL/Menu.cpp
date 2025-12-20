@@ -411,7 +411,6 @@ void Menu::DrawSettings(const float& bigPadding, const float& centerX, const flo
     ImGui::SliderInt(u8"Ä£ºýÇ¿¶È", &blur->blurriness_value, 0, 10);
     DrawKeybindSettings(bigPadding, centerX, itemWidth);
     DrawSoundSettings(bigPadding, centerX, itemWidth);
-    ClickSound::Instance().Init(isPlaySound, soundVolume);
     DrawStyleSettings(bigPadding, centerX, itemWidth);
 }
 

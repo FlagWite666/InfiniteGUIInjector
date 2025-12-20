@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "AnimButtonBase.h"
+#include "ClickSound.h"
 struct ModuleButtonStateData
 {
 	ButtonAnimTarget button; // size + pos
@@ -61,7 +62,13 @@ public:
 
 		bool pressed = DrawInvisibleButton(m_current.button);
 		rightClicked = ImGui::IsItemClicked(1); //右键单击
-		//if (pressed || rightClicked) ClickSound::Instance().PlayClickSound();
+		if (pressed) 
+		{
+			if(m_state == Normal)
+				ClickSound::Instance().PlayOnSound();
+			else if (m_state == Selected)
+				ClickSound::Instance().PlayOffSound();
+		}
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
 
@@ -138,13 +145,13 @@ public:
 	{
 		if (selected)
 		{
-			ImVec4 borderColor = ImVec4(0.2f, 0.8f, 0.2f, 1.0f);
+			ImVec4 borderColor = ImVec4(0.1f, 0.8f, 0.3f, 1.0f);
 			m_hovered.button.borderColor = borderColor; //绿色边框 代表开启状态
 			m_state = Selected;
 		}
 		else
 		{
-			ImVec4 borderColor = ImVec4(0.8f, 0.2f, 0.2f, 1.0f);
+			ImVec4 borderColor = ImVec4(0.8f, 0.4f, 0.4f, 1.0f);
 			m_hovered.button.borderColor = borderColor;//红色边框 代表关闭状态
 			m_state = Normal;
 		}
@@ -213,7 +220,7 @@ private:
 		ImVec4 bgColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Button));
 		bgColor.w = 0.35f;
 		m_normal.button.color = bgColor;
-		ImVec4 borderColor = ImVec4(0.8f, 0.2f, 0.2f, 0.8f); 
+		ImVec4 borderColor = ImVec4(0.6f, 0.2f, 0.2f, 0.8f); 
 		m_normal.button.borderColor = borderColor;//红色边框 代表关闭状态
 
 		//设置m_normal的图标
@@ -250,7 +257,7 @@ private:
 		m_selected.button.size = normal.button.size;
 		m_selected.button.center = normal.button.center;
 		m_selected.button.color = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Button));
-		ImVec4 borderColor = ImVec4(0.2f, 0.8f, 0.2f, 0.8f);
+		ImVec4 borderColor = ImVec4(0.0f, 0.6f, 0.2f, 0.8f);
 		m_selected.button.borderColor = borderColor; //绿色边框 代表开启状态
 
 		//设置m_selected的图标

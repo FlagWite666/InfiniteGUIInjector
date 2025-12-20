@@ -81,7 +81,9 @@ public:
 			savedTime = std::chrono::steady_clock::now();
 			saved = true;
 			ConfigManager::Instance().Save();
+			ClickSound::Instance().PlaySaveSound();
 			NotificationItem::Instance().AddNotification(NotificationType_Success,u8"配置文件已保存");
+
 		}
 		ImGui::PopFont();
 	}

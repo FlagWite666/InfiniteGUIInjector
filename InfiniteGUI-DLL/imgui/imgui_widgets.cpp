@@ -2047,10 +2047,10 @@ bool ImGui::BeginCombo(const char* label, const char* preview_value, ImGuiComboF
 
     float speed = 10.0f * GetIO().DeltaTime;
 
-    it_anim->second.open_anim = ImLerp(it_anim->second.open_anim, popup_open ? 1.0f : 0.2f, speed * 0.5f);
+    it_anim->second.open_anim = ImLerp(it_anim->second.open_anim, popup_open ? 100.0f : 0.0f, speed * 0.5f);
     if (!popup_open)
     {
-        it_anim->second.open_anim = 0.2f;
+        it_anim->second.open_anim = 0.0f;
     }
     it_anim->second.arrow_anim = ImLerp(it_anim->second.arrow_anim, popup_open ? 1.0f : 0.5f, speed);
 
@@ -2115,13 +2115,13 @@ bool ImGui::BeginCombo(const char* label, const char* preview_value, ImGuiComboF
     //it_anim->second.open_anim = 0.5f;
     // Set popup size
     //float w = bb.GetWidth();
-    if (!(g.NextWindowData.HasFlags & ImGuiNextWindowDataFlags_HasSizeConstraint))
-    {
-        g.NextWindowData.SizeConstraintRect.Min.x = ImMax(g.NextWindowData.SizeConstraintRect.Min.x, w) * it_anim->second.open_anim;
-        //g.NextWindowData.SizeConstraintRect.Min.y = ImMax(g.NextWindowData.SizeConstraintRect.Max.y, CalcMaxPopupHeightFromItemCount(5)) * it_anim->second.open_anim;
-    }
-    else
-    {
+    //if (!(g.NextWindowData.HasFlags & ImGuiNextWindowDataFlags_HasSizeConstraint))
+    //{
+    //    g.NextWindowData.SizeConstraintRect.Min.x = ImMax(g.NextWindowData.SizeConstraintRect.Min.x, w) * it_anim->second.open_anim;
+    //    //g.NextWindowData.SizeConstraintRect.Min.y = ImMax(g.NextWindowData.SizeConstraintRect.Max.y, CalcMaxPopupHeightFromItemCount(5)) * it_anim->second.open_anim;
+    //}
+    //else
+    //{
         if ((flags & ImGuiComboFlags_HeightMask_) == 0)
             flags |= ImGuiComboFlags_HeightRegular;
         IM_ASSERT(ImIsPowerOfTwo(flags & ImGuiComboFlags_HeightMask_)); // Only one
@@ -2133,9 +2133,9 @@ bool ImGui::BeginCombo(const char* label, const char* preview_value, ImGuiComboF
         if ((g.NextWindowData.HasFlags & ImGuiNextWindowDataFlags_HasSize) == 0 || g.NextWindowData.SizeVal.x <= 0.0f) // Don't apply constraints if user specified a size
             constraint_min.x = w /** it_anim->second.open_anim*/;
         if ((g.NextWindowData.HasFlags & ImGuiNextWindowDataFlags_HasSize) == 0 || g.NextWindowData.SizeVal.y <= 0.0f)
-            constraint_max.y = CalcMaxPopupHeightFromItemCount(popup_max_height_in_items) * it_anim->second.open_anim;
+            constraint_max.y = CalcMaxPopupHeightFromItemCount(popup_max_height_in_items) * it_anim->second.open_anim * 0.01f;
         SetNextWindowSizeConstraints(constraint_min, constraint_max);
-    }
+    //}
 
     // This is essentially a specialized version of BeginPopupEx()
     char name[16];
@@ -2343,6 +2343,7 @@ bool ImGui::Combo(const char* label, int* current_item, const char* (*getter)(vo
     ImGuiListClipper clipper;
     clipper.Begin(items_count);
     clipper.IncludeItemByIndex(*current_item);
+    SetScrollHereY(0.0f);
     while (clipper.Step())
         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
         {

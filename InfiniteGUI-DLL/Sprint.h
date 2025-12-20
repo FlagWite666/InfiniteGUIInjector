@@ -15,7 +15,8 @@ enum SprintState {
     Idle,
     Sprinting,
     Sneaking,
-    Walking
+    Walking,
+    OutOfWindow
 };
 
 struct sprint_element {
@@ -60,6 +61,8 @@ public:
         lastState = Idle;
         state = Idle;
 
+        inputMode = SC_SEND_INPUT;
+
         color = { ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text)) };
         dirtyState.contentDirty = true;
         dirtyState.animating = true;
@@ -82,5 +85,6 @@ private:
     SprintState lastState = Idle;
     SprintState state = Idle;
     KeyState keyStateHelper;
+    int inputMode = SC_SEND_INPUT;
     sprint_element color = { ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text)) };
 };

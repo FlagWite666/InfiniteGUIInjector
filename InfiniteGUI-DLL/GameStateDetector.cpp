@@ -14,6 +14,9 @@ void GameStateDetector::Update()
 		currentState = InGameMenu;
 	else
 		currentState = InGame;
+
+	isInGameWindow = opengl_hook::handle_window == GetForegroundWindow();
+
 	if (currentState != lastState)
 	{
 		dirtyState.contentDirty = true;
@@ -54,6 +57,11 @@ bool GameStateDetector::IsNeedHide() const
 GameState GameStateDetector::GetCurrentState() const
 {
 	return currentState;
+}
+
+bool GameStateDetector::IsInGameWindow() const
+{
+	return isInGameWindow;
 }
 
 bool GameStateDetector::IsInGame() const

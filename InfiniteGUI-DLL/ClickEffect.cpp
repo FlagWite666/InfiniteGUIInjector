@@ -22,7 +22,7 @@ void ClickEffect::Update()
 			clickEffects.pop_front();
 		}
 	}
-	if(opengl_hook::handle_window != GetForegroundWindow()) return;
+	if(!GameStateDetector::Instance().IsInGameWindow()) return;
 	GameState state = GameStateDetector::Instance().GetCurrentState();
 	bool yes = false;
 	if (enabledInGame && state == InGame)
@@ -38,14 +38,14 @@ void ClickEffect::Update()
 	{
 		//获取窗口中心位置
 		RECT rect;
-		GetClientRect(GetForegroundWindow(), &rect);
+		GetClientRect(opengl_hook::handle_window, &rect);
 		point.x = rect.left + rect.right / 2 - 1.0f;
 		point.y = rect.top + rect.bottom / 2 + 1.0f;
 	}
 	else
 	{
 		GetCursorPos(&point);
-		ScreenToClient(GetForegroundWindow(), &point);
+		ScreenToClient(opengl_hook::handle_window, &point);
 	}
 
 	ImVec2 mousePos = ImVec2(point.x, point.y);

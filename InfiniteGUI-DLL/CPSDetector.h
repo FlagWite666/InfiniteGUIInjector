@@ -129,8 +129,8 @@ public:
     void Save(nlohmann::json& j) const override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
 
-    int GetLeftCPS();
-    int GetRightCPS();
+    int GetLeftCPS() const;
+    int GetRightCPS() const;
 private:
     KeyState keyStateHelper;
     click_container cps;

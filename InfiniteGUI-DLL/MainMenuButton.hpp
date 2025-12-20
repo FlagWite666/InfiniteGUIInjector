@@ -45,7 +45,7 @@ public:
 		}
 
 		bool pressed = DrawInvisibleButton(m_current.button);
-		if(pressed) ClickSound::Instance().PlayClickSound();
+		if(pressed) ClickSound::Instance().PlayPopSound();
 		rightClicked = ImGui::IsItemClicked(1); //ÓÒ¼üµ¥»÷
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();

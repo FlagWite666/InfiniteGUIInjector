@@ -1,6 +1,8 @@
 #include "Motionblur.h"
 #include <GL/glew.h>
 #include <GL/GL.h>
+
+#include "FpsItem.h"
 #include "opengl_hook.h"
 #include "GameStateDetector.h"
 #include "imgui\imgui_internal.h"
@@ -141,7 +143,7 @@ void Motionblur::Render()
 		velocity_factor = 0.0f;
 
 	if (FpsModulate)
-		Fps_modulate(ImGui::GetIO().Framerate, &blurriness_value, &cur_blurriness_value);
+		Fps_modulate(FpsItem::Instance().GetInstantaneousFPS(), &blurriness_value, &cur_blurriness_value);
 	else
 		cur_blurriness_value = blurriness_value;
 
@@ -345,14 +347,12 @@ void Motionblur::DrawSettings(const float& bigPadding, const float& centerX, con
 	{
 		if (!velocityAdaptive) smooth_blur = false;
 	}
-
+	ImGui::SameLine(); ImGuiStd::HelpMarker(u8"根据视角移动速度调整模糊强度，能有效解决鬼影问题。");
 	ImGui::SetCursorPosX(bigPadding);
 	if (ImGui::Checkbox(u8"菜单动态模糊", &applayOnMenu))
 	{
 		processApplyOnMenu();
 	}
-	ImGui::SameLine(); ImGuiStd::HelpMarker(u8"根据视角移动速度调整模糊强度，能有效解决鬼影问题。");
-
 	ImGui::SameLine();
 	ImGui::SetCursorPosX(centerX + bigPadding);
 	ImGui::SetNextItemWidth(itemWidth);

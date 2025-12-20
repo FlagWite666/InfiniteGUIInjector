@@ -1,6 +1,7 @@
 #include "CPSDetector.h"
 #include "App.h"
-#include "opengl_hook.h"
+#include "GameStateDetector.h"
+
 
 //// 检查是否到了更新的时间
 //bool CPSDetector::ShouldCpsUpdate() {
@@ -21,7 +22,7 @@ void CPSDetector::Toggle()
 void CPSDetector::Update()
 {
     cps.processClick();
-    if (opengl_hook::handle_window != GetForegroundWindow())
+    if (!GameStateDetector::Instance().IsInGameWindow())
         return;
     if (keyStateHelper.GetKeyClick(VK_LBUTTON))
     {
@@ -33,11 +34,11 @@ void CPSDetector::Update()
     }
 }
 
-int CPSDetector::GetLeftCPS()
+int CPSDetector::GetLeftCPS() const
 {
     return cps.GetLeftCPS();
 }
-int CPSDetector::GetRightCPS()
+int CPSDetector::GetRightCPS() const
 {
     return cps.GetRightCPS();
 }

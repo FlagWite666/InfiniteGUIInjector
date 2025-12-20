@@ -93,6 +93,7 @@ private:
 					done = true;               // 真正退出
 					showExitConfirm = false;
 					ImGui::CloseCurrentPopup();
+					ClickSound::Instance().PlayExitSound();
 				}
 
 				ImGui::SameLine();

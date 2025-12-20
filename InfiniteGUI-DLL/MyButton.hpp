@@ -54,7 +54,7 @@ public:
 		}
 
 		bool pressed = DrawInvisibleButton(m_current.button);
-		//if (pressed) ClickSound::Instance().PlayClickSound();
+		if (pressed) ClickSound::Instance().PlayClickSound();
 		rightClicked = ImGui::IsItemClicked(1); //ÓÒ¼üµ¥»÷
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
@@ -232,7 +232,7 @@ protected:
 
 		m_selected.label.center = textCenter;
 		m_selected.label.fontSize = fontSize * 1.0f;
-		m_selected.label.color = ImVec4(0.2f, 0.9f, 0.2f, 1.0f);
+		m_selected.label.color = ImVec4(0.1f, 0.8f, 0.3f, 1.0f);
 
 	}
 

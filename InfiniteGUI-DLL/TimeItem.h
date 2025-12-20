@@ -18,7 +18,7 @@ public:
     TimeItem() {
         type = Hud; // 信息项类型
         name = u8"时间显示";
-        description = u8"显示当前时间";
+        description = u8"显示当前时间和日期";
         icon = "a";
         updateIntervalMs = 1000;
         lastUpdateTime = std::chrono::steady_clock::now();
@@ -47,6 +47,8 @@ public:
     void Save(nlohmann::json& j) const override;
 
 private:
+    bool showDate = true;
     std::string currentTimeStr;
+    std::string currentDateStr;
     time_element color;
 };

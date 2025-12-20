@@ -66,7 +66,7 @@ public:
 		}
 
 		bool pressed = DrawInvisibleButton(m_current.button);
-		//if (pressed) ClickSound::Instance().PlayClickSound();
+		if (pressed) ClickSound::Instance().PlayClickSound();
 		rightClicked = ImGui::IsItemClicked(1); //右键单击
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
@@ -251,7 +251,7 @@ private:
 		if (isExitButton)
 			m_selected.label.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f);
 		else
-			m_selected.label.color = ImVec4(0.2f, 0.9f, 0.2f, 1.0f);
+			m_selected.label.color = ImVec4(0.6f, 0.7f, 0.8f, 1.0f);// 清新但不刺眼的蓝色
 
 		ComputeTextLayout(
 			m_selected.icon,

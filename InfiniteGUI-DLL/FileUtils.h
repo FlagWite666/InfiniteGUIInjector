@@ -36,21 +36,6 @@ namespace FileUtils {
         return appDataPath + "\\Configs";
     }
 
-    //inline std::string GetGlobalConfigPath()
-    //{
-    //    //如果没有Configs文件夹，则创建
-    //    std::string p = GetConfigPath();
-    //    CreateDirectoryA(p.c_str(), NULL);
-    //    return p + "\\global.json";
-    //}
-
-    //inline std::string GetItemConfigPath()
-    //{
-    //    std::string p = GetConfigPath();
-    //    CreateDirectoryA(p.c_str(), NULL);
-    //    return p + "\\Item";
-    //}
-
     inline std::string GetSoundPath()
     {
         return modulePath + "\\Assets\\Sounds";
