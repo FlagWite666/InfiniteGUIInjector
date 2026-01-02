@@ -60,7 +60,7 @@
 ---
 
 ## 🛠 Build | 构建教程（源码编译）
-> 本代码仓库未包含 OpenGL (GLEW) 和 nlohmann/json 依赖库 需要用户自行引入。
+> 本代码仓库未包含 OpenGL (GLEW)、stb 和 nlohmann/json 依赖库 需要用户自行引入。
 
 ### 📦 依赖库说明
 
