@@ -59,6 +59,63 @@
 
 ---
 
+## 🛠 Build | 构建教程（源码编译）
+> 本代码仓库未包含 OpenGL (GLEW) 和 nlohmann/json 依赖库 需要用户自行引入。
+
+### 📦 依赖库说明
+
+本项目依赖以下第三方库：  
+
+- OpenGL / GLEW  
+- nlohmann/json（仅头文件库）  
+
+### ✅ 依赖安装方式一（推荐）：使用 vcpkg  
+
+#### 1️⃣ 安装 vcpkg（如果你还没装）
+- git clone https://github.com/microsoft/vcpkg  
+cd vcpkg  
+bootstrap-vcpkg.bat  
+
+#### 2️⃣ 使用 vcpkg 安装依赖
+- vcpkg install glew:x64-windows  
+vcpkg install nlohmann-json
+
+#### 3️⃣ 将 vcpkg 集成到 Visual Studio
+- vcpkg integrate install
+
+### ✅ 依赖安装方式二：手动下载并加入项目
+#### 🔹 nlohmann/json（头文件库）  
+
+前往官方仓库下载源码  
+- https://github.com/nlohmann/json  
+
+将 single_include/nlohmann/json.hpp  
+放入项目的 include/ 或任意你设置的包含目录中  
+
+#### 🔹 GLEW（OpenGL 扩展库）
+
+前往官网下载 GLEW  
+- http://glew.sourceforge.net/  
+
+解压后：  
+
+- 将 include/GL/glew.h 放入包含目录  
+将 lib 目录加入 链接器 → 附加库目录  
+
+在链接器中添加：  
+
+- glew32.lib  
+opengl32.lib
+
+### 🧩 编译环境建议
+- Visual Studio 2022  
+平台工具集：MSVC v143  
+编译模式：Release | x64  
+C++ 标准：C++17 或更高  
+
+---
+
+
 ## ⚠ Disclaimer | 免责声明
 
 **本程序不会读取、修改或写入任何 Minecraft 游戏内存数据。  
