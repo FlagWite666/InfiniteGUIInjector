@@ -54,13 +54,13 @@ void main()
     vec4 blurredHistory = history;
 	if(velocity_factor > 0.0){
 		float base_blurriness = blurriness * 0.5;
-		cur_blurriness = base_blurriness + (1.0 - velocity_factor) * base_blurriness;
+		cur_blurriness = base_blurriness + velocity_factor * base_blurriness;
 		if(smooth_blur)
 		{
 			blurredHistory = blurHistory(TexCoord);
 		}
 	}
-	vec4 blurredColor = mix(blurredHistory, current, cur_blurriness);
+	vec4 blurredColor = mix(current, blurredHistory, cur_blurriness);
     
     if (renderRGB)
     {
@@ -69,7 +69,7 @@ void main()
     else
     {
 		float value1 = current.r;
-		FragColor = mix(blurredHistory, vec4(value1), cur_blurriness);
+		FragColor = mix(vec4(value1), blurredHistory, cur_blurriness);
     }
 }
 
@@ -292,7 +292,7 @@ void Motionblur::draw_texture() const
 	glBindTexture(GL_TEXTURE_2D, history_texture_);
 	glUniform1i(glGetUniformLocation(shader_program_, "historyTexture"), 1);
 
-	auto value = max(0.1, (50 - cur_blurriness_value)) / 100;
+	auto value = cur_blurriness_value / 12.5f;
 	glUniform1f(glGetUniformLocation(shader_program_, "blurriness"), (GLfloat)value);
 	glUniform1f(glGetUniformLocation(shader_program_, "velocity_factor"), (GLfloat)velocity_factor);
 	glUniform1f(glGetUniformLocation(shader_program_, "renderRGB"), !clear_color);
@@ -346,15 +346,23 @@ void Motionblur::velocity_adaptive_blur(bool cameraMoving, float cameraSpeed, fl
 	}
 }
 
-void Motionblur::Fps_modulate(const float &fps,const float* blurriness_value, float* cur_blurriness_value)
+void Motionblur::Fps_modulate(const float& fps, const float* blurriness_value, float* cur_blurriness_value)
 {
-	*cur_blurriness_value = *blurriness_value * std::clamp(fps, 0.0f, 1000.0f) / 1000.0f; //fps越高，模糊强度越高
+	float normalized_fps = std::clamp(fps, 0.0f, 1000.0f) / 1000.0f;  // 归一化到[0,1]
+
+	// 指数衰减：fps越低，衰减越强
+	// 调整power值可以控制曲线陡峭程度（越大则低FPS衰减越强）
+	float attenuation_factor = std::pow(normalized_fps, 0.2f);
+
+	*cur_blurriness_value = *blurriness_value * attenuation_factor;
 }
 
 void Motionblur::Load(const nlohmann::json& j)
 {
 	LoadItem(j);
 	if (j.contains("blurriness")) blurriness_value = j["blurriness"].get<float>();
+	//调整blurriness不超过10
+	blurriness_value = std::clamp(blurriness_value, 0.0f, 10.0f);
 	if (j.contains("velocityAdaptive")) velocityAdaptive = j["velocityAdaptive"].get<bool>();
 	if (j.contains("smooth_blur")) smooth_blur = j["smooth_blur"].get<bool>();
 	if (j.contains("applayOnMenu")) applyOnMenu = j["applayOnMenu"].get<bool>();
@@ -384,7 +392,7 @@ void Motionblur::DrawSettings(const float& bigPadding, const float& centerX, con
 	ImGui::SetCursorPosX(bigPadding);
 	ImGui::SetNextItemWidth(bigItemWidth);
 	//DrawItemSettings();
-	ImGui::SliderFloat(u8"模糊强度", &blurriness_value, 0.0f, 30.0f, "%.1f");
+	ImGui::SliderFloat(u8"模糊强度", &blurriness_value, 0.0f, 10.0f, "%.1f");
 
 	ImGui::SetCursorPosX(bigPadding);
 	ImGui::SetNextItemWidth(itemWidth);

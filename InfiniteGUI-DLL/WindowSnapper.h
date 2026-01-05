@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <stdint.h>
 #include <algorithm>
-
+#include "ItemManager.h"
 enum SnapState : uint32_t {
     SNAP_NONE = 0,
 
@@ -17,6 +17,16 @@ enum SnapState : uint32_t {
     // 中心
     SNAP_CENTER_X = 1 << 4,
     SNAP_CENTER_Y = 1 << 5,
+
+    // 边
+    SNAP_OTHER_LEFT = 1 << 6,
+    SNAP_OTHER_RIGHT = 1 << 7,
+    SNAP_OTHER_TOP = 1 << 8,
+    SNAP_OTHER_BOTTOM = 1 << 9,
+
+    // 中心
+    SNAP_OTHER_CENTER_X = 1 << 10,
+    SNAP_OTHER_CENTER_Y = 1 << 11,
 };
 
 struct SnapResult {
@@ -33,7 +43,9 @@ public:
         float screenW,
         float screenH,
         float snapDist);
+    static void ComputeSnapWithWindows(const ImVec2& size,
+                                       float snapDist, const std::vector<Item*>& items, SnapResult& r);
 
-    static void DrawGuides(const SnapResult& r, float screenW, float screenH);
+    static void DrawGuides(const SnapResult& r, float screenW, float screenH, const ImVec2& size);
     static void KeepSnapped(ImVec2& pos, const ImVec2& size, float screenW, float screenH, const SnapState& r);
 };

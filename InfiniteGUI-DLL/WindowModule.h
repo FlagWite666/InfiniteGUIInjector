@@ -8,7 +8,7 @@
 #include <nlohmann/json.hpp>
 #include "WindowSnapper.h"
 #include "opengl_hook.h"
-static const float SNAP_DISTANCE = 15.0f;
+static constexpr float SNAP_DISTANCE = 10.0f;
 static bool isSnapping = false;
 
 struct Customize
@@ -313,6 +313,11 @@ public:
     void SetClickThrough(bool value) {
         clickThrough = value;
     }
+    float x = 100.0f;
+    float y = 40.0f;
+    float width = 250.0f;
+    float height = 80.0f;
+    bool isMoving = false;
 private:
         std::string GetActualWindowName() const {
             return "##" + std::to_string((uintptr_t)this);
@@ -335,7 +340,8 @@ private:
                 // 计算吸附
                 snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, SNAP_DISTANCE);
                 // 画吸附线
-                WindowSnapper::DrawGuides(snap, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y);
+                WindowSnapper::DrawGuides(snap, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, sz);
+                //WindowSnapper::ComputeSnapWithWindows(sz, SNAP_DISTANCE, ItemManager::Instance().GetItems(), snap);
             }
             else
                 snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, 0.0f);
@@ -419,18 +425,14 @@ protected:
     bool isWindowShow = true;
 
     bool isCustomSize = false;    //是否自定义大小
-    float x = 100.0f;
-    float y = 40.0f;
 
     SnapState snapState = SNAP_NONE;
-    float width = 250.0f;
-    float height = 80.0f;
+
 
     bool allowMove = true;
     bool allowResize = true;
     bool clickThrough = false;
 
-    bool isMoving = false;
     bool isHovered = true;
     bool isAnimating = false;
 

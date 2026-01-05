@@ -18,7 +18,7 @@ enum NotificationType
     NotificationType_Warning
 };
 
-enum WindowState
+enum NotificationState
 {
     Joining,
     Staying,
@@ -86,7 +86,7 @@ private:
     notification_element startElement;
     notification_element targetElement;
     notification_element curElement;
-    WindowState state = Joining;
+    NotificationState state = Joining;
     NotificationType type = NotificationType_Info;
     ImVec2 size = ImVec2(0, 0);
     std::chrono::steady_clock::time_point joinTime;  // 记录时间

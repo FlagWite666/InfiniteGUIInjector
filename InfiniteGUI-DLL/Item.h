@@ -4,12 +4,6 @@
 #include <nlohmann/json.hpp>
 #pragma comment(lib, "dwmapi.lib")
 
-enum GameState {
-    InGameMenu,
-    InMenu,
-    InGame,
-};
-
 enum ItemType{
     Hud,
     Util,
@@ -18,11 +12,6 @@ enum ItemType{
     Hidden,
     All
 }; //改成可同时拥有多个类型
-
-enum MultiType {
-    Singleton,
-    MultiInstance
-};
 
 class Item {
 public:

@@ -86,6 +86,14 @@ public:
             lastErrorMsg.clear();
             ImGui::OpenPopup(addPopupName);
         }
+        ImGui::SameLine();
+        ImGui::PushFont(opengl_hook::gui.iconFont);
+        if (ImGui::Button("{")) //打开配置文件夹
+        {
+            std::wstring path = StringConverter::Utf8ToWstring(FileUtils::configPath + "\\profiles");
+            ShellExecute(NULL, NULL, path.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        }
+        ImGui::PopFont();
 
         // ----------------------
     // Create Profile Popup

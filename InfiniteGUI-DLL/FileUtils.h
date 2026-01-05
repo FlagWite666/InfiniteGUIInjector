@@ -8,13 +8,13 @@
 #include "StringConverter.h"
 namespace FileUtils {
 
-    inline std::string appDataPath = "";
+    inline std::string appDataPath;
 
-    inline std::string configPath = "";
+    inline std::string configPath;
 
-    inline std::string modulePath = "";
+    inline std::string modulePath;
 
-    inline std::string soundPath = "";
+    inline std::string soundPath;
 
     inline std::string GetAppDataPath()
     {
@@ -67,10 +67,15 @@ namespace FileUtils {
 
     inline void InitPaths(HMODULE hMod)
     {
-        appDataPath = GetAppDataPath();
-        configPath = GetConfigPath();
         modulePath = GetModulePath(hMod);
         soundPath = GetSoundPath();
+        //MessageBoxA(NULL, "StartGetAppDataPath", "appDataPath", MB_OK);
+        appDataPath = GetAppDataPath();
+        //MessageBoxA(NULL, appDataPath.c_str(), "appDataPath", MB_OK);
+        if(appDataPath.empty()) // 如果获取失败，则使用默认路径（可能是多用户操作系统）
+            appDataPath = "C:\\InfiniteGUI";
+        //MessageBoxA(NULL, appDataPath.c_str(), "appDataPath", MB_OK);
+        configPath = GetConfigPath();
         InitBasePath(modulePath);
     }
 

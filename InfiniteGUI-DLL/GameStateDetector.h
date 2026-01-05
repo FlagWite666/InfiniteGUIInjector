@@ -4,6 +4,17 @@
 #include <Windows.h>
 
 #include "RenderModule.h"
+enum GameState {
+    InGameMenu,
+    InMenu,
+    InGame,
+};
+
+enum WindowState {
+    NormalWindow,
+    FullScreen,
+    BorderlessFullScreen,
+};
 
 class GameStateDetector : public UpdateModule, public Item, public RenderModule{
 public:
@@ -65,6 +76,7 @@ private:
 
     GameState currentState = InGameMenu;
     GameState lastState = InGameMenu;
+    WindowState windowState = NormalWindow;
     bool isInGameWindow = true;
     int centerLevel = 1;
 

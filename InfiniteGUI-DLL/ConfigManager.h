@@ -31,7 +31,7 @@ public:
 
 private:
     ConfigManager() = default;
-
+    static void NotifyProfileLoad();
     void RefreshProfileList();
     std::string GetProfilePath(const std::string& name) const;
 
