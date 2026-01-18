@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyName>InfiniteGUIInjector</AssemblyName>
+    <RootNamespace>DLLInjector</RootNamespace>
+    <Product>InfiniteGUI注入器</Product>
+    <AssemblyTitle>InfiniteGUI注入器</AssemblyTitle>
+    <Description>InfiniteGUI DLL 注入器</Description>
+    <Company>InfiniteGUI</Company>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <PublishTrimmed>false</PublishTrimmed>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="dll\InfiniteGUI-DLL.dll">
+      <LogicalName>InfiniteGUI_DLL.dll</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dll\glew32.dll">
+      <LogicalName>glew32.dll</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
