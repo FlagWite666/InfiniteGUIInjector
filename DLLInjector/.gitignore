@@ -1,0 +1,58 @@
+# Build results
+bin/
+obj/
+*.exe
+*.pdb
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Allow DLL files in dll folder
+!dll/
+!dll/*.dll
+
+# Visual Studio
+.vs/
+*.vscode/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rchitecture]/
+[Bb]in/
+
+# .NET
+*.cache
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Project specific
+InfiniteGUI-DLL.dll
+glew32.dll
+Logo.png
+*.tmp
+*.temp
