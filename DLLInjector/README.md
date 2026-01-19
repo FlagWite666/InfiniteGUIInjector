@@ -1,4 +1,4 @@
-<img width="285" height="53" alt="image" src="https://github.com/user-attachments/assets/afcd3605-f0e6-465d-bb1e-2fd553063704" /># InfiniteGUI 注入器
+## InfiniteGUI 注入器
 
 一个完全由AI编写的 DLL 注入器，专门为 Minecraft 设计。
 
@@ -173,3 +173,4 @@ DLLInjector/
 
 
 **Made with ❤️ for the Minecraft Community**
+
