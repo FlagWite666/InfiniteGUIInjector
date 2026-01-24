@@ -38,7 +38,7 @@ public:
         ResetKeybind();
         isEnabled = true;
         keybinds.insert(std::make_pair(u8"无边框全屏快捷键：", NULL));
-        windowTransparency = 255;
+        //windowTransparency = 255;
     }
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
     void Update() override;
@@ -48,8 +48,8 @@ public:
 
 private:
     void SetBorderlessFullscreen(HWND hwnd);
-    static void SetWindowTransparency(HWND hwnd, BYTE alpha);
+    //static void SetWindowTransparency(HWND hwnd, BYTE alpha);
     //std::map<HWND, WindowState> savedWindows;
     WindowStyleState windowStyleState;
-    int windowTransparency;
+    //int windowTransparency;
 };

@@ -74,6 +74,138 @@ namespace ImGuiStd {
         ImGui::Dummy(ImVec2(text_size.x, text_size.y));
     }
 
+    static void TextShadowWrapped(
+        const char* text,
+        float wrap_width = 0.0f,
+        ImVec2 offset = ImVec2(1, 1),
+        ImVec4 shadow_col = ImVec4(0, 0, 0, 0.6f))
+    {
+        ImGuiWindow* window = ImGui::GetCurrentWindow();
+        if (window->SkipItems)
+            return;
+
+        ImDrawList* draw = window->DrawList;
+        ImFont* font = ImGui::GetFont();
+        float size = ImGui::GetFontSize();
+
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+
+        // 自动换行宽度（默认用窗口剩余宽度）
+        if (wrap_width <= 0.0f)
+        {
+            wrap_width = ImGui::GetContentRegionAvail().x;
+        }
+
+        // 阴影
+        draw->AddText(
+            font,
+            size,
+            ImVec2(pos.x + offset.x, pos.y + offset.y),
+            ImGui::GetColorU32(shadow_col),
+            text,
+            nullptr,
+            wrap_width
+        );
+
+        // 正文
+        draw->AddText(
+            font,
+            size,
+            pos,
+            ImGui::GetColorU32(ImGuiCol_Text),
+            text,
+            nullptr,
+            wrap_width
+        );
+
+        // 推进光标（必须用 Wrapped 版本）
+        ImVec2 text_size =
+            ImGui::CalcTextSize(text, nullptr, false, wrap_width);
+
+        ImGui::Dummy(text_size);
+    }
+
+    static void TextShadowEllipsis(
+        const char* text,
+        float max_width,
+        ImVec2 offset = ImVec2(1, 1),
+        ImVec4 shadow_col = ImVec4(0, 0, 0, 0.6f))
+    {
+        ImGuiWindow* window = ImGui::GetCurrentWindow();
+        if (window->SkipItems)
+            return;
+
+        ImDrawList* draw = window->DrawList;
+        ImFont* font = ImGui::GetFont();
+        float size = ImGui::GetFontSize();
+
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+
+        const char* ellipsis = "...";
+        float ellipsis_width = ImGui::CalcTextSize(ellipsis).x;
+
+        // 如果整个文本能放下，直接画
+        ImVec2 full_size = ImGui::CalcTextSize(text);
+        if (full_size.x <= max_width)
+        {
+            // 阴影
+            draw->AddText(font, size, ImVec2(pos.x + offset.x, pos.y + offset.y),
+                ImGui::GetColorU32(shadow_col), text);
+
+            // 正文
+            draw->AddText(font, size, pos,
+                ImGui::GetColorU32(ImGuiCol_Text), text);
+
+            ImGui::Dummy(full_size);
+            return;
+        }
+
+        // ===== 需要省略 =====
+        const char* text_end = text + strlen(text);
+        const char* visible_end = text_end;
+
+        // 从后往前裁剪，直到能放下 + ...
+        while (visible_end > text)
+        {
+            float w = ImGui::CalcTextSize(text, visible_end).x;
+            if (w + ellipsis_width <= max_width)
+                break;
+
+            visible_end = ImGui::FindRenderedTextEnd(text, visible_end - 1);
+        }
+
+        // 阴影
+        draw->AddText(
+            font, size,
+            ImVec2(pos.x + offset.x, pos.y + offset.y),
+            ImGui::GetColorU32(shadow_col),
+            text, visible_end
+        );
+        draw->AddText(
+            font, size,
+            ImVec2(pos.x + offset.x + ImGui::CalcTextSize(text, visible_end).x, pos.y + offset.y),
+            ImGui::GetColorU32(shadow_col),
+            ellipsis
+        );
+
+        // 正文
+        draw->AddText(
+            font, size,
+            pos,
+            ImGui::GetColorU32(ImGuiCol_Text),
+            text, visible_end
+        );
+        draw->AddText(
+            font, size,
+            ImVec2(ImGui::CalcTextSize(text, visible_end).x + pos.x, pos.y),
+            ImGui::GetColorU32(ImGuiCol_Text),
+            ellipsis
+        );
+
+        ImGui::Dummy(ImVec2(max_width, full_size.y));
+    }
+
+
     static void TextColoredShadow(ImVec4 color, ImVec4 shadowColor, const char* text, ImVec2 offset, ...)
     {
         ImVec2 pos = ImGui::GetCursorPos();
@@ -104,19 +236,19 @@ namespace ImGuiStd {
 
     static void Keybind(const char* text, int &key)
     {
-        static std::map<const char*, keybind_element> keybind_elements;
-        if (keybind_elements.find(text) == keybind_elements.end())
+        std::string label = text ? text : std::string(); // 立即拷贝，保证有效
+        static std::map<std::string, keybind_element> keybind_elements;
+        if (keybind_elements.find(label) == keybind_elements.end())
         {
                 keybind_element element;
                 element.id = current_keybind_element_id++;
-                keybind_elements[text] = element;
+                keybind_elements[label] = element;
         }
-        keybind_element& element = keybind_elements[text];
-
+        keybind_element& element = keybind_elements[label];
 
         std::string hotkeyStr = keys[key];
 
-        ImGui::Text(text);
+        ImGui::Text(label.c_str());
 
         ImGui::SameLine();
 
@@ -126,9 +258,9 @@ namespace ImGuiStd {
         }
         if (element.binding)
         {
-            ImGui::OpenPopup(text);
+            ImGui::OpenPopup(label.c_str());
         }
-        if (ImGui::BeginPopup(text))
+        if (ImGui::BeginPopup(label.c_str()))
         {
             ImGui::Text(u8"绑定快捷键");
             ImGui::Separator();

@@ -96,15 +96,15 @@ void Sprint::Update()
         GetSneaking();
     }
 
-    if (!isActivated || state == OutOfWindow) return;
-    SetSprinting();
-
     if (lastState != state)
     {
         dirtyState.contentDirty = true;
         dirtyState.animating = true;
         lastState = state;
     }
+
+    if (!isActivated || state == OutOfWindow) return;
+    SetSprinting();
 }
 
 void Sprint::DrawContent()

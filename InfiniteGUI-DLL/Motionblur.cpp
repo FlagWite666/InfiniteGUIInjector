@@ -292,7 +292,7 @@ void Motionblur::draw_texture() const
 	glBindTexture(GL_TEXTURE_2D, history_texture_);
 	glUniform1i(glGetUniformLocation(shader_program_, "historyTexture"), 1);
 
-	auto value = cur_blurriness_value / 12.0f;
+	auto value = cur_blurriness_value / 11.0f;
 	glUniform1f(glGetUniformLocation(shader_program_, "blurriness"), (GLfloat)value);
 	glUniform1f(glGetUniformLocation(shader_program_, "velocity_factor"), (GLfloat)velocity_factor);
 	glUniform1f(glGetUniformLocation(shader_program_, "renderRGB"), !clear_color);

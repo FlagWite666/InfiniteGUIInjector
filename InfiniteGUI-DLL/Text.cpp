@@ -26,11 +26,13 @@ void Text::DrawContent()
 
 void Text::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
+    float bigItemWidth = centerX * 2.0f - bigPadding * 4.0f;
     ImGui::SetCursorPosX(bigPadding);
-
+    ImGui::SetNextItemWidth(itemWidth);
     ImGui::Checkbox(u8"启用", &isEnabled);
 
     ImGui::SetCursorPosX(bigPadding);
+    ImGui::SetNextItemWidth(bigItemWidth);
     ImGuiStd::InputTextStd(u8"文本内容", text);
     DrawAffixSettings(bigPadding, centerX, itemWidth);
     DrawWindowSettings(bigPadding, centerX, itemWidth);

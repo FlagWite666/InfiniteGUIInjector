@@ -4,6 +4,7 @@
 #include "AudioManager.h"
 #include <thread>
 #include <atomic>
+#include <winrt/base.h>
 
 #include "App.h"
 #include "ClickSound.h"

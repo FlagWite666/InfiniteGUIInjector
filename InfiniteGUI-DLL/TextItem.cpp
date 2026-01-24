@@ -33,10 +33,12 @@ void TextItem::DrawSettings(const float& bigPadding, const float& centerX, const
             text.DrawSettings(bigPadding, centerX, itemWidth);
             //居中显示
             ImGui::SetCursorPosX(bigPadding);
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.1f, 0.1f, 1.0f)); //红色警示
             if (ImGui::Button(u8"删除",ImVec2(centerX * 2 - bigPadding, 0)))
             {
                 texts.erase(texts.begin() + i);
             }
+            ImGui::PopStyleColor();
             ImGui::Separator();
         }
         ImGui::PopID();

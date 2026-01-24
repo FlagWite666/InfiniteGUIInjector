@@ -14,6 +14,7 @@
 #include <thread>
 
 #include "Motionblur.h"
+#include "MusicInfoItem.h"
 
 //#include <base/voyage.h>
 //#include <mutex>
@@ -214,6 +215,15 @@ bool detour_wgl_swap_buffers(HDC hdc)
 		}
 		if (!opengl_hook::gui.logoTexture.id) opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
 		opengl_hook::gui.render();
+		if (opengl_hook::gui.done)
+		{
+			MusicInfoItem::Instance().ShutDown();
+			if (opengl_hook::gui.logoTexture.id)
+			{
+				glDeleteTextures(1, &opengl_hook::gui.logoTexture.id);
+				opengl_hook::gui.logoTexture.id = 0;
+			}
+		}
 	}
 	wglMakeCurrent(hdc, opengl_hook::o_gl_ctx);
 	//glPopMatrix();

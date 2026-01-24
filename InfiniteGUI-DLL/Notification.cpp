@@ -33,18 +33,30 @@ void Notification::RenderGui()
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
     bool open = true;
     std::string windowName = "Notification" + std::to_string(id);
-    PushRounding(itemStyle.windowRounding);
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, itemStyle.bgColor);
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, itemStyle.bgColor);
-    ImGui::PushStyleColor(ImGuiCol_Border, itemStyle.borderColor);
-    if (itemStyle.rainbowFont) processRainbowFont();
-    else ImGui::PushStyleColor(ImGuiCol_Text, itemStyle.fontColor);
+
     ImGui::Begin(windowName.c_str(), &open, flags);
 
-    ImGui::PushFont(opengl_hook::gui.iconFont, itemStyle.fontSize * 0.8f);
+    auto now = std::chrono::steady_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - joinTime).count();
+
+    duration = static_cast<float>(elapsedTime) / durationMs;
+    duration = std::clamp(duration, 0.0f, 1.0f);
+    ImDrawList* draw = ImGui::GetWindowDrawList();
+    ImGui::SetCursorPos(ImVec2(0,0));
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+    //将颜色背景设置成ImGuiCol_ChildBg
+    draw->AddRectFilled(
+        ImVec2(pos.x + 3.0f, pos.y + 3.0f),
+        ImVec2(pos.x + (size.x - 3.0f) * duration, pos.y + size.y - 3.0f),
+        ImGui::GetColorU32(ImGuiCol_ChildBg),
+        ImGui::GetStyle().WindowRounding, // 圆角
+        ImDrawFlags_RoundCornersAll
+    );
+    ImGui::SetCursorPos(ImGui::GetStyle().WindowPadding);
+    ImGui::PushFont(opengl_hook::gui.iconFont, ImGui::GetFontSize() * 0.8f);
     ImGuiStd::TextShadow(icon.c_str());
     ImGui::PopFont();
-    ImGui::PushFont(NULL, itemStyle.fontSize * 0.8f);
+    ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
     ImGui::SameLine();
     float startX = ImGui::GetCursorPosX();
     ImGui::BeginDisabled();
@@ -54,12 +66,8 @@ void Notification::RenderGui()
 
     ImGui::Separator();
     ImGui::SetCursorPosX(startX);
-    ImGui::PushFont(NULL, itemStyle.fontSize);
-    ImGuiStd::TextShadow(message.c_str());
-    ImGui::PopFont();
+    ImGuiStd::TextShadowEllipsis(message.c_str(), ImGui::GetContentRegionAvail().x);
     ImGui::End();
-    ImGui::PopStyleColor(4);
-    ImGui::PopStyleVar(7);
 }
 
 void Notification::RenderBeforeGui()
@@ -91,7 +99,7 @@ bool Notification::ShouldLeave()
 {        //if (updateIntervalMs == -1) return false;
     auto now = std::chrono::steady_clock::now();
     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - joinTime).count();
-    if(elapsedTime >= intervalMs)
+    if(elapsedTime >= durationMs)
     {
         state = Leaving;
         return true;

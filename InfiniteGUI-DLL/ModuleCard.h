@@ -93,43 +93,49 @@ public:
 		for (auto& b : m_Buttons) 
 		{
 			ImGui::SetCursorPos(ImVec2(Pos.x + moduleButtonWidth + padding, Pos.y));
-			if (b.button->Draw())
+			if (b.type == Button_Setting)
 			{
-				if(b.type == Button_Setting)
+				if(b.button->Draw())
 					joinSetting = true;
-				else if(b.type == Button_Lock)
+			}
+			else if (b.type == Button_Lock)
+			{
+				auto win = dynamic_cast<WindowModule*>(m_item);
+				if (win)
 				{
-					auto win = dynamic_cast<WindowModule*>(m_item);
-					if (win)
+					b.button->SetSelected(win->IsClickThrough());
+					if (win->IsClickThrough())
 					{
-						win->SetClickThrough(!win->IsClickThrough());
-						b.button->SetSelected(win->IsClickThrough());
-						if (win->IsClickThrough())
-						{
-							b.button->SetLabelText(u8"\uE013");
-						}
-						else
-						{
-							b.button->SetLabelText(u8"\uE014");
-						}
+						b.button->SetLabelText(u8"\uE013");
+					}
+					else
+					{
+						b.button->SetLabelText(u8"\uE014");
 					}
 				}
-				else if(b.type == Button_Sound)
+				if (b.button->Draw())
 				{
-					auto sound = dynamic_cast<SoundModule*>(m_item);
-					if (sound)
+					win->SetClickThrough(!win->IsClickThrough());
+				}
+			}
+			else if (b.type == Button_Sound)
+			{
+				auto sound = dynamic_cast<SoundModule*>(m_item);
+				if (sound)
+				{
+					b.button->SetSelected(sound->IsPlaySound());
+					if (sound->IsPlaySound())
 					{
-						sound->SetPlaySound(!sound->IsPlaySound());
-						b.button->SetSelected(sound->IsPlaySound());
-						if (sound->IsPlaySound())
-						{
-							b.button->SetLabelText(u8"\uE060");
-						}
-						else
-						{
-							b.button->SetLabelText(u8"\uE061");
-						}
+						b.button->SetLabelText(u8"\uE060");
 					}
+					else
+					{
+						b.button->SetLabelText(u8"\uE061");
+					}
+				}
+				if (b.button->Draw())
+				{
+					sound->SetPlaySound(!sound->IsPlaySound());
 				}
 			}
 			Pos.x += moduleButtonSize.y + padding;
