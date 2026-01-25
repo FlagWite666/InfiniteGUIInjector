@@ -65,6 +65,15 @@ void ChangeLog::Init()
     AddContent(FIXBUG, u8"修复动态模糊花屏问题");
     AddContent(FIXBUG, u8"修复强制疾跑误激活问题");
 
+    NewVersion("V1.0.4", "26.01.24");
+    AddContent(ADD, u8"添加AutoText");
+    AddContent(ADD, u8"添加音乐信息显示");
+    AddContent(ADD, u8"添加弹窗进度背景条，优化弹窗");
+    AddContent(OPTIMIZE, u8"优化多处细节");
+    AddContent(FIXBUG, u8"修复模组右侧按钮不同步的问题");
+    AddContent(REMOVE, u8"去除窗口半透明，优化帧率");
+
+
 } //我写这个真是个天才，这样就不用手敲Imgui代码了，天才天才天才天
 
 ChangeLog::ChangeLog()
@@ -109,35 +118,53 @@ void ChangeLog::DrawSingleLog(const Log& log)
 void ChangeLog::DrawVersion(const Info& info)
 {
     std::string text = "   -" + info.date + "-    |    -" + info.version + "-";
-    ImGuiStd::TextShadow(text.c_str());
+    ImGuiStd::TextShadowWrapped(text.c_str());
 }
 
 void ChangeLog::DrawContent(const Content& content)
 {
     std::string prefix;
     std::string contentStr = content.content;
-    std::string finalStr;
+    //std::string finalStr;
+    ImVec4 * prefixColor = nullptr;
+    static ImVec4 COLOR_INFO = ImVec4(0.88f, 0.76f, 0.42f, 1.0f); // 金色（信息）
+    static ImVec4 COLOR_OPTIMIZE = ImVec4(0.70f, 0.58f, 0.80f, 1.0f); // 紫色（优化）
+    static ImVec4 COLOR_ADD = ImVec4(0.55f, 0.78f, 0.60f, 1.0f); // 绿色（新增） 
+    static ImVec4 COLOR_FIXBUG = ImVec4(0.55f, 0.70f, 0.85f, 1.0f); // 蓝色（修复）
+    static ImVec4 COLOR_REMOVE = ImVec4(0.88f, 0.52f, 0.52f, 1.0f); // 红色（移除）
+    static ImVec4 COLOR_CHANGE = ImVec4(0.65f, 0.65f, 0.65f, 1.0f); // 灰色（变更）
     switch (content.type)
     {
     case INFO:
         prefix = u8"[信息]";
+        prefixColor = &COLOR_INFO;
         break;
     case OPTIMIZE:
         prefix = u8"[优化]";
+        prefixColor = &COLOR_OPTIMIZE;
         break;
     case ADD:
         prefix = u8"[新增]";
+        prefixColor = &COLOR_ADD;
         break;
     case FIXBUG:
         prefix = u8"[修复]";
+        prefixColor = &COLOR_FIXBUG;
         break;
     case REMOVE:
         prefix = u8"[移除]";
+        prefixColor = &COLOR_REMOVE;
         break;
     case CHANGE:
         prefix = u8"[变更]";
+        prefixColor = &COLOR_CHANGE;
         break;
     }
-    finalStr = prefix + " " + contentStr;
-    ImGui::BulletText(finalStr.c_str());
+
+    //finalStr = prefix + " " + contentStr;
+    ImGui::Bullet();
+    ImGui::SameLine();
+    ImGuiStd::TextColoredShadow(*prefixColor, prefix.c_str());
+    ImGui::SameLine();
+    ImGuiStd::TextShadowWrapped(contentStr.c_str());
 }

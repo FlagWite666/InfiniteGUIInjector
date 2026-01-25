@@ -3367,4 +3367,4 @@ inline unsigned char iconFont[]
 	0xD3, 0x14, 0x9F, 0x8C
 };
 
-int iconFontsize = sizeof(iconFont);
+inline int iconFontsize = sizeof(iconFont);

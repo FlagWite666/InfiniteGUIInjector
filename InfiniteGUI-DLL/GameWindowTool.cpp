@@ -5,7 +5,7 @@
 
 GameWindowTool::~GameWindowTool()
 {
-	if(windowTransparency != 255) SetWindowTransparency(opengl_hook::handle_window, 255);
+	//if(windowTransparency != 255) SetWindowTransparency(opengl_hook::handle_window, 255);
     if (windowStyleState.isBorderlessFullscreen) SetBorderlessFullscreen(opengl_hook::handle_window);
 }
 
@@ -35,15 +35,15 @@ void GameWindowTool::Load(const nlohmann::json& j)
 {
     LoadItem(j);
     LoadKeybind(j);
-    if(j.contains("windowTransparency")) windowTransparency = j.at("windowTransparency").get<int>();
-    SetWindowTransparency(opengl_hook::handle_window, windowTransparency);
+    //if(j.contains("windowTransparency")) windowTransparency = j.at("windowTransparency").get<int>();
+    //SetWindowTransparency(opengl_hook::handle_window, windowTransparency);
 }
 
 void GameWindowTool::Save(nlohmann::json& j) const
 {
     SaveItem(j);
     SaveKeybind(j);
-    j["windowTransparency"] = windowTransparency;
+    //j["windowTransparency"] = windowTransparency;
 }
 
 void GameWindowTool::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
@@ -79,13 +79,13 @@ void GameWindowTool::DrawSettings(const float& bigPadding, const float& centerX,
         index++;
     }
 
-    ImGui::SetCursorPosX(bigPadding);
-    ImGui::SetNextItemWidth(bigItemWidth);
+    //ImGui::SetCursorPosX(bigPadding);
+    //ImGui::SetNextItemWidth(bigItemWidth);
 
-    if (ImGui::SliderInt(u8"游戏窗口透明度", &windowTransparency, 10, 255, u8"%d"))
-    {
-        SetWindowTransparency(opengl_hook::handle_window, windowTransparency);
-    }
+    //if (ImGui::SliderInt(u8"游戏窗口透明度", &windowTransparency, 10, 255, u8"%d"))
+    //{
+        //SetWindowTransparency(opengl_hook::handle_window, windowTransparency);
+    //}
     //DrawKeybindSettings(bigPadding, centerX, itemWidth);
 }
 
@@ -122,13 +122,13 @@ void GameWindowTool::SetBorderlessFullscreen(HWND hwnd)
     NotificationItem::Instance().AddNotification(NotificationType_Info, u8"已开启无边框全屏。");
 }
 
-void GameWindowTool::SetWindowTransparency(HWND hwnd, BYTE alpha)
-{
-    if (!hwnd) return;
-
-    LONG style = GetWindowLong(hwnd, GWL_EXSTYLE);
-    if (!(style & WS_EX_LAYERED)) {
-        SetWindowLong(hwnd, GWL_EXSTYLE, style | WS_EX_LAYERED);
-    }
-    SetLayeredWindowAttributes(hwnd, 0, alpha, LWA_ALPHA);
-}
+//void GameWindowTool::SetWindowTransparency(HWND hwnd, BYTE alpha)
+//{
+//    if (!hwnd) return;
+//
+//    LONG style = GetWindowLong(hwnd, GWL_EXSTYLE);
+//    if (!(style & WS_EX_LAYERED)) {
+//        SetWindowLong(hwnd, GWL_EXSTYLE, style | WS_EX_LAYERED);
+//    }
+//    SetLayeredWindowAttributes(hwnd, 0, alpha, LWA_ALPHA);
+//}

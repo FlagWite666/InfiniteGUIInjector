@@ -21,13 +21,14 @@ public:
         static NotificationItem instance;
         return instance;
     }
-    void AddNotification(NotificationType type, const std::string& message);
+    void AddNotification(NotificationType type, const std::string& message, int durationMs = 3000);
     void PopNotification();
     void Update() override;
     void Toggle() override;
     void Reset() override
     {
         isEnabled = true;
+        childBg = itemStyle.bgColor;
         //notifications.clear();
         ResetWindowStyle();
     }
@@ -39,4 +40,5 @@ public:
     void Save(nlohmann::json& j) const override;
 private:
     std::deque<Notification> notifications;
+    ImVec4 childBg;
 };

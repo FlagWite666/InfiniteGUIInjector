@@ -27,22 +27,22 @@ enum NotificationState
 
 constexpr float windowPadding = 15.0f;
 static int uniqueId = 0;
-class Notification : public RenderModule, public WindowStyleModule
+class Notification : public RenderModule
 {
 public:
-    Notification(NotificationType type, const std::string& message, int placeIndex,const ItemStyle& style) {
+    Notification(NotificationType type, const std::string& message, int placeIndex, const int durationMs) {
         Reset();
         this->message = message;
         this->type = type;
         SetTitleByType(type);
         this->placeIndex = placeIndex;
+        this->durationMs = durationMs;
         size = ImVec2(300, 100.0f);
         ImVec2 maxScreenSize = ImVec2((float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y);
         startElement.pos = ImVec2(maxScreenSize.x + windowPadding, maxScreenSize.y - (placeIndex + 1.5f) * (size.y + windowPadding));
         curElement = startElement;
         targetElement.pos = ImVec2(maxScreenSize.x - size.x - windowPadding, startElement.pos.y);
         joinTime = std::chrono::steady_clock::now();
-        itemStyle = style;
     }
 
     void Toggle();
@@ -90,5 +90,7 @@ private:
     NotificationType type = NotificationType_Info;
     ImVec2 size = ImVec2(0, 0);
     std::chrono::steady_clock::time_point joinTime;  // 记录时间
-    int intervalMs = 3000;
+    int durationMs = 3000;
+    float duration = 0.0f;
+
 };

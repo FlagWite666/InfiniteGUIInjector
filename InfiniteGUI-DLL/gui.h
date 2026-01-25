@@ -8,7 +8,7 @@
 
 struct Texture
 {
-	GLuint id = NULL;
+	GLuint id = 0;
 	int width;
 	int height;
 };

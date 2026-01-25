@@ -424,6 +424,21 @@
     <ClInclude Include="GameWindowTool.h">
       <Filter>src\core\items\hidden</Filter>
     </ClInclude>
+    <ClInclude Include="AutoText.h">
+      <Filter>src\core\items\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MusicInfoItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="pics\NeteaseMusicLogo.h">
+      <Filter>src\ui\hooks\gui\resources\images</Filter>
+    </ClInclude>
+    <ClInclude Include="pics\MCLogo.h">
+      <Filter>src\ui\hooks\gui\resources\images</Filter>
+    </ClInclude>
+    <ClInclude Include="pics\KuGouMusicLogo.h">
+      <Filter>src\ui\hooks\gui\resources\images</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -563,6 +578,12 @@
     </ClCompile>
     <ClCompile Include="GameWindowTool.cpp">
       <Filter>src\core\items\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoText.cpp">
+      <Filter>src\core\items\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicInfoItem.cpp">
+      <Filter>src\core\items\huds</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

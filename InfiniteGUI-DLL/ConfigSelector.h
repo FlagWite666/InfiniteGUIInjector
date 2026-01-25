@@ -66,6 +66,8 @@ public:
                 ImGui::SameLine();
                 if (ImGui::Button((":##del" + std::to_string(i)).c_str())) {
                     ConfigManager::Instance().Save();
+                    ClickSound::Instance().PlaySaveSound();
+                    NotificationItem::Instance().AddNotification(NotificationType_Success, u8"配置文件已保存");
                 }
             }
             ImGui::PopFont();

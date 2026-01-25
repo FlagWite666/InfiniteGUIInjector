@@ -69,7 +69,6 @@ public:
     bool IsCameraMoving() const;
     float GetCameraSpeed() const;
 private:
-    //bool DetWindowCenter() const;
     static bool IsMouseCursorVisible();
 
     bool hideItemInGui = true;

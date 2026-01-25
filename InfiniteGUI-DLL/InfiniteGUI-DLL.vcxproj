@@ -150,6 +150,7 @@
     <ClInclude Include="AnimButtonBase.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="AutoText.h" />
     <ClInclude Include="BilibiliFansItem.h" />
     <ClInclude Include="Blur.h" />
     <ClInclude Include="CategoryBar.h" />
@@ -218,10 +219,14 @@
     <ClInclude Include="ModuleSettings.h" />
     <ClInclude Include="ModulesPanel.h" />
     <ClInclude Include="Motionblur.h" />
+    <ClInclude Include="MusicInfoItem.h" />
     <ClInclude Include="MyButton.hpp" />
     <ClInclude Include="Notification.h" />
     <ClInclude Include="NotificationItem.h" />
     <ClInclude Include="opengl_hook.h" />
+    <ClInclude Include="pics\KuGouMusicLogo.h" />
+    <ClInclude Include="pics\MCLogo.h" />
+    <ClInclude Include="pics\NeteaseMusicLogo.h" />
     <ClInclude Include="SelectPanel.h" />
     <ClInclude Include="PanelButton.hpp" />
     <ClInclude Include="pics\MCInjector-small.h" />
@@ -244,6 +249,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="AutoText.cpp" />
     <ClCompile Include="BilibiliFansItem.cpp" />
     <ClCompile Include="Blur.cpp" />
     <ClCompile Include="ClickEffect.cpp" />
@@ -278,6 +284,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MoresPanel.h" />
     <ClCompile Include="Motionblur.cpp" />
+    <ClCompile Include="MusicInfoItem.cpp" />
     <ClCompile Include="Notification.cpp" />
     <ClCompile Include="NotificationItem.cpp" />
     <ClCompile Include="opengl_hook.cpp" />

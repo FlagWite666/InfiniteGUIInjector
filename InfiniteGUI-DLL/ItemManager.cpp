@@ -25,6 +25,9 @@
 #include <algorithm>
 #include <chrono>
 
+#include "AutoText.h"
+#include "MusicInfoItem.h"
+
 // ------------------------------------------------
 ItemManager::ItemManager()
 {
@@ -37,6 +40,7 @@ void ItemManager::Init()
     AddItem(&Menu::Instance());
 
     AddItem(&Sprint::Instance());
+    AddItem(&AutoText::Instance());
 
     AddItem(&Motionblur::Instance());
     AddItem(&ClickEffect::Instance());
@@ -50,6 +54,7 @@ void ItemManager::Init()
     AddItem(&TextItem::Instance());
     AddItem(&FileCountItem::Instance());
     AddItem(&CounterItem::Instance());
+    AddItem(&MusicInfoItem::Instance());
 
     AddItem(&NotificationItem::Instance());
 
