@@ -52,6 +52,7 @@ public:
         dirtyState.animating = true;
     }
     void Update() override;
+    void HoverSetting() override;
     void DrawContent() override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;

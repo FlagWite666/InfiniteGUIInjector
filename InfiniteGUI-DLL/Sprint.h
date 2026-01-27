@@ -52,9 +52,9 @@ public:
         isEnabled = false; // ÊÇ·ñÆôÓÃ
 
         keybinds.insert(std::make_pair(u8"¼¤»î¼ü£º", 'I'));
-        keybinds.insert(std::make_pair(u8"Ç°½ø¼ü£º", 'W'));
-        keybinds.insert(std::make_pair(u8"¼²ÅÜ¼ü£º", VK_CONTROL));
-        keybinds.insert(std::make_pair(u8"Ç±ÐÐ¼ü£º", VK_SHIFT));
+        gameKeybinds.insert(std::make_pair(u8"Ç°½ø¼ü£º", 'W'));
+        gameKeybinds.insert(std::make_pair(u8"¼²ÅÜ¼ü£º", VK_CONTROL));
+        gameKeybinds.insert(std::make_pair(u8"Ç±ÐÐ¼ü£º", VK_SHIFT));
 
         isActivated = false;
         isWalking = false;
@@ -70,6 +70,7 @@ public:
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
 
     void Update() override;
+    void HoverSetting() override;
     void DrawContent() override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;

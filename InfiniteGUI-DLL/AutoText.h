@@ -9,6 +9,7 @@
 #include "KeybindModule.h"
 #include <thread>
 
+#include "GameKeyBind.h"
 #include "GameStateDetector.h"
 //struct ClipboardData
 //{
@@ -282,7 +283,7 @@ public:
     {
         ResetSound();
         isEnabled = false; // 是否启用
-        chatKeybind = 'T';
+        chatKeybind = GameKeyBind::Instance().GetVK(GameAction::Chat);
         mode = Modern;
         texts.clear();
         //texts.emplace_back();
@@ -298,4 +299,5 @@ private:
     KeyState keyStateHelper;
     int chatKeybind;
     int mode;
+    bool customGameKeybinds = false;
 };

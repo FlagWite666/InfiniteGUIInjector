@@ -335,14 +335,18 @@ ImVec2 menuSize = ImVec2(menuInnerSize.x + 6.0f, menuInnerSize.y + 6.0f);
 void Menu::ShowSettings(bool* done)
 {
     //使窗口显示在屏幕中间
-    ImGui::SetNextWindowPos(ImVec2((ImGui::GetIO().DisplaySize.x - ImGui::GetIO().DisplaySize.x / 2), (ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 2)), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+    if (needRepos)
+    {
+        ImGui::SetNextWindowPos(
+            ImVec2(ImGui::GetIO().DisplaySize.x - ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 2), 
+        NULL, 
+       ImVec2(0.5f, 0.5f));
+        needRepos = false;
+    }
     ImGui::SetNextWindowSize(menuSize, ImGuiCond_Once);
-
     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
-    //ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
     ImGui::Begin(u8"主控制面板", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
     ImGui::PopStyleColor();
-
     ImGui::SetCursorPos(ImVec2(3, 3));
     //设置控件与左边的间隔
     if (!initialized)
@@ -363,6 +367,10 @@ void Menu::Toggle()
     static RECT gameWindowRect;
     if (!isEnabled)
     {
+        if (GlobalConfig::Instance().autoSave) {
+            ConfigManager::Instance().Save();
+            NotificationItem::Instance().AddNotification(NotificationType_Success, u8"自动保存：配置文件已保存。");
+        }
         RECT rect;
         // 获取窗口的矩形位置和大小
         if (GetWindowRect(opengl_hook::handle_window, &rect)) {
@@ -382,6 +390,7 @@ void Menu::Toggle()
     }
     else
     {
+        needRepos = true;
         GetClipCursor(&gameWindowRect); //保存当前裁剪矩形
         ClipCursor(NULL); // 移除当前的鼠标裁剪矩形，让鼠标恢复为全屏自由移动
         dirtyState.animating = true;

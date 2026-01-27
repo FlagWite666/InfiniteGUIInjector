@@ -134,6 +134,9 @@
     <Filter Include="src\core\items\huds\keystrokes">
       <UniqueIdentifier>{7daae9f0-050a-422e-8d00-6b6090de87c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\gameKeybind">
+      <UniqueIdentifier>{756b89f6-c2b4-4917-b688-94e59713061c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Init.hpp">
@@ -242,9 +245,6 @@
       <Filter>src\core\items\utils</Filter>
     </ClInclude>
     <ClInclude Include="AffixModule.h">
-      <Filter>src\core\virtual\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="HttpModule.h">
       <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="KeybindModule.h">
@@ -439,6 +439,9 @@
     <ClInclude Include="pics\KuGouMusicLogo.h">
       <Filter>src\ui\hooks\gui\resources\images</Filter>
     </ClInclude>
+    <ClInclude Include="GameKeyBind.h">
+      <Filter>src\utils\gameKeybind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -584,6 +587,9 @@
     </ClCompile>
     <ClCompile Include="MusicInfoItem.cpp">
       <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="GameKeyBind.cpp">
+      <Filter>src\utils\gameKeybind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

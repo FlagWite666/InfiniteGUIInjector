@@ -18,6 +18,6 @@ public:
         lastUpdateTime = std::chrono::steady_clock::now();
     }
 protected:
-	int updateIntervalMs;    // 默认 1 秒
+	int updateIntervalMs;
 	std::chrono::steady_clock::time_point lastUpdateTime = std::chrono::steady_clock::now();  // 记录最后更新时间
 };

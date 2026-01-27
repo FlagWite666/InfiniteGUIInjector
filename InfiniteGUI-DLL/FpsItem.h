@@ -39,6 +39,7 @@ public:
         dirtyState.animating = true;
     }
     void Update() override;
+    void HoverSetting() override;
     void DrawContent() override;
     void RenderBeforeGui() override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;

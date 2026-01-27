@@ -1,12 +1,9 @@
 #pragma once
 
 #include <string>
-#include <vector>
 #include <shlobj.h>
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
-#include "StringConverter.h"
-
 inline bool DirectoryExists(const std::string& path)
 {
     DWORD attr = GetFileAttributesA(path.c_str());
@@ -21,6 +18,10 @@ namespace FileUtils {
     inline std::string configPath;
 
     inline std::string modulePath;
+
+    inline std::string gamePath;
+
+    inline std::string optionsPath;
 
     inline std::string soundPath;
 
@@ -62,6 +63,13 @@ namespace FileUtils {
         return appDataPath + "\\Configs";
     }
 
+    inline std::string GetGameRunDir()
+    {
+        char buffer[MAX_PATH];
+        GetCurrentDirectoryA(MAX_PATH, buffer);
+        return std::string(buffer);
+    }
+
     inline std::string GetSoundPath()
     {
         return modulePath + "\\Assets\\Sounds";
@@ -94,6 +102,8 @@ namespace FileUtils {
     inline void InitPaths(HMODULE hMod)
     {
         modulePath = GetModulePath(hMod);
+        gamePath = GetGameRunDir();
+        optionsPath = gamePath + "\\options.txt";
         soundPath = GetSoundPath();
         appDataPath = GetAppDataPath();
         if(appDataPath.empty()) // 如果获取失败，则使用默认路径（可能是多用户操作系统）

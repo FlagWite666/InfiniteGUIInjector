@@ -32,8 +32,17 @@ void TimeItem::Update()
     dirtyState.contentDirty = true;
 }
 
+void TimeItem::HoverSetting()
+{
+}
+
 void TimeItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
     //ªÒ»°io
     ImGuiIO& io = ImGui::GetIO();

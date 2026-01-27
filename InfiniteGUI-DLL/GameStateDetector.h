@@ -56,10 +56,6 @@ public:
     void Save(nlohmann::json& j) const override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
 
-    //bool IsPaused() const;          // ESC菜单
-    //bool IsInventoryOpen() const;   // 背包
-    //bool IsChatTyping() const;      // 聊天输入
-    //bool IsInGUI() const;           // 任意GUI
     bool IsInGame() const;          // 在游戏世界中
     bool IsNeedHide() const;        // 是否需要隐藏信息项;
     GameState GetCurrentState() const;
@@ -68,8 +64,16 @@ public:
     void ProcessMouseMovement(int dx, int dy);
     bool IsCameraMoving() const;
     float GetCameraSpeed() const;
+    bool IsFullScreenClicked() const
+    {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastClickTime).count() < fullscreenIntervalMs;
+    }
+
 private:
     static bool IsMouseCursorVisible();
+
+    int fullscreenIntervalMs = 1000;
+    std::chrono::steady_clock::time_point lastClickTime = std::chrono::steady_clock::now(); 
 
     bool hideItemInGui = true;
 

@@ -3,6 +3,7 @@
 
 #include "Anim.h"
 #include "AudioManager.h"
+#include "GameKeyBind.h"
 #include "GameStateDetector.h"
 #include "NotificationItem.h"
 
@@ -39,7 +40,7 @@ void Sprint::OnKeyEvent(bool state, bool isRepeat, WPARAM key)
 
 void Sprint::GetSneaking()
 {
-    if (KeyState::GetKeyDown(keybinds.at(u8"Ç±ÐÐ¼ü£º")) && GameStateDetector::Instance().IsInGame())
+    if (KeyState::GetKeyDown(customGameKeybinds ? gameKeybinds.at(u8"Ç±ÐÐ¼ü£º") : GameKeyBind::Instance().GetVK(GameAction::Sneak)) && GameStateDetector::Instance().IsInGame())
     {
         state = Sneaking;
     }
@@ -47,7 +48,7 @@ void Sprint::GetSneaking()
 
 void Sprint::GetWalking()
 {
-    if (KeyState::GetKeyDown(keybinds.at(u8"Ç°½ø¼ü£º")) && GameStateDetector::Instance().IsInGame())
+    if (KeyState::GetKeyDown(customGameKeybinds ? gameKeybinds.at(u8"Ç°½ø¼ü£º") : GameKeyBind::Instance().GetVK(GameAction::Forward)) && GameStateDetector::Instance().IsInGame())
     {
         state = isActivated ? Sprinting : Walking;
     }
@@ -57,11 +58,11 @@ void Sprint::SetSprinting() const
 {
     if (state == Sprinting)
     {
-	    KeyState::SetKeyDown(keybinds.at(u8"¼²ÅÜ¼ü£º"), inputMode);
+	    KeyState::SetKeyDown(customGameKeybinds ? gameKeybinds.at(u8"¼²ÅÜ¼ü£º") : GameKeyBind::Instance().GetVK(GameAction::Sprint), inputMode);
     }
     if (state != Sprinting && lastState == Sprinting)
     {
-	    KeyState::SetKeyUp(keybinds.at(u8"¼²ÅÜ¼ü£º"), inputMode);
+	    KeyState::SetKeyUp(customGameKeybinds ? gameKeybinds.at(u8"¼²ÅÜ¼ü£º") : GameKeyBind::Instance().GetVK(GameAction::Sprint), inputMode);
     }
 }
 
@@ -100,17 +101,29 @@ void Sprint::Update()
     {
         dirtyState.contentDirty = true;
         dirtyState.animating = true;
-        lastState = state;
     }
 
     if (!isActivated || state == OutOfWindow) return;
     SetSprinting();
+    if (lastState != state)
+    {
+        lastState = state;
+    }
+
+}
+
+void Sprint::HoverSetting()
+{
 }
 
 void Sprint::DrawContent()
 {
 
-
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     std::string text;
     switch (state)
     {

@@ -29,8 +29,17 @@ void KeystrokesItem::Update()
     }
 }
 
+void KeystrokesItem::HoverSetting()
+{
+}
+
 void KeystrokesItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     //ªÒ»°io
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 window_padding = ImGui::GetStyle().WindowPadding;

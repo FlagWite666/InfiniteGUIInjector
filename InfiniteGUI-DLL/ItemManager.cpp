@@ -87,18 +87,6 @@ void ItemManager::UpdateAll() const
     }
 }
 
-void ItemManager::UpdateHttpAll() const
-{
-    for (auto item : Items)
-    {
-        if (!item->isEnabled) continue;
-        if (auto httpupd = dynamic_cast<HttpModule*>(item))
-        {
-            httpupd->UpdateHttp();
-        }
-    }
-}
-
 // ------------------------------------------------
 void ItemManager::RenderAllGui() const
 {
@@ -149,24 +137,26 @@ void ItemManager::RenderAllAfterGui() const
 bool ItemManager::IsDirty() const
 {
     bool isDirty = false;
-    for (auto item : Items)
-    {
-        if (!item->isEnabled) continue;
-        if (auto ren = dynamic_cast<RenderModule*>(item))
+    if (GameStateDetector::Instance().IsInGame())
+        for (auto item : Items)
         {
-            if (ren->IsAnimating()) //动画中
+            if (!item->isEnabled) continue;
+            if (auto ren = dynamic_cast<RenderModule*>(item))
             {
-                isDirty = true;
-                break;
-            }
-            if (ren->IsContentDirty()) //内容变化
-            {
-                ren->SetContentDirty(false);
-                isDirty = true;
-                break;
+                if (ren->IsAnimating()) //动画中
+                {
+                    isDirty = true;
+                    break;
+                }
+                if (ren->IsContentDirty()) //内容变化
+                {
+                    ren->SetContentDirty(false);
+                    isDirty = true;
+                    break;
+                }
             }
         }
-    }
+    else isDirty = true;
     return isDirty;
 }
 

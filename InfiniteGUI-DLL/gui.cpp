@@ -70,7 +70,6 @@ void Gui::clean()
 	isInit = false;
 	while (opengl_hook::rendering)
 	{
-
 	}
 	g_Cache.Clear();
 	if (imGuiContext)ImGui::GetIO().Fonts->Clear();
@@ -86,16 +85,28 @@ void Gui::render()
 {
 	if(ImGui::GetCurrentContext() == nullptr) return;
 	ItemManager::Instance().RenderAllBeforeGui();
-	if (GuiFrameLimiter::Instance().ShouldUpdate() && ItemManager::Instance().IsDirty())
+	if(GlobalConfig::Instance().enableOptimization)
+	{
+		if (GuiFrameLimiter::Instance().ShouldUpdate() && ItemManager::Instance().IsDirty())
+		{
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
+			ItemManager::Instance().RenderAllGui();
+			ImGui::Render();
+			CacheDrawData(g_Cache, ImGui::GetDrawData());
+		}
+		// 每一帧都画
+		RenderCachedDrawData(g_Cache);
+	}
+	else
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 		ItemManager::Instance().RenderAllGui();
 		ImGui::Render();
-		CacheDrawData(g_Cache, ImGui::GetDrawData());
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
-	// 每一帧都画
-	RenderCachedDrawData(g_Cache);
 	ItemManager::Instance().RenderAllAfterGui();
 }

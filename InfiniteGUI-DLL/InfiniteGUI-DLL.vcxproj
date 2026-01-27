@@ -176,6 +176,7 @@
     <ClInclude Include="fonts\AlibabaPuHuiTi-3-85-Bold.h" />
     <ClInclude Include="fonts\IconFont.h" />
     <ClInclude Include="FpsItem.h" />
+    <ClInclude Include="GameKeyBind.h" />
     <ClInclude Include="GameStateDetector.h" />
     <ClInclude Include="GameWindowTool.h" />
     <ClInclude Include="GlobalConfig.h" />
@@ -187,7 +188,6 @@
     <ClInclude Include="gui.h" />
     <ClInclude Include="GuiFrameLimiter.h" />
     <ClInclude Include="HttpClient.h" />
-    <ClInclude Include="HttpModule.h" />
     <ClInclude Include="HttpUpdateWorker.h" />
     <ClInclude Include="Images.h" />
     <ClInclude Include="ImGuiStd.h" />
@@ -262,6 +262,7 @@
     <ClCompile Include="FileCountItem.cpp" />
     <ClCompile Include="fonts.cpp" />
     <ClCompile Include="FpsItem.cpp" />
+    <ClCompile Include="GameKeyBind.cpp" />
     <ClCompile Include="GameStateDetector.cpp" />
     <ClCompile Include="GameWindowTool.cpp" />
     <ClCompile Include="GlobalConfig.cpp" />

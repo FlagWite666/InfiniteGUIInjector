@@ -62,6 +62,13 @@ static HWND FindNeteaseWindow()
             if (GetWindow(hwnd, GW_OWNER) != nullptr)
                 return TRUE;
 
+            wchar_t title[256];
+            GetWindowTextW(hwnd, title, 256);
+            
+            // 排除桌面歌词窗口
+            if (wcsstr(title, L"桌面歌词"))
+                return TRUE;
+
             *(HWND*)lParam = hwnd;
             return FALSE;
 
@@ -189,13 +196,12 @@ void MusicInfoItem::InitMediaManager()
 
 void MusicInfoItem::Update()
 {
-
     InitMediaManager();
 
     if (!mediaManagerReady)
         return;
 
-    bool hasOthers = false;
+    hasOthers = false;
     bool hasNetease = false;
     bool hasKuGou = false;
 
@@ -225,6 +231,26 @@ void MusicInfoItem::Update()
 
     if (hasOthers)
     {
+        auto playbackInfo = session.GetPlaybackInfo();
+
+        switch (playbackInfo.PlaybackStatus())
+        {
+        case winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus::Paused:
+            paused = true;
+            break;
+        case winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus::Playing:
+        case winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus::Stopped:
+        default:
+            paused = false;
+        }
+
+        if (lastPaused != paused)
+        {
+            dirtyState.contentDirty = true;
+            lastPaused = paused;
+        }
+
+
         currentKey = {
             mediaProps.Title().c_str(),
             mediaProps.Artist().c_str(),
@@ -274,6 +300,7 @@ void MusicInfoItem::Update()
         title = song;
         this->artist = artist;
         album.clear();
+        paused = false;
 
         if (source != L"网易云音乐")
         {
@@ -306,6 +333,7 @@ void MusicInfoItem::Update()
         title = song;
         this->artist = artist;
         album.clear();
+        paused = false;
 
         if (source != L"酷狗音乐")
         {
@@ -339,6 +367,7 @@ void MusicInfoItem::Update()
         title = failTitle;
         artist = failArtist;
         album.clear();
+        paused = false;
 
         if (source != failSource)
         {
@@ -392,8 +421,88 @@ void MusicInfoItem::Update()
     dirtyState.contentDirty = true;
 }
 
+void MusicInfoItem::RenderPlaybackBar()
+{
+    auto session = mediaManager.GetCurrentSession();
+    if (!session) return;
+    auto playbackInfo = session.GetPlaybackInfo();
+
+    switch (playbackInfo.PlaybackStatus())
+    {
+    case winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus::Paused:
+        paused = true;
+        break;
+    case winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus::Playing:
+    case winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus::Stopped:
+    default:
+        paused = false;
+    }
+    ImGui::PushFont(opengl_hook::gui.iconFont);
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+    ImGui::PushStyleColor(ImGuiCol_TextDisabled, ImVec4(0.8f, 0.8f, .8f, 1.0f));
+    if (prevSkipButton->Draw())
+    {
+        session.TrySkipPreviousAsync(); // 上一首
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPos(ImVec2(barPos.x + 30 + ImGui::GetStyle().ItemSpacing.x, barPos.y));
+    stopButton->SetLabelText(paused ? u8"\uE01a" : u8"\uE019");
+    if (stopButton->Draw())
+    {
+        session.TryTogglePlayPauseAsync(); // 停止播放
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPos(ImVec2(barPos.x + 60 + ImGui::GetStyle().ItemSpacing.x * 2, barPos.y));
+    if (nextSkipButton->Draw())
+    {
+        session.TrySkipNextAsync(); // 下一首
+    }
+    ImGui::Dummy(ImVec2(0, 0));
+    ImGui::PopStyleColor(2);
+    ImGui::PopFont();
+}
+
+void MusicInfoItem::HoverSetting()
+{
+    if(!hasMedia) return;
+    ImGui::SetCursorPos(ImGui::GetStyle().WindowPadding);
+    ImGui::Dummy(ImVec2(coverSize, coverSize));
+
+    ImGui::SameLine();
+
+    // ===== 右侧 =====
+    ImGui::BeginGroup();
+    ImVec2 startPos = ImGui::GetCursorPos();
+    if (hasOthers)
+    {
+        ImVec2 buttonSize = ImVec2(30.0f, 30.0f);
+        ImVec2 barSize = ImVec2(buttonSize.x * 3 + ImGui::GetStyle().ItemSpacing.x * 2, buttonSize.y);
+        barPos = ImVec2(startPos.x + ImGui::GetContentRegionAvail().x * 0.5f - barSize.x * 0.5f, (height - barSize.y) * 0.5f);
+        ImGui::SetCursorPos(barPos);
+        RenderPlaybackBar();
+    }
+    else
+    {
+
+        ImVec2 msgSize = ImGui::CalcTextSize(u8"该音频不支持暂停/跳转");
+        ImVec2 msgPos = ImVec2(startPos.x + ImGui::GetContentRegionAvail().x * 0.5f - msgSize.x * 0.5f, (height - msgSize.y) * 0.5f);
+        ImGui::SetCursorPos(msgPos);
+        ImGui::BeginDisabled();
+        ImGuiStd::TextShadowWrapped(u8"该音频不支持暂停/跳转");
+        ImGui::EndDisabled();
+    }
+
+    ImGui::EndGroup();
+
+}
+
 void MusicInfoItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     if (!hasMedia)
     {
         return;
@@ -439,7 +548,7 @@ void MusicInfoItem::DrawContent()
     }
 
 
-    float coverSize = height - 2 * ImGui::GetStyle().WindowPadding.y;
+    coverSize = height - 2 * ImGui::GetStyle().WindowPadding.y;
 
     ImGui::BeginGroup();
 
@@ -471,7 +580,7 @@ void MusicInfoItem::DrawContent()
     float iconWidth = ImGui::GetFontSize();
 
     ImGui::SetCursorPosX(width - iconWidth - ImGui::GetStyle().WindowPadding.x);
-    ImGuiStd::TextShadow(u8"\uE027"); // iconfont 音乐图标
+    ImGuiStd::TextShadow(paused ? u8"\uE019" : u8"\uE027"); // iconfont 音乐图标
     ImGui::PopFont();
 
     float titleHeight = ImGui::CalcTextSize(StringConverter::WstringToUtf8(title).c_str()).y;

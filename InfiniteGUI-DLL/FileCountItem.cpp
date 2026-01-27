@@ -92,8 +92,17 @@ void FileCountItem::Update()
 
 }
 
+void FileCountItem::HoverSetting()
+{
+}
+
 void FileCountItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 
     //ªÒ»°io

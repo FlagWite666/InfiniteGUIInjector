@@ -15,43 +15,46 @@ SnapResult WindowSnapper::ComputeSnap(
     SnapResult r;
     SnapState state = SNAP_NONE;
     r.snappedPos = pos;
+    if(GetAsyncKeyState(VK_CONTROL) & 0x8000)
+    {
+        float right = pos.x + size.x;
+        float bottom = pos.y + size.y;
 
-    float right = pos.x + size.x;
-    float bottom = pos.y + size.y;
+        float cx = pos.x + size.x * 0.5f;
+        float cy = pos.y + size.y * 0.5f;
 
-    float cx = pos.x + size.x * 0.5f;
-    float cy = pos.y + size.y * 0.5f;
+        // ±ßÔµÎü¸½
+        if (fabs(pos.x) < snapDist) {
+            r.snappedPos.x = 0;
+            state = static_cast<SnapState>(state | SNAP_LEFT);
+        }
+        if (fabs(right - screenW) < snapDist) {
+            r.snappedPos.x = screenW - size.x;
+            state = static_cast<SnapState>(state | SNAP_RIGHT);
+        }
+        if (fabs(pos.y) < snapDist) {
+            r.snappedPos.y = 0;
+            state = static_cast<SnapState>(state | SNAP_TOP);
+        }
+        if (fabs(bottom - screenH) < snapDist) {
+            r.snappedPos.y = screenH - size.y;
+            state = static_cast<SnapState>(state | SNAP_BOTTOM);
+        }
 
-    // ±ßÔµÎü¸½
-    if (fabs(pos.x) < snapDist) {
-        r.snappedPos.x = 0;
-        state = static_cast<SnapState>(state | SNAP_LEFT);
-    }
-    if (fabs(right - screenW) < snapDist) {
-        r.snappedPos.x = screenW - size.x;
-        state = static_cast<SnapState>(state | SNAP_RIGHT);
-    }
-    if (fabs(pos.y) < snapDist) {
-        r.snappedPos.y = 0;
-        state = static_cast<SnapState>(state | SNAP_TOP);
-    }
-    if (fabs(bottom - screenH) < snapDist) {
-        r.snappedPos.y = screenH - size.y;
-        state = static_cast<SnapState>(state | SNAP_BOTTOM);
-    }
+        // ÖÐÐÄÎü¸½
+        if (fabs(cx - screenW * 0.5f) < snapDist) {
+            r.snappedPos.x = screenW * 0.5f - size.x * 0.5f;
+            state = static_cast<SnapState>(state | SNAP_CENTER_X);
+        }
+        if (fabs(cy - screenH * 0.5f) < snapDist) {
+            r.snappedPos.y = screenH * 0.5f - size.y * 0.5f;
+            state = static_cast<SnapState>(state | SNAP_CENTER_Y);
+        }
 
-    // ÖÐÐÄÎü¸½
-    if (fabs(cx - screenW * 0.5f) < snapDist) {
-        r.snappedPos.x = screenW * 0.5f - size.x * 0.5f;
-        state = static_cast<SnapState>(state | SNAP_CENTER_X);
+        r.snapState = state;
     }
-    if (fabs(cy - screenH * 0.5f) < snapDist) {
-        r.snappedPos.y = screenH * 0.5f - size.y * 0.5f;
-        state = static_cast<SnapState>(state | SNAP_CENTER_Y);
-    }
-
-    r.snapState = state;
-    ComputeSnapWithWindows(size, snapDist, ItemManager::Instance().GetItems(), r);
+    if(GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+        ComputeSnapWithWindows(size, snapDist, ItemManager::Instance().GetItems(), r);
     return r;
 }
 
@@ -173,46 +176,51 @@ void WindowSnapper::DrawGuides(const SnapResult& r, float screenW, float screenH
     ImU32 color = IM_COL32(120, 180, 255, 150);
     float lineWidth = 3.0f;
     float lineWidth2 = 1.0f;
-    if (r.snapState & SNAP_LEFT) {
-        draw->AddLine(ImVec2(0, 0), ImVec2(0, screenH), color, lineWidth);
-    }
+    if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
+    {
+        if (r.snapState & SNAP_LEFT) {
+            draw->AddLine(ImVec2(0, 0), ImVec2(0, screenH), color, lineWidth);
+        }
 
-    if (r.snapState & SNAP_RIGHT) {
-        draw->AddLine(ImVec2(screenW, 0), ImVec2(screenW, screenH), color, lineWidth);
-    }
+        if (r.snapState & SNAP_RIGHT) {
+            draw->AddLine(ImVec2(screenW, 0), ImVec2(screenW, screenH), color, lineWidth);
+        }
 
-    if (r.snapState & SNAP_TOP) {
-        draw->AddLine(ImVec2(0, 0), ImVec2(screenW, 0), color, lineWidth);
-    }
+        if (r.snapState & SNAP_TOP) {
+            draw->AddLine(ImVec2(0, 0), ImVec2(screenW, 0), color, lineWidth);
+        }
 
-    if (r.snapState & SNAP_BOTTOM) {
-        draw->AddLine(ImVec2(0, screenH), ImVec2(screenW, screenH), color, lineWidth);
-    }
+        if (r.snapState & SNAP_BOTTOM) {
+            draw->AddLine(ImVec2(0, screenH), ImVec2(screenW, screenH), color, lineWidth);
+        }
 
-    if (r.snapState & SNAP_CENTER_X) {
-        draw->AddLine(ImVec2(screenW * 0.5f, 0), ImVec2(screenW * 0.5f, screenH), color, lineWidth);
-    }
+        if (r.snapState & SNAP_CENTER_X) {
+            draw->AddLine(ImVec2(screenW * 0.5f, 0), ImVec2(screenW * 0.5f, screenH), color, lineWidth);
+        }
 
-    if (r.snapState & SNAP_CENTER_Y) {
-        draw->AddLine(ImVec2(0, screenH * 0.5f), ImVec2(screenW, screenH * 0.5f), color, lineWidth);
+        if (r.snapState & SNAP_CENTER_Y) {
+            draw->AddLine(ImVec2(0, screenH * 0.5f), ImVec2(screenW, screenH * 0.5f), color, lineWidth);
+        }
     }
-
-    if (r.snapState & SNAP_OTHER_LEFT) {
-        draw->AddLine(ImVec2(r.snappedPos.x, 0), ImVec2(r.snappedPos.x, screenH), color, lineWidth2);
-    }
-    if (r.snapState & SNAP_OTHER_RIGHT) {
-        draw->AddLine(ImVec2(r.snappedPos.x + size.x, 0), ImVec2(r.snappedPos.x + size.x, screenH), color, lineWidth2);
-    }
-    if (r.snapState & SNAP_OTHER_TOP) {
-        draw->AddLine(ImVec2(0, r.snappedPos.y), ImVec2(screenW, r.snappedPos.y), color, lineWidth2);
-    }
-    if (r.snapState & SNAP_OTHER_BOTTOM) {
-        draw->AddLine(ImVec2(0, r.snappedPos.y + size.y), ImVec2(screenW, r.snappedPos.y + size.y), color, lineWidth2);
-    }
-    if (r.snapState & SNAP_OTHER_CENTER_X) {
-        draw->AddLine(ImVec2(r.snappedPos.x + size.x * 0.5f, 0), ImVec2(r.snappedPos.x + size.x * 0.5f, screenH), color, lineWidth2);
-    }
-    if (r.snapState & SNAP_OTHER_CENTER_Y) {
-        draw->AddLine(ImVec2(0, r.snappedPos.y + size.y * 0.5f), ImVec2(screenW, r.snappedPos.y + size.y * 0.5f), color, lineWidth2);
+    if(GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+    {
+        if (r.snapState & SNAP_OTHER_LEFT) {
+            draw->AddLine(ImVec2(r.snappedPos.x, 0), ImVec2(r.snappedPos.x, screenH), color, lineWidth2);
+        }
+        if (r.snapState & SNAP_OTHER_RIGHT) {
+            draw->AddLine(ImVec2(r.snappedPos.x + size.x, 0), ImVec2(r.snappedPos.x + size.x, screenH), color, lineWidth2);
+        }
+        if (r.snapState & SNAP_OTHER_TOP) {
+            draw->AddLine(ImVec2(0, r.snappedPos.y), ImVec2(screenW, r.snappedPos.y), color, lineWidth2);
+        }
+        if (r.snapState & SNAP_OTHER_BOTTOM) {
+            draw->AddLine(ImVec2(0, r.snappedPos.y + size.y), ImVec2(screenW, r.snappedPos.y + size.y), color, lineWidth2);
+        }
+        if (r.snapState & SNAP_OTHER_CENTER_X) {
+            draw->AddLine(ImVec2(r.snappedPos.x + size.x * 0.5f, 0), ImVec2(r.snappedPos.x + size.x * 0.5f, screenH), color, lineWidth2);
+        }
+        if (r.snapState & SNAP_OTHER_CENTER_Y) {
+            draw->AddLine(ImVec2(0, r.snappedPos.y + size.y * 0.5f), ImVec2(screenW, r.snappedPos.y + size.y * 0.5f), color, lineWidth2);
+        }
     }
 }

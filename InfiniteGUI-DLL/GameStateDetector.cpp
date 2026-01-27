@@ -1,5 +1,6 @@
 #include "GameStateDetector.h"
 #include "App.h"
+#include "GameWindowTool.h"
 #include "KeyState.h"
 #include "Menu.h"
 void GameStateDetector::Toggle()
@@ -54,7 +55,9 @@ static bool IsFullScreen()
 
 void GameStateDetector::Update()
 {
-	
+	if(KeyState::GetKeyDown(GameWindowTool::Instance().GetFullscreenVK()))
+		lastClickTime = std::chrono::steady_clock::now();
+
 	if (Menu::Instance().isEnabled)
 		currentState = InMenu;
 	else if (IsMouseCursorVisible())
@@ -70,6 +73,7 @@ void GameStateDetector::Update()
 
 	if (currentState != lastState)
 	{
+		GameKeyBind::Instance().Load(FileUtils::optionsPath);
 		dirtyState.contentDirty = true;
 		lastState = currentState;
 	}

@@ -22,8 +22,17 @@ void CPSItem::Update()
     dirtyState.contentDirty = true;
 }
 
+void CPSItem::HoverSetting()
+{
+}
+
 void CPSItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     bool needMiddleFix = showLeft && showRight;
     //std::string addon = std::to_string(Motionblur::Instance().cur_blurriness_value);
     std::string middleFix = needMiddleFix ? " | " : "";

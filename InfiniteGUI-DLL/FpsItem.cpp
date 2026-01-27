@@ -19,8 +19,18 @@ void FpsItem::Update()
 	}
 	dirtyState.contentDirty = true;
 }
+
+void FpsItem::HoverSetting()
+{
+}
+
 void FpsItem::DrawContent()
 {
+	if (closed)
+	{
+		isEnabled = false;
+		closed = false;
+	}
 	guiFrameCount++; //gui帧率
 	int FPS = int(this->FPS);
 	std::string fpsText;
@@ -62,7 +72,7 @@ void FpsItem::DrawSettings(const float& bigPadding, const float& centerX, const 
 	ImGui::SetNextItemWidth(itemWidth);
 	ImGui::Checkbox(u8"显示无限Gui的FPS", &showGuiFPS);
 	ImGui::SameLine(); ImGuiStd::HelpMarker(
-		u8"无限GUI会主动降低自身的渲染计算频率以优化性能。\nGUI是否刷新取决于窗口内容是否发生变化以及是否处于动画状态。\n    在界面静止时，无限GUI 会复用已有渲染结果；\n    在动画过程中，刷新频率最高限制为显示器的刷新率，以保证视觉流畅并避免无意义的高频计算。\n这种按需刷新机制在性能与体验之间取得了最佳平衡。");
+		u8"开启限帧优化后适用，显示无限Gui的ui计算频率。");
 	DrawAffixSettings(bigPadding, centerX, itemWidth);
 	DrawWindowSettings(bigPadding, centerX, itemWidth);
 }

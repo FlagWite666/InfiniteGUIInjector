@@ -9,6 +9,9 @@ public:
     std::string currentProfile = "profile";  // 全局语言
 
     // 在这里加更多全局参数…
+    bool enableOptimization = true;
+
+    bool autoSave = true;
 
     static GlobalConfig& Instance() {
         static GlobalConfig instance;

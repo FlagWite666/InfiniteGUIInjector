@@ -100,8 +100,12 @@ private:
 				if (ImGui::Button(u8"确定", ImVec2(buttonWidth, 0)))
 				{
 					done = true;               // 真正退出
+					opengl_hook::exitByMenu = true;
 					showExitConfirm = false;
 					ImGui::CloseCurrentPopup();
+					if (GlobalConfig::Instance().autoSave) {
+						ConfigManager::Instance().Save();
+					}
 					ClickSound::Instance().PlayExitSound();
 				}
 

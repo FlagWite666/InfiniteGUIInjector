@@ -13,6 +13,8 @@
 #include "pics\MCInjector-small.h"
 #include <thread>
 
+#include "GameWindowTool.h"
+#include "Init.hpp"
 #include "Motionblur.h"
 #include "MusicInfoItem.h"
 
@@ -36,11 +38,33 @@ void opengl_hook::lwjgl2FullscreenHandler() {
 	screen_size.y = area.bottom - area.top;
 }
 
+static void WndprocDestory()
+{
+	opengl_hook::gui.done = true;
+	auto start = std::chrono::steady_clock::now();
+	while (!opengl_hook::g_isDetaching.load())
+	{
+		std::this_thread::yield();
+
+		auto now = std::chrono::steady_clock::now();
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > 1000)
+		{
+			Uninit();
+			break; // 超时 1s
+		}
+	}
+}
+
 static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	bool isRepeat = (lParam & (1 << 30)) != 0;
 	switch (message)
 	{
+	case WM_CLOSE:
+	case WM_DESTROY:
+		if(!KeyState::GetKeyDown(GameWindowTool::Instance().GetFullscreenVK()) && !GameStateDetector::Instance().IsFullScreenClicked())
+			WndprocDestory();
+		break;
 	case WM_KEYDOWN:
 	{
 		if (wParam == Menu::Instance().GetKeyBind() && !isRepeat)
@@ -78,8 +102,20 @@ static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPA
 		int width = LOWORD(lParam);
 		int height = HIWORD(lParam);
 		opengl_hook::screen_size = { width, height };
+		if (Menu::Instance().isEnabled)
+		{
+			Menu::Instance().Repos();
+			//取消cursor范围限制
+			ClipCursor(NULL);
+		}
 		break;
 	}
+	case WM_MOVE:
+		if (Menu::Instance().isEnabled)
+		{
+			//取消cursor范围限制
+			ClipCursor(NULL);
+		}
 	default:
 	{
 		break;
@@ -96,39 +132,47 @@ static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPA
 		state = true;
 
 	ItemManager::Instance().ProcessKeyEvents(state, isRepeat, wParam);
-	if (Menu::Instance().isEnabled)
+	if (!GameStateDetector::Instance().IsInGame())
 	{
 		// 只有 UI 激活时才把消息交给 ImGui 处理
 		ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam);
-		switch (message)
+		if(Menu::Instance().isEnabled)
 		{
-		case WM_IME_STARTCOMPOSITION:
-		case WM_IME_ENDCOMPOSITION:
-		case WM_IME_COMPOSITION:
-
-		case WM_IME_SETCONTEXT:
-		case WM_IME_NOTIFY:
-		case WM_IME_CONTROL:
-		case WM_IME_COMPOSITIONFULL:
-		case WM_IME_SELECT:
-		case WM_IME_CHAR:
-		case WM_IME_REQUEST:
-		case WM_IME_KEYDOWN:
-		case WM_IME_KEYUP:
-
-		case WM_INPUTLANGCHANGEREQUEST:
-		case WM_INPUTLANGCHANGE:
-
-		case WM_DESTROY:
-		case WM_QUIT:
-		case WM_CLOSE:
-			goto end;
-		default:
-			return TRUE;
+			switch (message)
+			{
+			case WM_SETCURSOR:
+				if (LOWORD(lParam) == HTCLIENT)
+				{
+					SetCursor(LoadCursor(nullptr, IDC_ARROW));
+				}
+			case WM_SYSDEADCHAR:
+			case WM_KEYDOWN:
+			case WM_KEYUP:
+			case WM_CHAR:
+			case WM_DEADCHAR:
+			case WM_MOUSEMOVE:
+			case WM_MOUSEWHEEL:
+			case WM_LBUTTONDOWN:
+			case WM_LBUTTONUP:
+			case WM_LBUTTONDBLCLK:
+			case WM_RBUTTONDOWN:
+			case WM_RBUTTONUP:
+			case WM_RBUTTONDBLCLK:
+			case WM_MBUTTONDOWN:
+			case WM_MBUTTONUP:
+			case WM_MBUTTONDBLCLK:
+			case WM_XBUTTONDOWN:
+			case WM_XBUTTONUP:
+			case WM_XBUTTONDBLCLK:
+			case WM_MOUSEHOVER:
+			case WM_INPUT:
+				return TRUE;
+			default:
+				break;
+			}
 		}
 
 	}
-end:
 	// 始终把消息交回原来的窗口过程（不管 UI 是否激活）
 	return CallWindowProcW(opengl_hook::o_wndproc, hWnd, message, wParam, lParam);
 }

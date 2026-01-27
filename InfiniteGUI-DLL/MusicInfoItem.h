@@ -30,10 +30,18 @@ public:
         description = u8"显示系统当前播放的媒体信息";
         icon = u8"\uE027";
         updateIntervalMs = 1000;
+        prevSkipButton = new MyButton(u8"\uE01b", ImVec2(30.0f, 30.0f));
+        nextSkipButton = new MyButton(u8"\uE018", ImVec2(30.0f, 30.0f));
+        stopButton = new MyButton(u8"\uE019", ImVec2(30.0f, 30.0f));
         lastUpdateTime = std::chrono::steady_clock::now();
         MusicInfoItem::Reset();
     }
-
+    ~MusicInfoItem() override
+    {
+        delete prevSkipButton;
+        delete nextSkipButton;
+        delete stopButton;
+    }
     static MusicInfoItem& Instance() {
         static MusicInfoItem instance;
         return instance;
@@ -59,14 +67,16 @@ public:
     }
 
     void Update() override;
+    void HoverSetting() override;
     void DrawContent() override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
     void ShutDown();
-
+    //winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionManager GetMediaManager() const { return mediaManager; }
 private:
     void InitMediaManager();
+    void RenderPlaybackBar();
     winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionManager mediaManager{ nullptr };
     bool mediaManagerReady = false;
 
@@ -81,10 +91,13 @@ private:
     std::vector<uint8_t> bytes;
     std::vector<uint8_t> lastBytes;
     //ImTextureID coverTexture;
-    int coverWidth = 0;
-    int coverHeight = 0;
+    float coverSize;
+
 
     bool hasMedia = false;
+    bool hasOthers = false;
+    bool paused = false;
+    bool lastPaused = false;
 
     std::unique_ptr<DecodedImage> pendingImage;
 
@@ -92,4 +105,10 @@ private:
     float coverRounding;
 
     bool hideWhenNoMedia;
+
+    MyButton* prevSkipButton;
+    MyButton* nextSkipButton;
+    MyButton* stopButton;
+
+    ImVec2 barPos;
 };
