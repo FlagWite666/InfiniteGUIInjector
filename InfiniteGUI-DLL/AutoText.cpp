@@ -14,7 +14,7 @@ void AutoText::Update()
     for (auto& text : texts)
     {
         if(!text.isEnabled) continue;
-        if (text.Update(keyStateHelper, chatKeybind, mode))
+        if (text.Update(keyStateHelper, customGameKeybinds ? chatKeybind : GameKeyBind::Instance().GetVK(GameAction::Chat), mode))
         {
             AudioManager::Instance().playSound("menu\\pop.wav", soundVolume);
             std::string message = u8"自动消息：已发送。\n\"" + text.GetText() + u8"\"";
@@ -67,10 +67,16 @@ void AutoText::DrawSettings(const float& bigPadding, const float& centerX, const
 
     if(mode == Modern)
     {
-        ImGui::SameLine();
-        ImGui::SetCursorPosX(bigPadding + centerX);
+        ImGui::SetCursorPosX(bigPadding);
         ImGui::SetNextItemWidth(itemWidth);
-        ImGuiStd::Keybind(u8"聊天栏键：", chatKeybind);
+        ImGui::Checkbox(u8"自定义聊天栏键", &customGameKeybinds);
+        if(customGameKeybinds)
+        {
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(bigPadding + centerX);
+            ImGui::SetNextItemWidth(itemWidth);
+            ImGuiStd::Keybind(u8"聊天栏键：", chatKeybind);
+        }
     }
     DrawSoundSettings(bigPadding, centerX, itemWidth);
 }
@@ -80,6 +86,7 @@ void AutoText::Load(const nlohmann::json& j)
     LoadItem(j);
     LoadSound(j);
     texts.clear();
+    if(j.contains("customGameKeybinds")) customGameKeybinds = j["customGameKeybinds"].get<bool>();
     if(j.contains("chatKeybind")) chatKeybind = j["chatKeybind"].get<int>();
     if(j.contains("mode")) mode = j["mode"].get<int>();
     if (!j.contains("texts") || !j["texts"].is_array())
@@ -97,6 +104,7 @@ void AutoText::Save(nlohmann::json& j) const
 {
     SaveItem(j);
     SaveSound(j);
+    j["customGameKeybinds"] = customGameKeybinds;
     j["chatKeybind"] = chatKeybind;
     j["mode"] = mode;
     j["texts"] = nlohmann::json::array();

@@ -6,59 +6,34 @@
 #include "AudioManager.h"
 #include "HttpUpdateWorker.h"
 #include "Anim.h"
-#include "Notification.h"
 #include "NotificationItem.h"
 
 void BilibiliFansItem::Toggle()
 {
-    //if (isEnabled)
-    //    HttpAddTask();
-    //else
-    //    HttpRemoveTask();
-}
-
-//void BilibiliFansItem::HttpAddTask()
-//{
-//    httpTaskId = HttpUpdateWorker::Instance().AddTask(
-//        L"https://api.bilibili.com/x/relation/stat?vmid=" + std::to_wstring(uid),
-//        httpUpdateIntervalMs,
-//        [this](const std::string& response) {
-//            try {
-//                auto j = nlohmann::json::parse(response);
-//                pendingFans = j["data"]["follower"].get<int>();
-//            }
-//            catch (...) {
-//                pendingFans = -1;
-//            }
-//        }
-//    );
-//}
-//
-//void BilibiliFansItem::HttpRemoveTask()
-//{
-//    HttpUpdateWorker::Instance().RemoveTask(httpTaskId);
-//}
-
-void BilibiliFansItem::UpdateHttp()
-{
-    std::wstring url = L"https://api.bilibili.com/x/relation/stat?vmid=" + std::to_wstring(uid);
-    std::string response;
-    bool ok = HttpClient::HttpGet(url, response);
-    if(ok)
-    {
-        try {
-            auto j = nlohmann::json::parse(response);
-            pendingFans = j["data"]["follower"].get<int>();
-        }
-        catch (...) {
-            pendingFans = -1;
-        }
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(httpUpdateIntervalMs));
 }
 
 void BilibiliFansItem::Update()
 {
+
+    // 开后台线程获取
+    std::thread([this]()
+        {
+            std::wstring url = L"https://api.bilibili.com/x/relation/stat?vmid=" + std::to_wstring(uid);
+            std::string response;
+            bool ok = HttpClient::HttpGet(url, response);
+            if (ok)
+            {
+                try {
+                    auto j = nlohmann::json::parse(response);
+                    pendingFans = j["data"]["follower"].get<int>();
+                }
+                catch (...) {
+                    pendingFans = -1;
+                }
+            }
+
+        }).detach();
+
     int newFans = pendingFans.load(); 
 
     if (newFans < 0)
@@ -98,8 +73,17 @@ void BilibiliFansItem::Update()
 
 }
 
+void BilibiliFansItem::HoverSetting()
+{
+}
+
 void BilibiliFansItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 
     //获取io

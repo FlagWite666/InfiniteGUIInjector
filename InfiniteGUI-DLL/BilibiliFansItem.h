@@ -3,24 +3,21 @@
 #include "AffixModule.h"
 #include "SoundModule.h"
 #include "UpdateModule.h"
-#include "HttpModule.h"
 #include "WindowModule.h"
-#include <string>
 
 
 struct bilibili_fans_element {
     ImVec4 color;
 };
 
-class BilibiliFansItem : public Item, public AffixModule, public SoundModule, public HttpModule, public UpdateModule, public WindowModule {
+class BilibiliFansItem : public Item, public AffixModule, public SoundModule, public UpdateModule, public WindowModule {
 public:
     BilibiliFansItem() {
         type = Hud; // 信息项类型
         name = u8"粉丝数显示";
         description = u8"显示B站用户的粉丝数";
         icon = u8"\uE045";
-        httpUpdateIntervalMs = 3000;
-        updateIntervalMs = 50;
+        updateIntervalMs = 3000;
         lastUpdateTime = std::chrono::steady_clock::now();
         BilibiliFansItem::Reset();
     }
@@ -46,8 +43,8 @@ public:
         dirtyState.animating = true;
         firstLoad = true;
     }
-    void UpdateHttp() override;
     void Update() override;
+    void HoverSetting() override;
     void DrawContent() override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;

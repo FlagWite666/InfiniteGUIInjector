@@ -267,7 +267,7 @@ namespace ImGuiStd {
             for (int i = 0; i < IM_ARRAYSIZE(keys); i++)
             {
                 std::string keyStr = keys[i];
-                if (keyStr[0] == '-')
+                if (keyStr[0] == '-##')
                 {
                     continue;
                 }

@@ -48,7 +48,7 @@ public:
 		if (auto win = dynamic_cast<WindowModule*>(item))
 		{
 			MyButton* lockButton = new MyButton(u8"\uE013", ImVec2(moduleButtonSize.y, moduleButtonSize.y));
-			if (win->IsClickThrough())
+			if (win->IsFixed())
 			{
 				lockButton->SetSelected(true);
 			}
@@ -103,8 +103,8 @@ public:
 				auto win = dynamic_cast<WindowModule*>(m_item);
 				if (win)
 				{
-					b.button->SetSelected(win->IsClickThrough());
-					if (win->IsClickThrough())
+					b.button->SetSelected(win->IsFixed());
+					if (win->IsFixed())
 					{
 						b.button->SetLabelText(u8"\uE013");
 					}
@@ -115,7 +115,7 @@ public:
 				}
 				if (b.button->Draw())
 				{
-					win->SetClickThrough(!win->IsClickThrough());
+					win->SetFixed(!win->IsFixed());
 				}
 			}
 			else if (b.type == Button_Sound)

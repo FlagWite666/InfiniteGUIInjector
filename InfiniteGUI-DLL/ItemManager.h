@@ -17,7 +17,6 @@ public:
 
     void AddItem(Item* item);
     void UpdateAll() const;
-    void UpdateHttpAll() const;
 
     void RenderAllGui() const;
     void RenderAllBeforeGui() const;

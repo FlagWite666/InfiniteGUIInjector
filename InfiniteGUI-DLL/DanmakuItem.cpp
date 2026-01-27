@@ -251,8 +251,17 @@ void DanmakuItem::Update()
     }
 }
 
+void DanmakuItem::HoverSetting()
+{
+}
+
 void DanmakuItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     ImGui::PopFont(); // 把之前的字体弹出栈
     std::deque<Danmaku> copy_danmakuList;
     std::string copy_bottomMessage;

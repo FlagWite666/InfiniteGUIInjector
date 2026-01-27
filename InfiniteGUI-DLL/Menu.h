@@ -64,6 +64,7 @@ public:
         keybinds.insert(std::make_pair(u8"²Ëµ¥¿ì½Ý¼ü£º", VK_OEM_5));
         itemStyle.fontSize = 20.0f;
         itemStyle.bgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.15f);
+        needRepos = true;
     }
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
@@ -74,6 +75,7 @@ public:
     {
         blur->Destory();
     }
+    void Repos() {needRepos = true;}
 private:
     void ShowMain();
     void ShowSidePanels() const;
@@ -81,4 +83,5 @@ private:
     Blur* blur;
     SettingMenu* settingMenu;
     bool initialized = false;
+    bool needRepos;
 };

@@ -6,6 +6,9 @@
 #include "imgui/imgui.h"
 #include "ImGuiStd.h"
 #include <nlohmann/json.hpp>
+
+#include "GameStateDetector.h"
+#include "MyButton.hpp"
 #include "WindowSnapper.h"
 #include "opengl_hook.h"
 static constexpr float SNAP_DISTANCE = 10.0f;
@@ -42,6 +45,7 @@ public:
     virtual void DrawContent() = 0;       // 绘制内容（文本、图形等）
 
 protected:
+    virtual void HoverSetting() = 0;
     void SetStyle()
     {
         if (custom.windowRounding)
@@ -111,7 +115,7 @@ public:
         ImGui::SetCursorPosX(bigPadding);
         ImGui::SetNextItemWidth(itemWidth);
 
-        ImGui::Checkbox(u8"固定", &clickThrough);
+        ImGui::Checkbox(u8"固定", &fixed);
         ImGui::SameLine();
         ImGui::SetCursorPosX(bigPadding + centerX);
         ImGui::SetNextItemWidth(itemWidth);
@@ -231,7 +235,7 @@ public:
             if (isCustomSize)
                 ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Always);
         }
-        HWND g_hwnd = opengl_hook::handle_window;
+
         SetStyle();  //明明可以不加这个的，但是不加会崩，我无语...
         if (isTransparentBg)
         {
@@ -241,36 +245,58 @@ public:
         }
         else
         {
-            ImGui::PushStyleColor(ImGuiCol_WindowBg, *itemStylePtr.bgColor); 
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, *itemStylePtr.bgColor);
             ImGui::PushStyleColor(ImGuiCol_ChildBg, *itemStylePtr.bgColor);
-            ImGui::PushStyleColor(ImGuiCol_Border, *itemStylePtr.borderColor); 
+            ImGui::PushStyleColor(ImGuiCol_Border, *itemStylePtr.borderColor);
         }
         PushRounding(*itemStylePtr.windowRounding);
         if (*itemStylePtr.rainbowFont)
             processRainbowFont();
         else
             ImGui::PushStyleColor(ImGuiCol_Text, *itemStylePtr.fontColor); // 字体颜色
+        ImGui::PushFont(NULL, *itemStylePtr.fontSize);
+
+        HWND g_hwnd = opengl_hook::handle_window;
         ImGuiWindowFlags flags = 0;
         //if (!allowResize) flags |= ImGuiWindowFlags_NoResize;
-        //if (!allowMove)   flags |= ImGuiWindowFlags_NoMove;
-        if (!isCustomSize) flags |= ImGuiWindowFlags_NoResize;
+        if (fixed)   flags |= ImGuiWindowFlags_NoMove;
+        if (fixed || !isCustomSize || GameStateDetector::Instance().IsInGame()) flags |= ImGuiWindowFlags_NoResize;
         flags |= ImGuiWindowFlags_NoTitleBar;
         flags |= ImGuiWindowFlags_NoScrollbar;
         flags |= ImGuiWindowFlags_NoSavedSettings;
+        flags |= ImGuiWindowFlags_NoScrollWithMouse;
 
-
-        if (clickThrough) flags |= ImGuiWindowFlags_NoInputs;
+        //if (fixed) flags |= ImGuiWindowFlags_NoInputs;
 
         ImGui::Begin(GetActualWindowName().c_str(), nullptr, flags);
+        isHovered = (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) ||
+            (ImGui::IsAnyItemActive() && ImGui::IsWindowFocused())) && !GameStateDetector::Instance().IsInGame();
+        isMoving = ImGui::IsMouseDragging(0, 1.0f) && isHovered;
+        if (isHovered)
+        {
+            //获取io
+            ImGuiIO& io = ImGui::GetIO();
+            //计算速度
+            float speed = 10.0f * std::clamp(io.DeltaTime, 0.0f, 0.05f);
+            alpha = ImLerp(alpha, 0.35f, speed);
+            // 判断动画是否结束
+            if (Anim::AlmostEqual(alpha, 0.35f))
+            {
+                alpha = 0.35f;
+            }
+            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, alpha);  //添加半透明
+        }
+        else alpha = 1.0f;
 
-        isMoving = ImGui::IsMouseDragging(0, 1.0f) && ImGui::IsWindowFocused();
-
-        isHovered = ImGui::IsWindowHovered();
-
-        ImGui::PushFont(NULL, *itemStylePtr.fontSize);
         DrawContent();
-        ImGui::PopFont();
 
+        if (isHovered)
+        {
+            ImGui::PopStyleVar(); //去除半透明
+            HoverSetting();
+            Sidebar();
+        }
+        ImGui::PopFont();
         // 判断拖动/修改大小事件
         if (isMoving)
         {
@@ -306,12 +332,12 @@ public:
 
     }
 
-    bool IsClickThrough() const {
-        return clickThrough;
+    bool IsFixed() const {
+        return fixed;
     }
 
-    void SetClickThrough(bool value) {
-        clickThrough = value;
+    void SetFixed(bool value) {
+        fixed = value;
     }
     float x = 100.0f;
     float y = 40.0f;
@@ -319,45 +345,73 @@ public:
     float height = 80.0f;
     bool isMoving = false;
 private:
-        std::string GetActualWindowName() const {
-            return "##" + std::to_string((uintptr_t)this);
-        }
 
-        void HandleDrag(HWND g_hwnd)
+    void Sidebar()
+    {
+        ImGui::PushFont(opengl_hook::gui.iconFont);
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
+        if (fixed)
         {
-            if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
-                isSnapping = true;
-            else
-                isSnapping = false;
-
-            // 当前窗口位置大小
-            ImVec2 pos = ImGui::GetWindowPos();
-            ImVec2 sz = ImGui::GetWindowSize();
-
-            SnapResult snap;
-            if (isSnapping)
-            {
-                // 计算吸附
-                snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, SNAP_DISTANCE);
-                // 画吸附线
-                WindowSnapper::DrawGuides(snap, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, sz);
-                //WindowSnapper::ComputeSnapWithWindows(sz, SNAP_DISTANCE, ItemManager::Instance().GetItems(), snap);
-            }
-            else
-                snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, 0.0f);
-
-            // 设置吸附后的位置
-            ImGui::SetWindowPos(snap.snappedPos, ImGuiCond_Always);
-
-            // 保存到 Item
-            x = snap.snappedPos.x;
-            y = snap.snappedPos.y;
-            snapState = snap.snapState;
-
-            //保存窗口大小
-            width = ImGui::GetWindowSize().x;
-            height = ImGui::GetWindowSize().y;
+            ImVec2 lockPos = ImVec2(ImGui::GetWindowWidth() - ImGui::GetFontSize() - ImGui::GetStyle().WindowPadding.x, ImGui::GetStyle().WindowPadding.y);
+            ImGui::SetCursorPos(lockPos);
+            ImGuiStd::TextShadow(u8"\uE013");
+            if (ImGui::IsItemClicked()) fixed = false;
         }
+        else
+        {
+            ImVec2 lockPos = ImVec2(ImGui::GetWindowWidth() - ImGui::GetFontSize() * 2 - ImGui::GetStyle().WindowPadding.x - ImGui::GetStyle().ItemSpacing.x, ImGui::GetStyle().WindowPadding.y);
+            ImGui::SetCursorPos(lockPos);
+            ImGuiStd::TextShadow(u8"\uE014");
+            if (ImGui::IsItemClicked()) fixed = true;
+            ImGui::SameLine();
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.88f, 0.52f, 0.52f, 1.0f)); // 字体颜色
+            ImGuiStd::TextShadow("9");
+            ImGui::PopStyleColor();
+            if (ImGui::IsItemClicked()) closed = true;
+        }
+        ImGui::PopStyleVar();
+        ImGui::PopFont();
+    }
+
+    std::string GetActualWindowName() const {
+        return "##" + std::to_string((uintptr_t)this);
+    }
+
+    void HandleDrag(HWND g_hwnd)
+    {
+        if (GetAsyncKeyState(VK_CONTROL) & 0x8000 || GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+            isSnapping = true;
+        else
+            isSnapping = false;
+
+        // 当前窗口位置大小
+        ImVec2 pos = ImGui::GetWindowPos();
+        ImVec2 sz = ImGui::GetWindowSize();
+
+        SnapResult snap;
+        if (isSnapping)
+        {
+            // 计算吸附
+            snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, SNAP_DISTANCE);
+            // 画吸附线
+            WindowSnapper::DrawGuides(snap, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, sz);
+            //WindowSnapper::ComputeSnapWithWindows(sz, SNAP_DISTANCE, ItemManager::Instance().GetItems(), snap);
+        }
+        else
+            snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, 0.0f);
+
+        // 设置吸附后的位置
+        ImGui::SetWindowPos(snap.snappedPos, ImGuiCond_Always);
+
+        // 保存到 Item
+        x = snap.snappedPos.x;
+        y = snap.snappedPos.y;
+        snapState = snap.snapState;
+
+        //保存窗口大小
+        width = ImGui::GetWindowSize().x;
+        height = ImGui::GetWindowSize().y;
+    }
 
 protected:
     void LoadWindow(const nlohmann::json& j)
@@ -368,7 +422,7 @@ protected:
         if (j.contains("width")) width = j["width"];
         if (j.contains("height")) height = j["height"];
 
-        if (j.contains("clickThrough")) clickThrough = j["clickThrough"];
+        if (j.contains("clickThrough")) fixed = j["clickThrough"];
 
         if (j.contains("snapState")) snapState = j["snapState"];
 
@@ -391,7 +445,7 @@ protected:
         j["width"] = width;
         j["height"] = height;
 
-        j["clickThrough"] = clickThrough;
+        j["clickThrough"] = fixed;
 
         j["snapState"] = snapState;
 
@@ -413,7 +467,7 @@ protected:
         snapState = SNAP_NONE;
         width = 250.0f;
         height = 80.0f;
-        clickThrough = false;
+        fixed = false;
         custom.windowRounding = false;
         custom.fontSize = false;
         custom.fontColor = false;
@@ -428,16 +482,17 @@ protected:
 
     SnapState snapState = SNAP_NONE;
 
-
-    bool allowMove = true;
     bool allowResize = true;
-    bool clickThrough = false;
+    bool fixed = false;
 
     bool isHovered = true;
-    bool isAnimating = false;
+    float alpha = 1.0f;
 
     bool isTransparentBg = false;
 
     Customize custom;
     ItemStylePtr itemStylePtr;
+    
+    bool closed = false;
+
 };

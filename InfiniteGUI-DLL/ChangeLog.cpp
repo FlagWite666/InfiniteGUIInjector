@@ -73,6 +73,15 @@ void ChangeLog::Init()
     AddContent(FIXBUG, u8"修复模组右侧按钮不同步的问题");
     AddContent(REMOVE, u8"去除窗口半透明，优化帧率");
 
+    NewVersion("V1.0.5", "26.01.27");
+    AddContent(ADD, u8"鼠标悬停在窗口上时添加固定/删除按钮");
+    AddContent(ADD, u8"音乐显示现在有按钮可以暂停/播放、跳过");
+    AddContent(ADD, u8"添加游戏按键绑定读取系统");
+    AddContent(ADD, u8"添加自动保存");
+    AddContent(FIXBUG, u8"解决打开菜单时游戏窗口无法调整/关闭的问题");
+    AddContent(FIXBUG, u8"解决关闭MC时游戏进程关不干净的问题");
+    AddContent(CHANGE, u8"现在按住Ctrl吸附边缘，按住Shift吸附其它窗口");
+    AddContent(CHANGE, u8"打开菜单时会恢复居中，解决调整窗口大小后菜单消失偏移的问题");
 
 } //我写这个真是个天才，这样就不用手敲Imgui代码了，天才天才天才天
 

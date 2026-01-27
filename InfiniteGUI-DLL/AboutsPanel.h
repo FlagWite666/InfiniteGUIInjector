@@ -7,6 +7,8 @@
 #include "ImGuiStd.h"
 #include "imgui/imgui.h"
 #include "FileUtils.h"
+#include "StringConverter.h"
+
 class AboutsPanel
 {
 public:

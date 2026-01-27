@@ -18,7 +18,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         break;
 
     case DLL_PROCESS_DETACH:
-        //Uninit(hModule);
+	    opengl_hook::g_isDetaching.store(true, std::memory_order_release);
         break;
     }
     return TRUE;

@@ -3,6 +3,7 @@
 #include "UpdateModule.h"
 #include <windows.h>
 
+#include "GameKeyBind.h"
 #include "KeybindModule.h"
 
 struct WindowStyleState {
@@ -38,7 +39,10 @@ public:
         ResetKeybind();
         isEnabled = true;
         keybinds.insert(std::make_pair(u8"无边框全屏快捷键：", NULL));
-        //windowTransparency = 255;
+        gameKeybinds.insert(std::make_pair(u8"游戏全屏快捷键：", GameKeyBind::Instance().IsSuccess() ? GameKeyBind::Instance().GetVK(GameAction::Fullscreen) : NULL));
+    }
+    int GetFullscreenVK() const {
+        return GameKeyBind::Instance().IsSuccess() ? GameKeyBind::Instance().GetVK(GameAction::Fullscreen) : gameKeybinds.at(u8"游戏全屏快捷键：");
     }
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
     void Update() override;
@@ -48,8 +52,5 @@ public:
 
 private:
     void SetBorderlessFullscreen(HWND hwnd);
-    //static void SetWindowTransparency(HWND hwnd, BYTE alpha);
-    //std::map<HWND, WindowState> savedWindows;
     WindowStyleState windowStyleState;
-    //int windowTransparency;
 };

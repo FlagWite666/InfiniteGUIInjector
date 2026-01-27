@@ -53,8 +53,17 @@ void CounterItem::OnKeyEvent(bool state, bool isRepeat, WPARAM key)
     }
 }
 
+void CounterItem::HoverSetting()
+{
+}
+
 void CounterItem::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 
     //ªÒ»°io

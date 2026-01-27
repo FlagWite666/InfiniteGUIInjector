@@ -7,8 +7,17 @@ void Text::Toggle()
 {
 }
 
+void Text::HoverSetting()
+{
+}
+
 void Text::DrawContent()
 {
+    if (closed)
+    {
+        isEnabled = false;
+        closed = false;
+    }
     ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
     //ªÒ»°io
     ImGuiIO& io = ImGui::GetIO();
